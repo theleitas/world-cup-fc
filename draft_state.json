@@ -61,7 +61,8 @@
       "color": "#B56CFF",
       "image": "Jayme.png",
       "national_teams": [
-        "USA"
+        "USA",
+        "Ghana"
       ],
       "star_players": []
     },
@@ -139,6 +140,13 @@
       "coach": "Spencer",
       "team": "Congo DR",
       "picked_at": "2026-06-07T12:47:20.201606-04:00"
+    },
+    {
+      "pick": 10,
+      "round": 2,
+      "coach": "Jayme",
+      "team": "Ghana",
+      "picked_at": "2026-06-07T12:47:26.330900-04:00"
     }
   ],
   "player_picks": [],
@@ -2493,6 +2501,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780850840,
+  "current_pick_started_at": 1780850846,
   "last_friendly_api_error": ""
 }
