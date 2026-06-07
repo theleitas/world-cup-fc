@@ -69,7 +69,9 @@
       "team_name": "Spencer",
       "color": "#FF3D3D",
       "image": "Spencer.png",
-      "national_teams": [],
+      "national_teams": [
+        "Korea Republic"
+      ],
       "star_players": []
     }
   },
@@ -122,6 +124,13 @@
       "coach": "Jayme",
       "team": "Canada",
       "picked_at": "2026-06-07T08:52:48.571076-04:00"
+    },
+    {
+      "pick": 8,
+      "round": 1,
+      "coach": "Spencer",
+      "team": "Korea Republic",
+      "picked_at": "2026-06-07T08:55:36.743907-04:00"
     }
   ],
   "player_picks": [],
@@ -2476,5 +2485,5 @@
   "last_score_refresh_attempt_at": 1780836762,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780836931
+  "current_pick_started_at": 1780836936
 }
