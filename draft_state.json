@@ -117,7 +117,8 @@
         "Switzerland"
       ],
       "star_players": [
-        "Lamine Yamal (Spain)"
+        "Lamine Yamal (Spain)",
+        "Lionel Messi (Argentina)"
       ]
     },
     "Spencer": {
@@ -573,6 +574,13 @@
       "coach": "Herb",
       "player": "Julian Alvarez (Argentina)",
       "picked_at": "2026-06-07T13:30:41.521691-04:00"
+    },
+    {
+      "pick": 63,
+      "round": 2,
+      "coach": "Jayme",
+      "player": "Lionel Messi (Argentina)",
+      "picked_at": "2026-06-07T13:30:44.561476-04:00"
     }
   ],
   "players": [
@@ -2926,6 +2934,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853441,
+  "current_pick_started_at": 1780853444,
   "last_friendly_api_error": ""
 }
