@@ -58,12 +58,14 @@ input, textarea, select { color:#fff!important; }
 .subtle { color:#b9c2c9; font-size:.9rem; }
 .rules-box { border-left:5px solid #00e5ff; border-radius:8px; background:#070707; padding:12px 14px; margin:.8rem 0 1rem; color:#dceff5; }
 .standings-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; }
-.coach-card { border:3px solid var(--coach-color); border-radius:8px; padding:12px; background:#070707; box-shadow:0 0 16px rgba(0,229,255,.08); min-height:280px; }
+.coach-card { border:3px solid var(--coach-color); border-radius:8px; padding:12px; background:#070707; box-shadow:0 0 18px var(--coach-color), inset 0 0 22px rgba(255,255,255,.055), inset 0 0 30px color-mix(in srgb, var(--coach-color) 18%, transparent); min-height:280px; }
 .coach-head { display:flex; align-items:center; gap:12px; min-width:0; }
 .coach-face { width:74px; height:74px; border-radius:50%; object-fit:cover; border:4px solid var(--coach-color); box-shadow:0 0 14px var(--coach-color); flex:0 0 auto; }
 .coach-face-placeholder { width:74px; height:74px; border-radius:50%; border:4px solid var(--coach-color); color:var(--coach-color); display:flex; align-items:center; justify-content:center; text-align:center; font-weight:1000; font-size:.78rem; line-height:1; flex:0 0 auto; }
 .coach-name { font-size:1.25rem; font-weight:1000; overflow-wrap:anywhere; }
 .score-badge { margin-left:auto; width:68px; height:68px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--coach-color); color:#000; font-size:1.45rem; font-weight:1000; box-shadow:0 0 14px var(--coach-color); flex:0 0 auto; }
+.award-lines { margin-top:2px; }
+.award-line { color:var(--coach-color); font-size:.84rem; line-height:1.18; font-weight:950; text-shadow:0 0 7px var(--coach-color); }
 .metric-row { display:flex; justify-content:space-between; gap:10px; border-bottom:1px solid rgba(255,255,255,.11); padding:7px 0; font-size:.92rem; }
 .metric-row b { color:#fff; }
 .asset-list { color:#e8f6f8; font-size:.88rem; line-height:1.45; margin-top:9px; }
@@ -82,18 +84,24 @@ input, textarea, select { color:#fff!important; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
 .draft-control-row { margin:.3rem 0 .8rem; }
 .draft-control-row div[data-testid="stButton"] > button { width:100%!important; min-height:50px!important; }
+.draft-start-control div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
+.draft-stop-control div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
+.draft-undo-control div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; }
 .draft-choice-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:7px; margin:.45rem 0 1rem; }
 .draft-choice-cell { display:flex; align-items:stretch; gap:6px; min-width:0; }
-.draft-choice-link, .draft-choice-disabled {
+.draft-choice-link, .draft-choice-disabled, .draft-choice-button {
     flex:1 1 auto; min-width:0; min-height:42px; display:flex; align-items:center;
     border:1px solid #444; border-radius:8px; background:#121212; color:#fff!important;
     text-decoration:none!important; font-weight:900; font-size:.86rem; line-height:1.15;
     padding:6px 9px; overflow-wrap:anywhere;
 }
-.draft-choice-link:hover { border-color:#00e5ff; background:#181818; }
+.draft-choice-link:hover, .draft-choice-button:hover { border-color:#00e5ff; background:#181818; }
 .draft-choice-disabled { color:#777!important; background:#202020; border-color:#333; }
+.draft-choice-button { justify-content:space-between; width:100%; cursor:pointer; }
+.draft-choice-button .info-link { margin-left:8px; flex:0 0 auto; }
 .draft-info-wrap { flex:0 0 32px; min-height:42px; display:flex; align-items:center; justify-content:center; border:1px solid #303030; border-radius:8px; background:#070707; }
-.info-link { color:#00e5ff!important; text-decoration:none!important; font-size:1.02rem; margin-left:3px; display:inline-flex; align-items:center; justify-content:center; }
+.info-link { color:#00e5ff!important; text-decoration:none!important; font-size:.82rem; margin-left:3px; display:inline-flex; align-items:center; justify-content:center; }
+.asset-list .info-link, .match-line .info-link, .data-table .info-link { font-size:.72rem; margin-left:2px; }
 .available-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(112px, 1fr)); gap:6px; margin:.45rem 0 1rem; }
 .choice-card { border:0; border-radius:0; background:transparent; padding:0; min-height:0; }
 .choice-title { font-weight:1000; color:#fff; }
@@ -102,16 +110,22 @@ input, textarea, select { color:#fff!important; }
 .match-line { display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-weight:1000; }
 .match-score { color:#ffd54a; }
 .matches-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
+.match-section-spacer { height:14px; }
+.match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
+div[data-testid="stExpander"] summary p { color:#ffd54a!important; font-weight:1000; font-size:1.03rem; }
 .drafted-chip { display:inline-flex; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
 .payout-item { border:1px solid #2d2d2d; border-radius:8px; padding:10px; background:#070707; }
 .payout-item b { color:#ffd54a; }
 .payout-desc { border-left:4px solid #ffd54a; background:#070707; border-radius:8px; padding:11px 13px; margin:.7rem 0; color:#eaf7fa; line-height:1.45; }
+.payout-desc b { color:#ffd54a; }
 .data-table { width:100%; border-collapse:collapse; background:#070707; border-radius:8px; overflow:hidden; font-size:.88rem; }
 .data-table th { text-align:left; color:#ffd54a; background:#101010; border-bottom:1px solid #333; padding:8px; }
 .data-table td { border-bottom:1px solid rgba(255,255,255,.1); padding:8px; vertical-align:middle; }
 .data-table tr:last-child td { border-bottom:none; }
 .coach-dot { display:inline-flex; width:.85rem; height:.85rem; border-radius:50%; background:var(--coach-color); box-shadow:0 0 8px var(--coach-color); margin-right:6px; vertical-align:-.12rem; }
+.coach-mini-face { width:22px; height:22px; border-radius:50%; object-fit:cover; border:2px solid var(--coach-color); box-shadow:0 0 8px var(--coach-color); vertical-align:middle; margin:0 4px 0 0; }
+.coach-mini-placeholder { display:inline-flex; width:22px; height:22px; border-radius:50%; border:2px solid var(--coach-color); color:var(--coach-color); align-items:center; justify-content:center; font-size:.58rem; font-weight:1000; vertical-align:middle; margin:0 4px 0 0; }
 .admin-box { border:1px solid #333; background:#060606; border-radius:8px; padding:12px; margin:1rem 0; }
 @media (max-width:700px) {
     div[data-testid="stButton"] > button { min-height:42px!important; font-size:.84rem!important; padding:6px 7px!important; }
@@ -130,7 +144,7 @@ input, textarea, select { color:#fff!important; }
     .draft-choice-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; }
     .draft-choice-link, .draft-choice-disabled { min-height:38px; font-size:.74rem; padding:5px 6px; }
     .draft-info-wrap { flex-basis:26px; min-height:38px; }
-    .info-link { font-size:.92rem; margin-left:1px; }
+    .info-link { font-size:.74rem; margin-left:1px; }
     .data-table { font-size:.78rem; }
     .data-table th, .data-table td { padding:6px 5px; }
 }
@@ -720,6 +734,7 @@ def default_state():
         "last_score_refresh_at": 0,
         "last_score_refresh_attempt_at": 0,
         "last_api_error": "",
+        "current_pick_started_at": int(time.time()),
     }
 
 
@@ -742,6 +757,7 @@ def normalize_state(state):
     state.setdefault("last_score_refresh_at", 0)
     state.setdefault("last_score_refresh_attempt_at", 0)
     state.setdefault("last_api_error", "")
+    state.setdefault("current_pick_started_at", int(time.time()))
 
     state["players"] = [str(player).strip() for player in state.get("players", []) if str(player).strip()]
     if not state["players"]:
@@ -946,6 +962,18 @@ def parse_match_payload_item(item, index):
     )
 
 
+def parse_friendly_match_payload_item(item, index):
+    match = parse_match_payload_item(item, index)
+    competition = item.get("competition") if isinstance(item.get("competition"), dict) else {}
+    competition_name = str(competition.get("name") or "").strip()
+    stage = str(match.get("stage") or "")
+    if "friendly" in competition_name.lower() or "friendly" in stage.lower():
+        match["stage"] = "FRIENDLY"
+    else:
+        match["stage"] = f"FRIENDLY - {competition_name or stage or 'International'}"
+    return normalize_match(match, index)
+
+
 def github_file_url():
     return f"https://api.github.com/repos/{GITHUB_OWNER}/{GITHUB_REPO}/contents/{STATE_FILE_PATH}"
 
@@ -1078,6 +1106,8 @@ def drafted_players(state):
 
 
 def score_match_for_team(match, team_name):
+    if "friendly" in str(match.get("stage") or "").lower():
+        return 0
     home = canonical_team_name(match.get("home"))
     away = canonical_team_name(match.get("away"))
     if team_name not in [home, away]:
@@ -1103,6 +1133,8 @@ def stage_is_group(stage):
 def team_goals_in_matches(matches, team_name):
     goals = 0
     for match in matches:
+        if "friendly" in str(match.get("stage") or "").lower():
+            continue
         if match.get("home") == team_name and match.get("home_score") is not None:
             goals += int(match.get("home_score") or 0)
         if match.get("away") == team_name and match.get("away_score") is not None:
@@ -1202,12 +1234,15 @@ def award_leaders(scores):
     values = list(scores.values())
     if not values:
         return {}
-    cinderella_candidates = [item for item in values if item.get("cinderella_team")]
-    return {
-        "Group Stage Winner": max(values, key=lambda item: item["group_stage_points"]),
-        "Empire Builder": max(values, key=lambda item: (item["empire_count"], item["empire_goals"], item["total_points"])),
-        "Cinderella Award": max(cinderella_candidates, key=lambda item: item["cinderella"]) if cinderella_candidates else None,
-    }
+    leaders = {}
+    if max(item.get("group_stage_points", 0) for item in values) > 0:
+        leaders["Group Stage Winner"] = max(values, key=lambda item: item["group_stage_points"])
+    if max(item.get("empire_count", 0) for item in values) > 0:
+        leaders["Empire Builder"] = max(values, key=lambda item: (item["empire_count"], item["empire_goals"], item["total_points"]))
+    cinderella_candidates = [item for item in values if item.get("cinderella_team") and item.get("cinderella", 0) > 0]
+    if cinderella_candidates:
+        leaders["Cinderella Award"] = max(cinderella_candidates, key=lambda item: item["cinderella"])
+    return leaders
 
 
 @st.cache_data(ttl=180, show_spinner=False)
@@ -1228,6 +1263,29 @@ def fetch_matches_from_football_data(token):
         for index, item in enumerate(payload.get("matches", []))
         if (item.get("homeTeam") or {}).get("name") and (item.get("awayTeam") or {}).get("name")
     ]
+
+
+@st.cache_data(ttl=180, show_spinner=False)
+def fetch_friendly_matches_from_football_data(token):
+    if not token:
+        return []
+    headers = {"X-Auth-Token": token, "X-Unfold-Goals": "true"}
+    resp = requests.get(
+        "https://api.football-data.org/v4/matches",
+        headers=headers,
+        params={"dateFrom": "2026-05-15", "dateTo": "2026-06-10"},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    payload = resp.json()
+    team_names = {team["name"] for team in WORLD_CUP_TEAMS}
+    matches = []
+    for index, item in enumerate(payload.get("matches", [])):
+        home = canonical_team_name((item.get("homeTeam") or {}).get("name"))
+        away = canonical_team_name((item.get("awayTeam") or {}).get("name"))
+        if home in team_names and away in team_names:
+            matches.append(parse_friendly_match_payload_item(item, index))
+    return matches
 
 
 @st.cache_data(ttl=180, show_spinner=False)
@@ -1313,6 +1371,8 @@ def match_winner_team(match):
 def player_stats_from_matches(matches, players):
     stats = {player: {"goals": 0, "assists": 0, "group_goals": 0, "group_assists": 0} for player in players}
     for match in matches:
+        if "friendly" in str(match.get("stage") or "").lower():
+            continue
         is_group = stage_is_group(match.get("stage"))
         for goal in match.get("goals", []):
             scorer = match_player_to_pool(goal.get("scorer"), players)
@@ -1345,6 +1405,11 @@ def refresh_api_scores():
         state["last_score_refresh_attempt_at"] = int(time.time())
         try:
             matches = fetch_matches_from_football_data(FOOTBALL_DATA_TOKEN)
+            try:
+                friendly_matches = fetch_friendly_matches_from_football_data(FOOTBALL_DATA_TOKEN)
+            except Exception:
+                friendly_matches = []
+            matches = sorted(friendly_matches + matches, key=lambda match: match.get("date") or "")
             if matches:
                 state["matches"] = matches
                 match_stats = player_stats_from_matches(matches, state["players"])
@@ -1380,38 +1445,28 @@ def render_header(state):
 """,
         unsafe_allow_html=True,
     )
-    st.markdown(
-        f"""
-<div class="rules-box">
-Eight coaches draft eight national teams and two star players. Team scoring: win 3, draw 1, goals 1 each, clean sheet 1.
-Advancement bonuses climb from Round of 32 through Champion. Players score 4 per goal and 3 per assist.
-Cinderella is actual team fantasy points minus locked FIFA-ranking expected points from {html.escape(FIFA_RANKING_LOCK_DATE)}.
-</div>
-""",
-        unsafe_allow_html=True,
-    )
 
 
 def render_payout_descriptions():
     with st.expander("Payout Descriptions", expanded=False):
         st.markdown(
             f"""
-<div class='payout-desc'><b>Gold - $300.</b><br>
+<div class='payout-desc'><b>Gold - $300</b><br>
 Awarded to the coach who finishes first overall in total fantasy points. Total fantasy points are the sum of every drafted national team's match points and advancement bonuses plus every drafted star player's goal and assist points. National teams earn 3 points for a win, 1 for a draw, 1 for each goal scored, and 1 for a clean sheet. Players earn 4 points per goal and 3 per assist.</div>
 
-<div class='payout-desc'><b>Silver - $150.</b><br>
+<div class='payout-desc'><b>Silver - $150</b><br>
 Awarded to the coach who finishes second overall by total fantasy points, using the same full-tournament scoring calculation as Gold.</div>
 
-<div class='payout-desc'><b>Bronze - $100.</b><br>
+<div class='payout-desc'><b>Bronze - $100</b><br>
 Awarded to the coach who finishes third overall by total fantasy points, using the same full-tournament scoring calculation as Gold and Silver.</div>
 
-<div class='payout-desc'><b>Group Stage Winner - $90.</b><br>
+<div class='payout-desc'><b>Group Stage Winner - $90</b><br>
 Awarded to the coach with the most fantasy points earned during group-stage matches only. This includes group-stage national-team match points plus group-stage star-player goals and assists. Knockout advancement bonuses and knockout player production do not count for this side bet.</div>
 
-<div class='payout-desc'><b>Empire Builder - $80.</b><br>
+<div class='payout-desc'><b>Empire Builder - $80</b><br>
 Awarded to the coach with the most drafted national teams that reach the Round of 16 or later. The app counts each drafted team whose advancement status is Round of 16, Quarterfinals, Semifinals, Final, or Champion. If coaches are tied on teams advanced, the tiebreaker is total goals scored by those advanced teams.</div>
 
-<div class='payout-desc'><b>Cinderella Award - $80.</b><br>
+<div class='payout-desc'><b>Cinderella Award - $80</b><br>
 Awarded to the coach who owns the single drafted national team with the largest overperformance against its locked FIFA ranking baseline. This is not a coach portfolio total. For each drafted team, the app calculates: current team fantasy points minus FIFA expected points. FIFA expected points are locked from the {html.escape(FIFA_RANKING_LOCK_DATE)} FIFA/Coca-Cola Men's World Ranking and scaled across the 48 qualified World Cup teams. The team with the highest positive delta wins the award for its coach.</div>
 """,
             unsafe_allow_html=True,
@@ -1436,7 +1491,11 @@ def render_standings(state, scores):
         for award_name, leader in leaders.items():
             if leader and leader["coach"] == coach:
                 awards.append(award_name)
-        award_text = " | ".join(awards) if awards else "In the hunt"
+        award_html = "<div class='award-lines'></div>"
+        if awards:
+            award_html = "<div class='award-lines'>" + "".join(
+                f"<div class='award-line'>{html.escape(award)}</div>" for award in awards
+            ) + "</div>"
         cards.append(
             f"""
 <div class='coach-card' style='--coach-color:{html.escape(color)}'>
@@ -1444,7 +1503,7 @@ def render_standings(state, scores):
     {coach_image_html(coach, color)}
     <div>
       <div class='coach-name'>{html.escape(item["display_name"])}</div>
-      <div class='subtle'>{html.escape(award_text)}</div>
+      {award_html}
     </div>
     <div class='score-badge'>{int(item["total_points"])}</div>
   </div>
@@ -1461,6 +1520,15 @@ def render_standings(state, scores):
         )
     cards.append("</div>")
     st.markdown("".join(cards), unsafe_allow_html=True)
+
+
+def coach_mini_html(coach, color):
+    image_path = coach_photo_filename(coach)
+    data_uri = image_to_data_uri(image_path)
+    escaped_color = html.escape(color)
+    if data_uri:
+        return f"<img class='coach-mini-face' style='--coach-color:{escaped_color}' src='{html.escape(data_uri, quote=True)}' alt=''>"
+    return f"<span class='coach-mini-placeholder' style='--coach-color:{escaped_color}'>{html.escape(coach[:1])}</span>"
 
 
 def render_cinderella_standings(state):
@@ -1542,11 +1610,164 @@ def render_drafted_player_stats(state):
     st.markdown("".join(html_rows), unsafe_allow_html=True)
 
 
+def match_is_completed(match):
+    status = str(match.get("status") or "").lower()
+    if status in ["scheduled", "timed", "postponed", "cancelled", "canceled", "suspended"]:
+        return False
+    return match.get("home_score") is not None and match.get("away_score") is not None
+
+
+def team_record_and_result_points(state, team_name):
+    team_name = canonical_team_name(team_name)
+    wins = draws = losses = result_points = 0
+    for match in state.get("matches", []):
+        if "friendly" in str(match.get("stage") or "").lower():
+            continue
+        home = canonical_team_name(match.get("home"))
+        away = canonical_team_name(match.get("away"))
+        if team_name not in [home, away] or not match_is_completed(match):
+            continue
+        home_score = int(match.get("home_score") or 0)
+        away_score = int(match.get("away_score") or 0)
+        goals_for = home_score if team_name == home else away_score
+        goals_against = away_score if team_name == home else home_score
+        if goals_for > goals_against:
+            wins += 1
+            result_points += 3
+        elif goals_for == goals_against:
+            draws += 1
+            result_points += 1
+        else:
+            losses += 1
+    return f"{wins}-{draws}-{losses}", result_points
+
+
+def next_match_for_team(state, team_name):
+    team_name = canonical_team_name(team_name)
+    now = datetime.now(ZoneInfo("UTC"))
+    candidates = []
+    for match in state.get("matches", []):
+        home = canonical_team_name(match.get("home"))
+        away = canonical_team_name(match.get("away"))
+        if team_name not in [home, away] or match_is_completed(match):
+            continue
+        date_text = str(match.get("date") or "")
+        try:
+            parsed = datetime.fromisoformat(date_text.replace("Z", "+00:00"))
+            if parsed.tzinfo is None:
+                parsed = parsed.replace(tzinfo=ZoneInfo("UTC"))
+        except Exception:
+            parsed = datetime.max.replace(tzinfo=ZoneInfo("UTC"))
+        if parsed >= now or parsed == datetime.max.replace(tzinfo=ZoneInfo("UTC")):
+            candidates.append((parsed, match))
+    if not candidates:
+        return "TBD"
+    _, match = sorted(candidates, key=lambda item: item[0])[0]
+    opponent = canonical_team_name(match.get("away")) if canonical_team_name(match.get("home")) == team_name else canonical_team_name(match.get("home"))
+    stage = str(match.get("stage") or "")
+    if "friendly" in stage.lower():
+        stage = "FRIENDLY"
+    return f"{flag_for_team(opponent)} {opponent} - {stage} - {format_match_date(match.get('date'))}"
+
+
+def owned_players_for_team_html(state, team_name):
+    team_name = canonical_team_name(team_name)
+    rows = []
+    for coach, data in state["teams"].items():
+        color = data.get("color") or "#FFD54A"
+        for player in data.get("star_players", []):
+            if player_country(player) != team_name:
+                continue
+            stats = state["player_stats"].get(player, {})
+            points = int(stats.get("goals", 0)) * 4 + int(stats.get("assists", 0)) * 3
+            rows.append((points, f"{coach_mini_html(coach, color)}{html.escape(player_base_name(player))}"))
+    if not rows:
+        return "<span class='subtle'>None</span>"
+    return ", ".join(item[1] for item in sorted(rows, key=lambda item: item[0], reverse=True)[:4])
+
+
+def team_standings_rows(state):
+    rows = []
+    for team in WORLD_CUP_TEAMS:
+        team_name = team["name"]
+        coach = drafted_coach_for_team(state, team_name)
+        coach_data = state["teams"].get(coach, {}) if coach else {}
+        record, result_points = team_record_and_result_points(state, team_name)
+        rows.append(
+            {
+                "team": team_name,
+                "coach": coach,
+                "coach_name": coach_data.get("team_name") or coach or "Undrafted",
+                "coach_color": coach_data.get("color") or "#777777",
+                "record": record,
+                "result_points": result_points,
+                "next_match": next_match_for_team(state, team_name),
+                "fifa_rank": FIFA_RANKINGS.get(team_name, {}).get("rank"),
+                "team_points": team_fantasy_points(state, team_name),
+                "players": owned_players_for_team_html(state, team_name),
+            }
+        )
+    return sorted(
+        rows,
+        key=lambda item: (
+            -float(item["team_points"]),
+            -int(item["result_points"]),
+            int(item["fifa_rank"] or 999),
+            item["team"],
+        ),
+    )
+
+
+def team_standings_table_html(rows):
+    html_rows = [
+        "<table class='data-table'><thead><tr>"
+        "<th>Team</th><th>Coach</th><th>Record</th><th>Win/Draw Pts</th><th>Next Match</th><th>FIFA</th><th>Top Owned Players</th>"
+        "</tr></thead><tbody>"
+    ]
+    for row in rows:
+        color = html.escape(row["coach_color"])
+        coach_html = (
+            f"{coach_mini_html(row['coach'], row['coach_color'])}{html.escape(row['coach_name'])}"
+            if row["coach"]
+            else "<span class='subtle'>Undrafted</span>"
+        )
+        html_rows.append(
+            f"""
+<tr>
+  <td>{display_team_html(row["team"], "", include_info=True)}</td>
+  <td>{coach_html}</td>
+  <td>{html.escape(row["record"])}</td>
+  <td>{int(row["result_points"])}</td>
+  <td>{html.escape(row["next_match"])}</td>
+  <td>#{html.escape(str(row["fifa_rank"] or "n/a"))}</td>
+  <td>{row["players"]}</td>
+</tr>
+"""
+        )
+    html_rows.append("</tbody></table>")
+    return "".join(html_rows)
+
+
+def render_team_standings(state):
+    rows = team_standings_rows(state)
+    st.markdown("<div class='section-title'>Team Standings</div>", unsafe_allow_html=True)
+    st.markdown(team_standings_table_html(rows[:10]), unsafe_allow_html=True)
+    if len(rows) > 10:
+        with st.expander("More Teams", expanded=False):
+            st.markdown(team_standings_table_html(rows[10:]), unsafe_allow_html=True)
+
+
 def render_draft_status(stage_label, current, state):
     if current:
         color = state["teams"][current["coach"]]["color"]
+        try:
+            started_at = int(state.get("current_pick_started_at") or time.time())
+        except (TypeError, ValueError):
+            started_at = int(time.time())
+        elapsed = max(0, int(time.time()) - started_at)
+        elapsed_text = time.strftime("%H:%M:%S", time.gmtime(elapsed))
         st.markdown(
-            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']}: <span>{html.escape(current['coach'])}</span> is up</div>",
+            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']}: <span>{html.escape(current['coach'])}</span> is On The Clock 🕒 {html.escape(elapsed_text)}</div>",
             unsafe_allow_html=True,
         )
     st.markdown(
@@ -1560,6 +1781,8 @@ def set_draft_active(active):
         state = normalize_state(state)
         state["draft_enabled"] = True
         state["draft_active"] = bool(active)
+        if active:
+            state["current_pick_started_at"] = int(time.time())
         return True
     return mutate_shared_state(mutator, "Update draft status")
 
@@ -1584,6 +1807,7 @@ def undo_last_pick():
         else:
             return False
         apply_picks_to_rosters(state)
+        state["current_pick_started_at"] = int(time.time())
         return True
     return mutate_shared_state(mutator, "Undo last draft pick")
 
@@ -1596,28 +1820,50 @@ def reset_rosters_and_draft():
         for coach in COACHES:
             state["teams"][coach]["national_teams"] = []
             state["teams"][coach]["star_players"] = []
+        state["current_pick_started_at"] = int(time.time())
         return True
     return mutate_shared_state(mutator, "Reset rosters and draft picks")
+
+
+def rerun_draft_scope():
+    try:
+        st.rerun(scope="fragment")
+    except Exception:
+        st.rerun()
+
+
+def remember_draft_fragment_state(state):
+    if state:
+        st.session_state["draft_fragment_state"] = normalize_state(state)
 
 
 def render_draft_controls(state):
     st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 1, 1], gap="large")
     with c1:
+        st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
         if st.button("Start Draft", key="draft-start-top", width="stretch"):
-            ok, _ = set_draft_active(True)
+            ok, updated_state = set_draft_active(True)
             if ok:
-                st.rerun()
+                remember_draft_fragment_state(updated_state)
+                rerun_draft_scope()
+        st.markdown("</div>", unsafe_allow_html=True)
     with c2:
+        st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
         if st.button("Stop Draft", key="draft-stop-top", width="stretch"):
-            ok, _ = set_draft_active(False)
+            ok, updated_state = set_draft_active(False)
             if ok:
-                st.rerun()
+                remember_draft_fragment_state(updated_state)
+                rerun_draft_scope()
+        st.markdown("</div>", unsafe_allow_html=True)
     with c3:
+        st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
         if st.button("Undo Last Pick", key="draft-undo-top", width="stretch"):
-            ok, _ = undo_last_pick()
+            ok, updated_state = undo_last_pick()
             if ok:
-                st.rerun()
+                remember_draft_fragment_state(updated_state)
+                rerun_draft_scope()
+        st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
 
 
@@ -1677,6 +1923,7 @@ def make_team_pick(team_name):
             }
         )
         apply_picks_to_rosters(state)
+        state["current_pick_started_at"] = int(time.time())
         return True
 
     return mutate_shared_state(mutator, f"Draft {team_name}")
@@ -1703,6 +1950,7 @@ def make_player_pick(player):
             }
         )
         apply_picks_to_rosters(state)
+        state["current_pick_started_at"] = int(time.time())
         return True
 
     return mutate_shared_state(mutator, f"Draft {player}")
@@ -1710,49 +1958,39 @@ def make_player_pick(player):
 
 def render_available_teams(state):
     available = [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)]
-    parts = ["<div class='draft-choice-grid'>"]
-    for team in available:
-        label = html.escape(display_team(team["name"], state["odds"].get(team["name"], "")))
-        info_html = info_link(team_info_url(team["name"]), f"{team['name']} info")
-        if state.get("draft_active"):
-            action = f"<a class='draft-choice-link' href='?draft_team={quote(team['name'])}'>{label}</a>"
-        else:
-            action = f"<span class='draft-choice-disabled'>{label}</span>"
-        parts.append(f"<div class='draft-choice-cell'>{action}<div class='draft-info-wrap'>{info_html}</div></div>")
-    parts.append("</div>")
-    st.markdown("".join(parts), unsafe_allow_html=True)
+    for row_start in range(0, len(available), 4):
+        cols = st.columns(4, gap="small")
+        for col, team in zip(cols, available[row_start:row_start + 4]):
+            with col:
+                label = display_team(team["name"], state["odds"].get(team["name"], ""))
+                button_col, info_col = st.columns([6, 1], gap="small", vertical_alignment="center")
+                with button_col:
+                    if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=not state.get("draft_active")):
+                        ok, updated_state = make_team_pick(team["name"])
+                        if ok:
+                            remember_draft_fragment_state(updated_state)
+                            rerun_draft_scope()
+                with info_col:
+                    st.markdown(info_link(team_info_url(team["name"]), f"{team['name']} info"), unsafe_allow_html=True)
 
 
 def render_available_players(state):
     used = drafted_players(state)
     available = [player for player in state["players"] if player not in used]
-    parts = ["<div class='draft-choice-grid'>"]
-    for player in available:
-        label = html.escape(display_player(player))
-        info_html = info_link(player_info_url(player), f"{player_base_name(player)} info")
-        if state.get("draft_active"):
-            action = f"<a class='draft-choice-link' href='?draft_player={quote(player)}'>{label}</a>"
-        else:
-            action = f"<span class='draft-choice-disabled'>{label}</span>"
-        parts.append(f"<div class='draft-choice-cell'>{action}<div class='draft-info-wrap'>{info_html}</div></div>")
-    parts.append("</div>")
-    st.markdown("".join(parts), unsafe_allow_html=True)
-
-
-def process_draft_query_params(state):
-    draft_team = st.query_params.get("draft_team")
-    draft_player = st.query_params.get("draft_player")
-    if draft_team:
-        ok, _ = make_team_pick(str(draft_team))
-        st.query_params.clear()
-        if ok:
-            st.rerun()
-        return
-    if draft_player:
-        ok, _ = make_player_pick(str(draft_player))
-        st.query_params.clear()
-        if ok:
-            st.rerun()
+    for row_start in range(0, len(available), 4):
+        cols = st.columns(4, gap="small")
+        for col, player in zip(cols, available[row_start:row_start + 4]):
+            with col:
+                label = display_player(player)
+                button_col, info_col = st.columns([6, 1], gap="small", vertical_alignment="center")
+                with button_col:
+                    if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=not state.get("draft_active")):
+                        ok, updated_state = make_player_pick(player)
+                        if ok:
+                            remember_draft_fragment_state(updated_state)
+                            rerun_draft_scope()
+                with info_col:
+                    st.markdown(info_link(player_info_url(player), f"{player_base_name(player)} info"), unsafe_allow_html=True)
 
 
 def render_drafts(state):
@@ -1774,6 +2012,7 @@ def render_drafts(state):
     render_draft_controls(state)
 
     render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
+    render_draft_status(active_stage, active_pick, state)
     if team_pick:
         render_available_teams(state)
     else:
@@ -1781,9 +2020,20 @@ def render_drafts(state):
 
     if team_draft_complete(state):
         render_draft_board("Player Draft", PLAYER_DRAFT_SEQUENCE, state["player_picks"], "player", state)
+        render_draft_status(active_stage, active_pick, state)
         player_pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
         if player_pick:
             render_available_players(state)
+
+
+if hasattr(st, "fragment"):
+    @st.fragment(run_every=1)
+    def render_drafts_fragment(initial_state):
+        fragment_state = st.session_state.get("draft_fragment_state", initial_state)
+        render_drafts(normalize_state(fragment_state))
+else:
+    def render_drafts_fragment(initial_state):
+        render_drafts(initial_state)
 
 
 def drafted_coach_for_team(state, team_name):
@@ -1794,8 +2044,69 @@ def drafted_coach_for_team(state, team_name):
     return ""
 
 
+def render_match_cards(state, matches):
+    if not matches:
+        st.caption("No matches in this section yet.")
+        return
+    cards = ["<div class='matches-grid'>"]
+    for match in matches:
+        home = canonical_team_name(match.get("home"))
+        away = canonical_team_name(match.get("away"))
+        home_coach = drafted_coach_for_team(state, home)
+        away_coach = drafted_coach_for_team(state, away)
+        score_text = "vs"
+        if match.get("home_score") is not None and match.get("away_score") is not None:
+            score_text = f"{match['home_score']} - {match['away_score']}"
+        chips = []
+        for team_name, coach in [(home, home_coach), (away, away_coach)]:
+            if coach:
+                color = state["teams"][coach]["color"]
+                points = score_match_for_team(match, team_name)
+                chips.append(
+                    f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
+                )
+        date_text = format_match_date(match.get("date"))
+        stage = str(match.get("stage") or "")
+        if "friendly" in stage.lower():
+            stage = "FRIENDLY"
+        cards.append(
+            f"""
+<div class='match-card'>
+  <div class='match-line'>
+    <span>{display_team_html(home, '', include_info=True)}</span>
+    <span class='match-score'>{html.escape(score_text)}</span>
+    <span>{display_team_html(away, '', include_info=True)}</span>
+  </div>
+  <div class='subtle'>{html.escape(stage)} | {html.escape(match.get('status') or '')} | {html.escape(date_text)}</div>
+  <div>{''.join(chips) or "<span class='subtle'>No drafted teams in this match yet.</span>"}</div>
+</div>
+"""
+        )
+    cards.append("</div>")
+    st.markdown("".join(cards), unsafe_allow_html=True)
+
+
+def match_section_name(match):
+    stage = str(match.get("stage") or "")
+    if "friendly" in stage.lower():
+        return "Friendly Matches"
+    stage_level = stage_to_advancement(stage)
+    if not stage_level and stage_is_group(stage):
+        return "Group Stages"
+    if stage_level == "Round of 32":
+        return "Round of 32"
+    if stage_level == "Round of 16":
+        return "Round of 16"
+    if stage_level == "Quarterfinals":
+        return "Quarterfinals"
+    if stage_level in ["Semifinals", "Final"]:
+        return "Championship"
+    return "Group Stages"
+
+
 def render_live_matches(state):
-    with st.expander("Live Matches", expanded=False):
+    st.markdown("<div class='match-section-spacer'></div>", unsafe_allow_html=True)
+    with st.expander("Past, Present, and Live Matches", expanded=False):
         c1, c2 = st.columns([1, 2])
         with c1:
             if st.button("Refresh Scores"):
@@ -1815,39 +2126,12 @@ def render_live_matches(state):
             st.info("No matches loaded yet. Configure Football-Data token or add manual matches in Admin.")
             return
 
-        cards = ["<div class='matches-grid'>"]
+        sections = {name: [] for name in ["Friendly Matches", "Group Stages", "Round of 32", "Round of 16", "Quarterfinals", "Championship"]}
         for match in matches:
-            home = canonical_team_name(match.get("home"))
-            away = canonical_team_name(match.get("away"))
-            home_coach = drafted_coach_for_team(state, home)
-            away_coach = drafted_coach_for_team(state, away)
-            score_text = "vs"
-            if match.get("home_score") is not None and match.get("away_score") is not None:
-                score_text = f"{match['home_score']} - {match['away_score']}"
-            chips = []
-            for team_name, coach in [(home, home_coach), (away, away_coach)]:
-                if coach:
-                    color = state["teams"][coach]["color"]
-                    points = score_match_for_team(match, team_name)
-                    chips.append(
-                        f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
-                    )
-            date_text = format_match_date(match.get("date"))
-            cards.append(
-                f"""
-<div class='match-card'>
-  <div class='match-line'>
-    <span>{display_team_html(home, '', include_info=True)}</span>
-    <span class='match-score'>{html.escape(score_text)}</span>
-    <span>{display_team_html(away, '', include_info=True)}</span>
-  </div>
-  <div class='subtle'>{html.escape(match.get('stage') or '')} | {html.escape(match.get('status') or '')} | {html.escape(date_text)}</div>
-  <div>{''.join(chips) or "<span class='subtle'>No drafted teams in this match yet.</span>"}</div>
-</div>
-"""
-            )
-        cards.append("</div>")
-        st.markdown("".join(cards), unsafe_allow_html=True)
+            sections.setdefault(match_section_name(match), []).append(match)
+        for title in sections:
+            with st.expander(title, expanded=False):
+                render_match_cards(state, sections[title])
 
 
 def format_match_date(value):
@@ -1874,15 +2158,18 @@ def render_admin(state):
         label_by_hex = {hex_value: label for label, hex_value in TEAM_COLOR_OPTIONS}
         color_by_label = {label: hex_value for label, hex_value in TEAM_COLOR_OPTIONS}
         changed_colors = {}
-        for coach in COACHES:
-            current_hex = state["teams"][coach]["color"]
-            selected = st.selectbox(
-                coach,
-                color_labels,
-                index=color_labels.index(label_by_hex.get(current_hex, color_labels[0])),
-                key=f"admin-color-{coach}",
-            )
-            changed_colors[coach] = color_by_label[selected]
+        for row_start in range(0, len(COACHES), 4):
+            cols = st.columns(4, gap="small")
+            for col, coach in zip(cols, COACHES[row_start:row_start + 4]):
+                with col:
+                    current_hex = state["teams"][coach]["color"]
+                    selected = st.selectbox(
+                        coach,
+                        color_labels,
+                        index=color_labels.index(label_by_hex.get(current_hex, color_labels[0])),
+                        key=f"admin-color-{coach}",
+                    )
+                    changed_colors[coach] = color_by_label[selected]
         if st.button("Save Coach Colors"):
             def mutator(fresh):
                 fresh = normalize_state(fresh)
@@ -2050,14 +2337,16 @@ if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_
     _, refreshed_state = refresh_api_scores()
     if refreshed_state:
         state = normalize_state(refreshed_state)
-process_draft_query_params(state)
+if "draft_fragment_state" not in st.session_state:
+    remember_draft_fragment_state(state)
 scores = calculate_scores(state)
 
 render_header(state)
 render_standings(state, scores)
 render_live_matches(state)
-render_drafts(state)
+render_drafts_fragment(state)
 render_drafted_player_stats(state)
+render_team_standings(state)
 render_cinderella_standings(state)
 render_payout_descriptions()
 render_admin(state)
