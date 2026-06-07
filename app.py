@@ -91,6 +91,9 @@ input, textarea, select { color:#fff!important; }
 .draft-start-control div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
 .draft-stop-control div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
 .draft-undo-control div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; }
+.st-key-admin-start-draft div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
+.st-key-admin-stop-draft div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
+.st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; }
 .st-key-team-pick-buttons div[data-testid="stButton"] > button,
 .st-key-player-pick-buttons div[data-testid="stButton"] > button {
     background:var(--draft-button-bg, #121212)!important;
@@ -1945,25 +1948,27 @@ def save_draft_pick(action, value, label, status_placeholder=None):
 
 
 def render_draft_controls(state, key_prefix="draft-controls"):
+    draft_live = bool(state.get("draft_active"))
+    has_any_picks = bool(state.get("team_picks") or state.get("player_picks"))
     st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 1, 1], gap="small")
     with c1:
         st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
-        if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch"):
+        if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch", disabled=draft_live):
             ok, _ = set_draft_active(True)
             if ok:
                 rerun_draft_scope()
         st.markdown("</div>", unsafe_allow_html=True)
     with c2:
         st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
-        if st.button("Stop Draft", key=f"{key_prefix}-stop", width="stretch"):
+        if st.button("Stop Draft", key=f"{key_prefix}-stop", width="stretch", disabled=not draft_live):
             ok, _ = set_draft_active(False)
             if ok:
                 rerun_draft_scope()
         st.markdown("</div>", unsafe_allow_html=True)
     with c3:
         st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
-        if st.button("Undo Last Pick", key=f"{key_prefix}-undo", width="stretch"):
+        if st.button("Undo Last Pick", key=f"{key_prefix}-undo", width="stretch", disabled=not has_any_picks):
             ok, _ = undo_last_pick()
             if ok:
                 rerun_draft_scope()
@@ -2342,7 +2347,7 @@ def draft_status_summary(state):
 
 
 def render_admin(state):
-    with st.expander("Admin"):
+    with st.expander("Admin", expanded=st.session_state.get("admin_open", False)):
         st.caption("Admin controls are open for this private league app.")
 
         status_label, status_text = draft_status_summary(state)
@@ -2351,6 +2356,8 @@ def render_admin(state):
         st.caption(f"Status: {status_label}")
         st.caption(status_text)
         st.caption("Draft order is fixed and intentionally not editable.")
+        draft_live = bool(state.get("draft_active"))
+        has_any_picks = bool(state.get("team_picks") or state.get("player_picks"))
         c1, c2, c3, c4 = st.columns(4, gap="small")
         with c1:
             if st.button("Enable Draft", key="admin-enable-draft"):
@@ -2363,16 +2370,16 @@ def render_admin(state):
                 if ok:
                     st.rerun()
         with c3:
-            if st.button("Start Draft", key="admin-start-draft"):
+            if st.button("Start Draft", key="admin-start-draft", disabled=draft_live):
                 ok, _ = set_draft_active(True)
                 if ok:
                     st.rerun()
         with c4:
-            if st.button("Stop Draft", key="admin-stop-draft"):
+            if st.button("Stop Draft", key="admin-stop-draft", disabled=not draft_live):
                 ok, _ = set_draft_active(False)
                 if ok:
                     st.rerun()
-        if st.button("Undo Last Pick", key="admin-undo-last-pick-top", width="stretch"):
+        if st.button("Undo Last Pick", key="admin-undo-last-pick-top", width="stretch", disabled=not has_any_picks):
             ok, _ = undo_last_pick()
             if ok:
                 st.rerun()
@@ -2383,6 +2390,7 @@ def render_admin(state):
         if st.button("Reset Rosters", key="admin-reset-rosters", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET")):
             ok, _ = reset_rosters_and_draft()
             if ok:
+                st.session_state["admin_open"] = False
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
