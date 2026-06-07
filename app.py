@@ -1522,6 +1522,17 @@ def render_standings(state, scores):
     st.markdown("".join(cards), unsafe_allow_html=True)
 
 
+if hasattr(st, "fragment"):
+    @st.fragment(run_every=1)
+    def render_standings_fragment(initial_state):
+        fragment_state = st.session_state.get("draft_fragment_state", initial_state)
+        fragment_state = normalize_state(fragment_state)
+        render_standings(fragment_state, calculate_scores(fragment_state))
+else:
+    def render_standings_fragment(initial_state):
+        render_standings(initial_state, calculate_scores(initial_state))
+
+
 def coach_mini_html(coach, color):
     image_path = coach_photo_filename(coach)
     data_uri = image_to_data_uri(image_path)
@@ -2148,6 +2159,21 @@ def format_match_date(value):
         return text
 
 
+if hasattr(st, "fragment"):
+    @st.fragment(run_every=1)
+    def render_draft_tables_fragment(initial_state):
+        fragment_state = st.session_state.get("draft_fragment_state", initial_state)
+        fragment_state = normalize_state(fragment_state)
+        render_drafted_player_stats(fragment_state)
+        render_team_standings(fragment_state)
+        render_cinderella_standings(fragment_state)
+else:
+    def render_draft_tables_fragment(initial_state):
+        render_drafted_player_stats(initial_state)
+        render_team_standings(initial_state)
+        render_cinderella_standings(initial_state)
+
+
 def render_admin(state):
     with st.expander("Admin"):
         st.caption("Admin controls are open for this private league app.")
@@ -2339,14 +2365,11 @@ if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_
         state = normalize_state(refreshed_state)
 if "draft_fragment_state" not in st.session_state:
     remember_draft_fragment_state(state)
-scores = calculate_scores(state)
 
 render_header(state)
-render_standings(state, scores)
+render_standings_fragment(state)
 render_live_matches(state)
 render_drafts_fragment(state)
-render_drafted_player_stats(state)
-render_team_standings(state)
-render_cinderella_standings(state)
+render_draft_tables_fragment(state)
 render_payout_descriptions()
 render_admin(state)
