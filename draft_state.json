@@ -134,7 +134,8 @@
         "Spain"
       ],
       "star_players": [
-        "Michael Olise (France)"
+        "Michael Olise (France)",
+        "Nico Williams (Spain)"
       ]
     }
   },
@@ -581,6 +582,13 @@
       "coach": "Jayme",
       "player": "Lionel Messi (Argentina)",
       "picked_at": "2026-06-07T13:30:44.561476-04:00"
+    },
+    {
+      "pick": 64,
+      "round": 2,
+      "coach": "Spencer",
+      "player": "Nico Williams (Spain)",
+      "picked_at": "2026-06-07T13:30:49.727350-04:00"
     }
   ],
   "players": [
@@ -2934,6 +2942,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853444,
+  "current_pick_started_at": 1780853449,
   "last_friendly_api_error": ""
 }
