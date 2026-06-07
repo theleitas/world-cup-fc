@@ -44,7 +44,7 @@ If no GitHub token is present, the app reads and writes local `draft_state.json`
 
 Admin is intentionally open for this private league app.
 
-Admin can edit coach colors, the 25-player pool, odds, expected points, match results, player stats, advancement bonuses, enable/disable the public draft room, and reset rosters.
+Admin can edit coach colors, the 25-player pool, odds, advancement bonuses, enable/disable the public draft room, and reset rosters. Manual match and player stat editors are hidden inside `Emergency Manual Overrides` and should only be used if Football-Data is wrong, delayed, or unavailable.
 
 Admin cannot edit draft order.
 
@@ -54,7 +54,7 @@ Roster reset is protected by a confirmation checkbox and by typing `RESET`.
 
 - Qualified teams are seeded from FIFA's official 48-team qualified list.
 - Futures odds are seeded from current pre-tournament winner markets and remain editable in Admin.
-- Match data can refresh from Football-Data.org when a token is configured; otherwise use the manual match table in Admin.
+- Match and drafted-player data refresh from Football-Data.org when a token is configured; otherwise emergency manual override tables are available in Admin.
 
 ## Live Data
 

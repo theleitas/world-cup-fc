@@ -1476,6 +1476,55 @@ def render_cinderella_standings(state):
     st.markdown("".join(html_rows), unsafe_allow_html=True)
 
 
+def drafted_player_rows(state):
+    rows = []
+    for coach, data in state["teams"].items():
+        for player in data.get("star_players", []):
+            stats = state["player_stats"].get(player, {})
+            goals = int(stats.get("goals", 0))
+            assists = int(stats.get("assists", 0))
+            rows.append(
+                {
+                    "coach": coach,
+                    "coach_name": data.get("team_name") or coach,
+                    "color": data.get("color") or "#FFD54A",
+                    "player": player,
+                    "goals": goals,
+                    "assists": assists,
+                    "points": goals * 4 + assists * 3,
+                }
+            )
+    return sorted(rows, key=lambda item: (item["points"], item["goals"], item["assists"], item["player"]), reverse=True)
+
+
+def render_drafted_player_stats(state):
+    rows = drafted_player_rows(state)
+    st.markdown("<div class='section-title'>Drafted Player Stats</div>", unsafe_allow_html=True)
+    if not rows:
+        st.caption("No players drafted yet.")
+        return
+    html_rows = [
+        "<table class='data-table'><thead><tr>"
+        "<th>Player</th><th>Coach</th><th>Goals</th><th>Assists</th><th>Total</th>"
+        "</tr></thead><tbody>"
+    ]
+    for row in rows:
+        color = html.escape(row["color"])
+        html_rows.append(
+            f"""
+<tr>
+  <td>{display_player_html(row["player"], include_info=True)}</td>
+  <td><span class='coach-dot' style='--coach-color:{color}'></span>{html.escape(row["coach_name"])}</td>
+  <td>{row["goals"]}</td>
+  <td>{row["assists"]}</td>
+  <td><b>{row["points"]}</b></td>
+</tr>
+"""
+        )
+    html_rows.append("</tbody></table>")
+    st.markdown("".join(html_rows), unsafe_allow_html=True)
+
+
 def render_draft_status(stage_label, current, state):
     if current:
         color = state["teams"][current["coach"]]["color"]
@@ -1855,50 +1904,53 @@ def render_admin(state):
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
-        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-        st.subheader("Manual Match Results")
-        matches_df = pd.DataFrame(state.get("matches", []))
-        edited_matches = st.data_editor(matches_df, hide_index=True, width="stretch", num_rows="dynamic")
-        if st.button("Save Matches"):
-            def mutator(fresh):
-                fresh = normalize_state(fresh)
-                fresh["matches"] = [normalize_match(row.to_dict(), index) for index, row in edited_matches.iterrows()]
-                return True
-            ok, _ = mutate_shared_state(mutator, "Update matches")
-            if ok:
-                st.rerun()
-        st.caption("Finished matches should use status Finished or Final. Dates can be ISO timestamps.")
-        st.markdown("</div>", unsafe_allow_html=True)
+        with st.expander("Emergency Manual Overrides", expanded=False):
+            st.caption("Normal scoring is automatic from Football-Data. Use these only if the API is wrong, delayed, or unavailable.")
 
-        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-        st.subheader("Player Stats")
-        stats_df = pd.DataFrame(
-            [
-                {"Player": player, **state["player_stats"].get(player, {"goals": 0, "assists": 0, "group_goals": 0, "group_assists": 0})}
-                for player in state["players"]
-            ]
-        )
-        edited_stats = st.data_editor(stats_df, hide_index=True, width="stretch", num_rows="fixed")
-        if st.button("Save Player Stats"):
-            def mutator(fresh):
-                fresh = normalize_state(fresh)
-                stats = {}
-                for _, row in edited_stats.iterrows():
-                    player = str(row["Player"]).strip()
-                    if not player:
-                        continue
-                    stats[player] = {
-                        "goals": none_or_int(row.get("goals")) or 0,
-                        "assists": none_or_int(row.get("assists")) or 0,
-                        "group_goals": none_or_int(row.get("group_goals")) or 0,
-                        "group_assists": none_or_int(row.get("group_assists")) or 0,
-                    }
-                fresh["player_stats"] = stats
-                return True
-            ok, _ = mutate_shared_state(mutator, "Update player stats")
-            if ok:
-                st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Manual Match Results")
+            matches_df = pd.DataFrame(state.get("matches", []))
+            edited_matches = st.data_editor(matches_df, hide_index=True, width="stretch", num_rows="dynamic")
+            if st.button("Save Matches"):
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    fresh["matches"] = [normalize_match(row.to_dict(), index) for index, row in edited_matches.iterrows()]
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update matches")
+                if ok:
+                    st.rerun()
+            st.caption("Finished matches should use status Finished or Final. Dates can be ISO timestamps.")
+            st.markdown("</div>", unsafe_allow_html=True)
+
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Manual Player Stats")
+            stats_df = pd.DataFrame(
+                [
+                    {"Player": player, **state["player_stats"].get(player, {"goals": 0, "assists": 0, "group_goals": 0, "group_assists": 0})}
+                    for player in state["players"]
+                ]
+            )
+            edited_stats = st.data_editor(stats_df, hide_index=True, width="stretch", num_rows="fixed")
+            if st.button("Save Player Stats"):
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    stats = {}
+                    for _, row in edited_stats.iterrows():
+                        player = str(row["Player"]).strip()
+                        if not player:
+                            continue
+                        stats[player] = {
+                            "goals": none_or_int(row.get("goals")) or 0,
+                            "assists": none_or_int(row.get("assists")) or 0,
+                            "group_goals": none_or_int(row.get("group_goals")) or 0,
+                            "group_assists": none_or_int(row.get("group_assists")) or 0,
+                        }
+                    fresh["player_stats"] = stats
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update player stats")
+                if ok:
+                    st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Advancement Bonuses")
@@ -1966,6 +2018,7 @@ render_header(state)
 render_standings(state, scores)
 render_live_matches(state)
 render_drafts(state)
+render_drafted_player_stats(state)
 render_cinderella_standings(state)
 render_payout_descriptions()
 render_admin(state)
