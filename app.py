@@ -90,6 +90,19 @@ input, textarea, select { color:#fff!important; }
 .draft-start-control div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
 .draft-stop-control div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
 .draft-undo-control div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; }
+.st-key-team-pick-buttons div[data-testid="stButton"] > button,
+.st-key-player-pick-buttons div[data-testid="stButton"] > button {
+    background:var(--draft-button-bg, #121212)!important;
+    border-color:var(--draft-button-border, #444)!important;
+    color:var(--draft-button-fg, #fff)!important;
+    box-shadow:0 0 12px color-mix(in srgb, var(--draft-button-border, #444) 35%, transparent)!important;
+}
+.st-key-team-pick-buttons div[data-testid="stButton"] > button:hover,
+.st-key-player-pick-buttons div[data-testid="stButton"] > button:hover {
+    background:var(--draft-button-hover, #181818)!important;
+    border-color:var(--draft-button-border, #00e5ff)!important;
+    box-shadow:0 0 18px color-mix(in srgb, var(--draft-button-border, #00e5ff) 50%, transparent)!important;
+}
 .draft-choice-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:7px; margin:.45rem 0 1rem; }
 .draft-choice-cell { display:flex; align-items:stretch; gap:6px; min-width:0; }
 .draft-choice-link, .draft-choice-disabled, .draft-choice-button {
@@ -1924,8 +1937,6 @@ def render_draft_board(title, sequence, picks, field, state):
     pick_map = pick_by_number(picks)
     rounds = max(item["round"] for item in sequence)
     rows = []
-    current = current_pick(sequence, picks)
-    active_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
     rows.append("<div class='draft-board'><table><thead><tr>")
     rows.append("<th class='round-head'>Round</th>")
     for coach in COACHES:
@@ -1938,14 +1949,15 @@ def render_draft_board(title, sequence, picks, field, state):
         for coach in COACHES:
             item = next(seq for seq in sequence if seq["round"] == round_number and seq["coach"] == coach)
             pick = pick_map.get(item["pick"])
+            cell_color = state["teams"][item["coach"]]["color"]
             if pick:
                 choice = pick[field]
                 label = display_team_html(choice, include_info=False) if field == "team" else display_player_html(choice, include_info=False)
             else:
-                label = "On deck" if current and item["pick"] == current["pick"] else "Open"
+                label = "Open"
             rows.append(
                 f"""
-<td><div class='pick-cell' style='--coach-color:{html.escape(active_color)}'>
+<td><div class='pick-cell' style='--coach-color:{html.escape(cell_color)}'>
   <div class='pick-num'>Pick {item["pick"]}</div>
   <div class='pick-choice'>{label}</div>
 </div></td>
@@ -2011,26 +2023,60 @@ def make_player_pick(player):
 def render_available_teams(state):
     available = [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)]
     saving = st.session_state.get("draft_saving", False)
-    for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
-        cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
-        for col, team in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
-            with col:
-                label = display_team(team["name"], state["odds"].get(team["name"], ""))
-                if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=(not state.get("draft_active") or saving)):
-                    save_draft_pick(make_team_pick, team["name"], label)
+    current = current_pick(TEAM_DRAFT_SEQUENCE, state["team_picks"])
+    coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
+    hover_color = f"color-mix(in srgb, {coach_color} 28%, #121212)"
+    st.markdown(
+        f"""
+<style>
+.st-key-team-pick-buttons {{
+    --draft-button-bg:{coach_color};
+    --draft-button-border:{coach_color};
+    --draft-button-hover:{hover_color};
+    --draft-button-fg:#000;
+}}
+</style>
+""",
+        unsafe_allow_html=True,
+    )
+    with st.container(key="team-pick-buttons"):
+        for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
+            cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
+            for col, team in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
+                with col:
+                    label = display_team(team["name"], state["odds"].get(team["name"], ""))
+                    if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=(not state.get("draft_active") or saving)):
+                        save_draft_pick(make_team_pick, team["name"], label)
 
 
 def render_available_players(state):
     used = drafted_players(state)
     available = [player for player in state["players"] if player not in used]
     saving = st.session_state.get("draft_saving", False)
-    for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
-        cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
-        for col, player in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
-            with col:
-                label = display_player(player)
-                if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=(not state.get("draft_active") or saving)):
-                    save_draft_pick(make_player_pick, player, label)
+    current = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
+    coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
+    hover_color = f"color-mix(in srgb, {coach_color} 28%, #121212)"
+    st.markdown(
+        f"""
+<style>
+.st-key-player-pick-buttons {{
+    --draft-button-bg:{coach_color};
+    --draft-button-border:{coach_color};
+    --draft-button-hover:{hover_color};
+    --draft-button-fg:#000;
+}}
+</style>
+""",
+        unsafe_allow_html=True,
+    )
+    with st.container(key="player-pick-buttons"):
+        for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
+            cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
+            for col, player in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
+                with col:
+                    label = display_player(player)
+                    if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=(not state.get("draft_active") or saving)):
+                        save_draft_pick(make_player_pick, player, label)
 
 
 def render_drafts(state):
