@@ -33,7 +33,8 @@
       "national_teams": [
         "Iraq",
         "Uzbekistan",
-        "Senegal"
+        "Senegal",
+        "Colombia"
       ],
       "star_players": []
     },
@@ -275,6 +276,13 @@
       "coach": "Jeff",
       "team": "Egypt",
       "picked_at": "2026-06-07T11:33:00.770905-04:00"
+    },
+    {
+      "pick": 27,
+      "round": 4,
+      "coach": "Peter",
+      "team": "Colombia",
+      "picked_at": "2026-06-07T11:33:10.991727-04:00"
     }
   ],
   "player_picks": [],
@@ -2629,5 +2637,5 @@
   "last_score_refresh_attempt_at": 1780846343,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780846380
+  "current_pick_started_at": 1780846390
 }
