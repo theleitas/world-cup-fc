@@ -105,7 +105,7 @@ input, textarea, select { color:#fff!important; }
 .current-pick-accent { color:var(--coach-color); }
 .on-deck-line { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:6px; text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:-.85rem 0 .55rem; text-shadow:0 0 10px var(--coach-color); }
 .on-deck-line .coach-mini-face,
-.on-deck-line .coach-mini-placeholder { width:29px; height:29px; font-size:.72rem; }
+.on-deck-line .coach-mini-placeholder { width:36px; height:36px; font-size:.9rem; }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
 .draft-control-row { margin:.2rem 0 .5rem; }
@@ -2003,8 +2003,8 @@ body {{ padding:10px 0 8px; }}
 }}
 .coach-timer-face,
 .coach-timer-placeholder {{
-  width:44px;
-  height:44px;
+  width:55px;
+  height:55px;
   border-radius:50%;
   object-fit:cover;
   border:2px solid {html.escape(payload["color"])};
@@ -2013,7 +2013,7 @@ body {{ padding:10px 0 8px; }}
   align-items:center;
   justify-content:center;
   color:{html.escape(payload["color"])};
-  font-size:1.05rem;
+  font-size:1.3rem;
   font-weight:1000;
   flex:0 0 auto;
 }}
@@ -2046,7 +2046,7 @@ setInterval(tick, 1000);
 </body>
 </html>
 """,
-        height=112,
+        height=128,
     )
 
 
