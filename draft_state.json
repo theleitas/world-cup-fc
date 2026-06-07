@@ -82,7 +82,8 @@
         "USA",
         "Ghana",
         "Cabo Verde",
-        "Austria"
+        "Austria",
+        "Croatia"
       ],
       "star_players": []
     },
@@ -331,6 +332,13 @@
       "coach": "Spencer",
       "team": "Bosnia and Herzegovina",
       "picked_at": "2026-06-07T13:24:02.568905-04:00"
+    },
+    {
+      "pick": 34,
+      "round": 5,
+      "coach": "Jayme",
+      "team": "Croatia",
+      "picked_at": "2026-06-07T13:24:05.336757-04:00"
     }
   ],
   "player_picks": [],
@@ -2685,6 +2693,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853042,
+  "current_pick_started_at": 1780853045,
   "last_friendly_api_error": ""
 }
