@@ -11,7 +11,8 @@
         "Belgium",
         "Argentina",
         "Haiti",
-        "Austria"
+        "Austria",
+        "Sweden"
       ],
       "star_players": []
     },
@@ -387,6 +388,13 @@
       "coach": "Benji",
       "team": "Austria",
       "picked_at": "2026-06-07T11:50:24.435558-04:00"
+    },
+    {
+      "pick": 41,
+      "round": 6,
+      "coach": "Benji",
+      "team": "Sweden",
+      "picked_at": "2026-06-07T11:51:11.828055-04:00"
     }
   ],
   "player_picks": [],
@@ -2741,5 +2749,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847424
+  "current_pick_started_at": 1780847471
 }
