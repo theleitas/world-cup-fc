@@ -2411,7 +2411,7 @@
   "last_score_refresh_at": 1780875730,
   "last_score_refresh_attempt_at": 1780875728,
   "last_api_error": "",
-  "draft_enabled": false,
+  "draft_enabled": true,
   "current_pick_started_at": 1780875743,
   "last_friendly_api_error": ""
 }
