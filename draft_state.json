@@ -25,7 +25,8 @@
         "Curaçao",
         "Cabo Verde",
         "Uzbekistan",
-        "Netherlands"
+        "Netherlands",
+        "Belgium"
       ],
       "star_players": []
     },
@@ -395,6 +396,13 @@
       "coach": "Benji",
       "team": "Portugal",
       "picked_at": "2026-06-07T09:58:42.902941-04:00"
+    },
+    {
+      "pick": 42,
+      "round": 6,
+      "coach": "Jeff",
+      "team": "Belgium",
+      "picked_at": "2026-06-07T09:58:44.404156-04:00"
     }
   ],
   "player_picks": [],
@@ -2749,5 +2757,5 @@
   "last_score_refresh_attempt_at": 1780840463,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780840722
+  "current_pick_started_at": 1780840724
 }
