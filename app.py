@@ -69,6 +69,7 @@ input, textarea, select { color:#fff!important; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
 .draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
+.draft-save-note { margin:.28rem 0 .2rem; color:#ffd54a; font-size:.82rem; font-weight:900; line-height:1.15; }
 .asset-list { color:#e8f6f8; font-size:.88rem; line-height:1.45; margin-top:9px; }
 .draft-board { overflow-x:auto; width:100%; margin:.45rem 0 1rem; }
 .draft-board table { width:100%; border-collapse:collapse; min-width:820px; font-size:.82rem; table-layout:fixed; }
@@ -159,6 +160,7 @@ div[data-testid="stExpander"] summary p { color:#ffd54a!important; font-weight:1
     .pick-choice { font-size:.72rem; }
     .draft-control-row { margin:.15rem 0 .35rem; }
     .draft-control-row div[data-testid="stButton"] > button { min-height:38px!important; font-size:.75rem!important; padding:4px 6px!important; }
+    .draft-save-note { font-size:.74rem; margin:.2rem 0 .1rem; }
     .draft-choice-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; }
     .draft-choice-link, .draft-choice-disabled { min-height:38px; font-size:.74rem; padding:5px 6px; }
     .draft-info-wrap { flex-basis:26px; min-height:38px; }
@@ -1906,9 +1908,11 @@ def rerun_draft_scope():
     st.rerun()
 
 
-def save_draft_pick(action, value, label):
+def save_draft_pick(action, value, label, status_placeholder=None):
     st.session_state["draft_saving"] = True
     st.toast("Updating roster...")
+    if status_placeholder is not None:
+        status_placeholder.markdown("<div class='draft-save-note'>Updating roster...</div>", unsafe_allow_html=True)
     with st.spinner("Updating roster and saving pick..."):
         ok, _ = action(value)
     if ok:
@@ -2060,8 +2064,10 @@ def render_available_teams(state):
             for col, team in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
                 with col:
                     label = display_team(team["name"], state["odds"].get(team["name"], ""))
-                    if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=(not state.get("draft_active") or saving)):
-                        save_draft_pick(make_team_pick, team["name"], label)
+                    pressed = st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=(not state.get("draft_active") or saving))
+                    status_placeholder = st.empty()
+                    if pressed:
+                        save_draft_pick(make_team_pick, team["name"], label, status_placeholder=status_placeholder)
 
 
 def render_available_players(state):
@@ -2092,8 +2098,10 @@ def render_available_players(state):
             for col, player in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
                 with col:
                     label = display_player(player)
-                    if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=(not state.get("draft_active") or saving)):
-                        save_draft_pick(make_player_pick, player, label)
+                    pressed = st.button(label, key=f"draft-player-{player}", width="stretch", disabled=(not state.get("draft_active") or saving))
+                    status_placeholder = st.empty()
+                    if pressed:
+                        save_draft_pick(make_player_pick, player, label, status_placeholder=status_placeholder)
 
 
 def render_drafts(state):
@@ -2125,7 +2133,7 @@ def render_drafts(state):
         render_available_teams(state)
         return
 
-    with st.expander("Completed Team Draft Board", expanded=False):
+    if st.toggle("Show Completed Team Draft Board", value=False, key="show-completed-team-board"):
         render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
     if not player_draft_complete(state):
         st.success("Team draft complete. Player draft is open.")
@@ -2473,11 +2481,16 @@ draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
     render_standings(state, scores)
+    show_draft_extras = st.toggle("Show Match Tracker and Tables During Draft", value=False, key="show-draft-extras")
+    if not show_draft_extras:
+        st.caption("Draft focus mode is on to keep picks faster on mobile. Turn on the tracker and tables when you need them.")
 else:
     render_standings(state, scores)
-render_live_matches(state)
-render_team_standings(state)
-render_drafted_player_stats(state)
-render_cinderella_standings(state)
+    show_draft_extras = True
+if show_draft_extras:
+    render_live_matches(state)
+    render_team_standings(state)
+    render_drafted_player_stats(state)
+    render_cinderella_standings(state)
 render_payout_descriptions()
 render_admin(state)
