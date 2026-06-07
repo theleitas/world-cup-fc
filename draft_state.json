@@ -6,7 +6,9 @@
       "team_name": "Benji",
       "color": "#FFD54A",
       "image": "Benji.png",
-      "national_teams": [],
+      "national_teams": [
+        "Brazil"
+      ],
       "star_players": []
     },
     "Jeff": {
@@ -59,7 +61,15 @@
       "star_players": []
     }
   },
-  "team_picks": [],
+  "team_picks": [
+    {
+      "pick": 1,
+      "round": 1,
+      "coach": "Benji",
+      "team": "Brazil",
+      "picked_at": "2026-06-07T01:39:35.125481-04:00"
+    }
+  ],
   "player_picks": [],
   "players": [
     "Lamine Yamal (Spain)",
