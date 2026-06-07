@@ -39,7 +39,8 @@
         "Uzbekistan",
         "Senegal",
         "Colombia",
-        "Ghana"
+        "Ghana",
+        "Netherlands"
       ],
       "star_players": []
     },
@@ -403,6 +404,13 @@
       "coach": "Jeff",
       "team": "Scotland",
       "picked_at": "2026-06-07T11:51:15.781901-04:00"
+    },
+    {
+      "pick": 43,
+      "round": 6,
+      "coach": "Peter",
+      "team": "Netherlands",
+      "picked_at": "2026-06-07T11:51:20.309065-04:00"
     }
   ],
   "player_picks": [],
@@ -2757,5 +2765,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847475
+  "current_pick_started_at": 1780847480
 }
