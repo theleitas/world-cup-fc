@@ -15,7 +15,8 @@
         "Sweden"
       ],
       "star_players": [
-        "Lionel Messi (Argentina)"
+        "Lionel Messi (Argentina)",
+        "Bukayo Saka (England)"
       ]
     },
     "Jeff": {
@@ -525,6 +526,13 @@
       "coach": "Benji",
       "player": "Lionel Messi (Argentina)",
       "picked_at": "2026-06-07T12:02:43.175238-04:00"
+    },
+    {
+      "pick": 57,
+      "round": 2,
+      "coach": "Benji",
+      "player": "Bukayo Saka (England)",
+      "picked_at": "2026-06-07T12:03:26.389739-04:00"
     }
   ],
   "players": [
@@ -2878,5 +2886,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848163
+  "current_pick_started_at": 1780848206
 }
