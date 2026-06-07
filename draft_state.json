@@ -81,7 +81,8 @@
       "national_teams": [
         "USA",
         "Ghana",
-        "Cabo Verde"
+        "Cabo Verde",
+        "Austria"
       ],
       "star_players": []
     },
@@ -307,6 +308,13 @@
       "coach": "Herb",
       "team": "Paraguay",
       "picked_at": "2026-06-07T13:23:46.454568-04:00"
+    },
+    {
+      "pick": 31,
+      "round": 4,
+      "coach": "Jayme",
+      "team": "Austria",
+      "picked_at": "2026-06-07T13:23:49.612466-04:00"
     }
   ],
   "player_picks": [],
@@ -2661,6 +2669,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853026,
+  "current_pick_started_at": 1780853029,
   "last_friendly_api_error": ""
 }
