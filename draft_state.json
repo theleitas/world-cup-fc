@@ -34,7 +34,8 @@
         "Mexico",
         "Spain",
         "Haiti",
-        "Congo DR"
+        "Congo DR",
+        "England"
       ],
       "star_players": []
     },
@@ -363,6 +364,13 @@
       "coach": "Chad",
       "team": "Czechia",
       "picked_at": "2026-06-07T09:55:58.742083-04:00"
+    },
+    {
+      "pick": 38,
+      "round": 5,
+      "coach": "Peter",
+      "team": "England",
+      "picked_at": "2026-06-07T09:56:07.370460-04:00"
     }
   ],
   "player_picks": [],
@@ -2717,5 +2725,5 @@
   "last_score_refresh_attempt_at": 1780840463,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780840558
+  "current_pick_started_at": 1780840567
 }
