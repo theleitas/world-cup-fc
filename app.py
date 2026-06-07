@@ -103,6 +103,7 @@ input, textarea, select { color:#fff!important; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
+.on-deck-line { color:var(--coach-color); text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:-.3rem 0 .8rem; text-shadow:0 0 10px var(--coach-color); }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
 .draft-control-row { margin:.2rem 0 .5rem; }
@@ -1934,6 +1935,19 @@ def draft_total_for_stage(stage_label):
     return len(TEAM_DRAFT_SEQUENCE) if stage_label == "Team" else len(TEAM_DRAFT_SEQUENCE) + len(PLAYER_DRAFT_SEQUENCE)
 
 
+def next_pick_after_current(stage_label, state):
+    if stage_label == "Team":
+        sequence = TEAM_DRAFT_SEQUENCE
+        picks = state.get("team_picks", [])
+    else:
+        sequence = PLAYER_DRAFT_SEQUENCE
+        picks = state.get("player_picks", [])
+    next_index = len(picks) + 1
+    if next_index >= len(sequence):
+        return None
+    return sequence[next_index]
+
+
 def render_pick_timer(stage_label, current, color, started_at):
     total_picks = draft_total_for_stage(stage_label)
     payload = {
@@ -2022,6 +2036,13 @@ def render_draft_status(stage_label, current, state):
         except (TypeError, ValueError):
             started_at = int(time.time())
         render_pick_timer(stage_label, current, color, started_at)
+        on_deck = next_pick_after_current(stage_label, state)
+        if on_deck:
+            on_deck_color = state["teams"][on_deck["coach"]]["color"]
+            st.markdown(
+                f"<div class='on-deck-line' style='--coach-color:{html.escape(on_deck_color)}'>{html.escape(on_deck['coach'])} is ON-DECK</div>",
+                unsafe_allow_html=True,
+            )
     st.markdown(
         f"<div class='draft-status-line'><b>Deadline:</b> {html.escape(KICKOFF_DEADLINE)} <b>Status:</b> {'Live' if state.get('draft_active') else 'Paused'}</div>",
         unsafe_allow_html=True,
