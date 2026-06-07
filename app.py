@@ -1594,7 +1594,7 @@ def render_standings(state, scores):
         color = item["color"]
         coach_state = state["teams"][coach]
         teams = ", ".join(display_team_html(team, include_info=False) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
-        players = ", ".join(display_player_html(player) for player in coach_state.get("star_players", [])) or "No players drafted yet"
+        players = ", ".join(display_player_html(player, include_info=False) for player in coach_state.get("star_players", [])) or "No players drafted yet"
         badge = f"#{rank_by_coach[coach]}"
         if rank_by_coach[coach] == 1:
             badge = "Gold"
@@ -1658,7 +1658,7 @@ def render_cinderella_standings(state):
             f"""
 <tr>
   <td>{index}</td>
-  <td>{display_team_html(row["team"], "", include_info=True)}</td>
+  <td>{display_team_html(row["team"], "", include_info=False)}</td>
   <td><span class='coach-dot' style='--coach-color:{color}'></span>{html.escape(row["coach_name"])}</td>
   <td>#{html.escape(str(row["rank"] or "n/a"))}</td>
   <td>{row["baseline"]:.1f}</td>
@@ -1871,7 +1871,7 @@ def team_standings_table_html(rows):
         html_rows.append(
             f"""
 <tr class='team-main-row'>
-  <td class='team-name-cell'>{display_team_html(row["team"], "", include_info=False)}</td>
+  <td class='team-name-cell'>{display_team_html(row["team"], "", include_info=True)}</td>
   <td>{coach_html}</td>
   <td>{html.escape(row["group"])}</td>
   <td>{html.escape(row["record"])}</td>
