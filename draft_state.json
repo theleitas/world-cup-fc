@@ -34,7 +34,8 @@
       "color": "#40FF6A",
       "image": "Chad.png",
       "national_teams": [
-        "Jordan"
+        "Jordan",
+        "Algeria"
       ],
       "star_players": []
     },
@@ -163,6 +164,13 @@
       "coach": "Lamp",
       "team": "Iraq",
       "picked_at": "2026-06-07T12:48:02.407245-04:00"
+    },
+    {
+      "pick": 13,
+      "round": 2,
+      "coach": "Chad",
+      "team": "Algeria",
+      "picked_at": "2026-06-07T12:48:07.511524-04:00"
     }
   ],
   "player_picks": [],
@@ -2517,6 +2525,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780850882,
+  "current_pick_started_at": 1780850887,
   "last_friendly_api_error": ""
 }
