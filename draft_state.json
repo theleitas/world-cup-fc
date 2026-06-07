@@ -34,7 +34,8 @@
       "color": "#40FF6A",
       "image": "Chad.png",
       "national_teams": [
-        "Australia"
+        "Australia",
+        "France"
       ],
       "star_players": []
     },
@@ -163,6 +164,13 @@
       "coach": "Lamp",
       "team": "Scotland",
       "picked_at": "2026-06-07T09:15:11.351971-04:00"
+    },
+    {
+      "pick": 13,
+      "round": 2,
+      "coach": "Chad",
+      "team": "France",
+      "picked_at": "2026-06-07T09:15:50.081955-04:00"
     }
   ],
   "player_picks": [],
@@ -2517,5 +2525,5 @@
   "last_score_refresh_attempt_at": 1780838077,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780838111
+  "current_pick_started_at": 1780838150
 }
