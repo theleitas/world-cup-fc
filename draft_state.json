@@ -83,7 +83,8 @@
         "Netherlands"
       ],
       "star_players": [
-        "Erling Haaland (Norway)"
+        "Erling Haaland (Norway)",
+        "Ousmane Dembele (France)"
       ]
     },
     "Herb": {
@@ -557,6 +558,13 @@
       "coach": "Chad",
       "player": "Raphinha (Brazil)",
       "picked_at": "2026-06-07T13:30:36.450890-04:00"
+    },
+    {
+      "pick": 61,
+      "round": 2,
+      "coach": "Lamp",
+      "player": "Ousmane Dembele (France)",
+      "picked_at": "2026-06-07T13:30:38.342640-04:00"
     }
   ],
   "players": [
@@ -2910,6 +2918,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853436,
+  "current_pick_started_at": 1780853438,
   "last_friendly_api_error": ""
 }
