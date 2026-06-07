@@ -98,7 +98,9 @@
         "Argentina",
         "Bosnia and Herzegovina"
       ],
-      "star_players": []
+      "star_players": [
+        "Harry Kane (England)"
+      ]
     },
     "Spencer": {
       "team_name": "Spencer",
@@ -462,6 +464,13 @@
       "coach": "Spencer",
       "player": "Arda Guler (Türkiye)",
       "picked_at": "2026-06-07T10:30:31.934855-04:00"
+    },
+    {
+      "pick": 50,
+      "round": 1,
+      "coach": "Jayme",
+      "player": "Harry Kane (England)",
+      "picked_at": "2026-06-07T10:30:44.833614-04:00"
     }
   ],
   "players": [
@@ -2815,5 +2824,5 @@
   "last_score_refresh_attempt_at": 1780842627,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842631
+  "current_pick_started_at": 1780842644
 }
