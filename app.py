@@ -2001,8 +2001,8 @@ body {{ padding:10px 0 8px; }}
 }}
 .coach-timer-face,
 .coach-timer-placeholder {{
-  width:32px;
-  height:32px;
+  width:44px;
+  height:44px;
   border-radius:50%;
   object-fit:cover;
   border:2px solid {html.escape(payload["color"])};
@@ -2011,7 +2011,7 @@ body {{ padding:10px 0 8px; }}
   align-items:center;
   justify-content:center;
   color:{html.escape(payload["color"])};
-  font-size:.85rem;
+  font-size:1.05rem;
   font-weight:1000;
   flex:0 0 auto;
 }}
