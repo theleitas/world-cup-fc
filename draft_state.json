@@ -48,7 +48,8 @@
       "image": "Lamp.png",
       "national_teams": [
         "Mexico",
-        "Iraq"
+        "Iraq",
+        "Panama"
       ],
       "star_players": []
     },
@@ -219,6 +220,13 @@
       "coach": "Herb",
       "team": "Côte d'Ivoire",
       "picked_at": "2026-06-07T13:12:50.272291-04:00"
+    },
+    {
+      "pick": 20,
+      "round": 3,
+      "coach": "Lamp",
+      "team": "Panama",
+      "picked_at": "2026-06-07T13:19:14.674985-04:00"
     }
   ],
   "player_picks": [],
@@ -2573,6 +2581,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780852370,
+  "current_pick_started_at": 1780852754,
   "last_friendly_api_error": ""
 }
