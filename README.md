@@ -12,6 +12,16 @@ Each coach drafts 8 national teams and 2 star players. The draft order is fixed 
 streamlit run app.py
 ```
 
+## Share Link
+
+Use this GitHub Pages URL for iMessage previews:
+
+```text
+https://theleitas.github.io/world-cup-fc/
+```
+
+That page uses `docs/titlethumb.png` for the preview image and then redirects visitors to the Streamlit app.
+
 ## Persistence
 
 The app stores shared state in `draft_state.json`.
