@@ -14,7 +14,9 @@
         "Austria",
         "Sweden"
       ],
-      "star_players": []
+      "star_players": [
+        "Lionel Messi (Argentina)"
+      ]
     },
     "Jeff": {
       "team_name": "Jeff",
@@ -516,6 +518,13 @@
       "coach": "Jeff",
       "player": "Nico Williams (Spain)",
       "picked_at": "2026-06-07T12:02:34.914528-04:00"
+    },
+    {
+      "pick": 56,
+      "round": 1,
+      "coach": "Benji",
+      "player": "Lionel Messi (Argentina)",
+      "picked_at": "2026-06-07T12:02:43.175238-04:00"
     }
   ],
   "players": [
@@ -2869,5 +2878,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848154
+  "current_pick_started_at": 1780848163
 }
