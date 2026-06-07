@@ -61,7 +61,8 @@
       "color": "#B56CFF",
       "image": "Jayme.png",
       "national_teams": [
-        "Japan"
+        "Japan",
+        "Cabo Verde"
       ],
       "star_players": []
     },
@@ -139,6 +140,13 @@
       "coach": "Spencer",
       "team": "Congo DR",
       "picked_at": "2026-06-07T11:28:36.487574-04:00"
+    },
+    {
+      "pick": 10,
+      "round": 2,
+      "coach": "Jayme",
+      "team": "Cabo Verde",
+      "picked_at": "2026-06-07T11:28:41.324780-04:00"
     }
   ],
   "player_picks": [],
@@ -2493,5 +2501,5 @@
   "last_score_refresh_attempt_at": 1780846040,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780846116
+  "current_pick_started_at": 1780846121
 }
