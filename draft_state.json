@@ -70,7 +70,8 @@
         "USA",
         "Tunisia",
         "Ecuador",
-        "Morocco"
+        "Morocco",
+        "Norway"
       ],
       "star_players": []
     },
@@ -339,6 +340,13 @@
       "coach": "Jayme",
       "team": "Argentina",
       "picked_at": "2026-06-07T09:55:25.535988-04:00"
+    },
+    {
+      "pick": 35,
+      "round": 5,
+      "coach": "Herb",
+      "team": "Norway",
+      "picked_at": "2026-06-07T09:55:42.104055-04:00"
     }
   ],
   "player_picks": [],
@@ -2693,5 +2701,5 @@
   "last_score_refresh_attempt_at": 1780840463,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780840525
+  "current_pick_started_at": 1780840542
 }
