@@ -8,7 +8,8 @@
       "image": "Benji.png",
       "national_teams": [
         "Canada",
-        "Egypt"
+        "Egypt",
+        "South Africa"
       ],
       "star_players": []
     },
@@ -251,6 +252,13 @@
       "coach": "Jeff",
       "team": "Haiti",
       "picked_at": "2026-06-07T13:19:29.114748-04:00"
+    },
+    {
+      "pick": 24,
+      "round": 3,
+      "coach": "Benji",
+      "team": "South Africa",
+      "picked_at": "2026-06-07T13:19:34.777880-04:00"
     }
   ],
   "player_picks": [],
@@ -2605,6 +2613,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780852769,
+  "current_pick_started_at": 1780852774,
   "last_friendly_api_error": ""
 }
