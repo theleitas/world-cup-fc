@@ -42,7 +42,9 @@
         "Norway",
         "New Zealand"
       ],
-      "star_players": []
+      "star_players": [
+        "Harry Kane (England)"
+      ]
     },
     "Chad": {
       "team_name": "Chad",
@@ -498,6 +500,13 @@
       "coach": "Chad",
       "player": "Vinicius Junior (Brazil)",
       "picked_at": "2026-06-07T13:26:12.979333-04:00"
+    },
+    {
+      "pick": 54,
+      "round": 1,
+      "coach": "Peter",
+      "player": "Harry Kane (England)",
+      "picked_at": "2026-06-07T13:30:16.339062-04:00"
     }
   ],
   "players": [
@@ -2851,6 +2860,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853172,
+  "current_pick_started_at": 1780853416,
   "last_friendly_api_error": ""
 }
