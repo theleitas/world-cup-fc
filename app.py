@@ -85,7 +85,7 @@ input, textarea, select { color:#fff!important; }
 .current-pick-accent { color:var(--coach-color); }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
-.draft-control-row { margin:.3rem 0 .8rem; }
+.draft-control-row { margin:.2rem 0 .5rem; }
 .draft-control-row div[data-testid="stButton"] > button { width:100%!important; min-height:50px!important; }
 .draft-start-control div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
 .draft-stop-control div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
@@ -157,6 +157,8 @@ div[data-testid="stExpander"] summary p { color:#ffd54a!important; font-weight:1
     .draft-board td { padding:3px; }
     .pick-cell { min-height:62px; padding:4px; }
     .pick-choice { font-size:.72rem; }
+    .draft-control-row { margin:.15rem 0 .35rem; }
+    .draft-control-row div[data-testid="stButton"] > button { min-height:38px!important; font-size:.75rem!important; padding:4px 6px!important; }
     .draft-choice-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; }
     .draft-choice-link, .draft-choice-disabled { min-height:38px; font-size:.74rem; padding:5px 6px; }
     .draft-info-wrap { flex-basis:26px; min-height:38px; }
@@ -1907,7 +1909,7 @@ def save_draft_pick(action, value, label):
 
 def render_draft_controls(state, key_prefix="draft-controls"):
     st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
-    c1, c2, c3 = st.columns([1, 1, 1], gap="large")
+    c1, c2, c3 = st.columns([1, 1, 1], gap="small")
     with c1:
         st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
         if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch"):
