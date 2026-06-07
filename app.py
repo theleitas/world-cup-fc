@@ -80,7 +80,20 @@ input, textarea, select { color:#fff!important; }
 .current-pick-box span { color:var(--coach-color); }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
-.info-link { color:#00e5ff!important; text-decoration:none!important; font-size:.9em; margin-left:3px; }
+.draft-control-row { margin:.3rem 0 .8rem; }
+.draft-control-row div[data-testid="stButton"] > button { width:100%!important; min-height:50px!important; }
+.draft-choice-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(230px, 1fr)); gap:7px; margin:.45rem 0 1rem; }
+.draft-choice-cell { display:flex; align-items:stretch; gap:6px; min-width:0; }
+.draft-choice-link, .draft-choice-disabled {
+    flex:1 1 auto; min-width:0; min-height:42px; display:flex; align-items:center;
+    border:1px solid #444; border-radius:8px; background:#121212; color:#fff!important;
+    text-decoration:none!important; font-weight:900; font-size:.86rem; line-height:1.15;
+    padding:6px 9px; overflow-wrap:anywhere;
+}
+.draft-choice-link:hover { border-color:#00e5ff; background:#181818; }
+.draft-choice-disabled { color:#777!important; background:#202020; border-color:#333; }
+.draft-info-wrap { flex:0 0 32px; min-height:42px; display:flex; align-items:center; justify-content:center; border:1px solid #303030; border-radius:8px; background:#070707; }
+.info-link { color:#00e5ff!important; text-decoration:none!important; font-size:1.02rem; margin-left:3px; display:inline-flex; align-items:center; justify-content:center; }
 .available-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(112px, 1fr)); gap:6px; margin:.45rem 0 1rem; }
 .choice-card { border:0; border-radius:0; background:transparent; padding:0; min-height:0; }
 .choice-title { font-weight:1000; color:#fff; }
@@ -114,6 +127,10 @@ input, textarea, select { color:#fff!important; }
     .draft-board td { padding:3px; }
     .pick-cell { min-height:62px; padding:4px; }
     .pick-choice { font-size:.72rem; }
+    .draft-choice-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; }
+    .draft-choice-link, .draft-choice-disabled { min-height:38px; font-size:.74rem; padding:5px 6px; }
+    .draft-info-wrap { flex-basis:26px; min-height:38px; }
+    .info-link { font-size:.92rem; margin-left:1px; }
     .data-table { font-size:.78rem; }
     .data-table th, .data-table td { padding:6px 5px; }
 }
@@ -1584,22 +1601,24 @@ def reset_rosters_and_draft():
 
 
 def render_draft_controls(state):
-    c1, c2, c3 = st.columns(3)
+    st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
+    c1, c2, c3 = st.columns([1, 1, 1], gap="large")
     with c1:
-        if st.button("Start Draft", key="draft-start-top"):
+        if st.button("Start Draft", key="draft-start-top", width="stretch"):
             ok, _ = set_draft_active(True)
             if ok:
                 st.rerun()
     with c2:
-        if st.button("Stop Draft", key="draft-stop-top"):
+        if st.button("Stop Draft", key="draft-stop-top", width="stretch"):
             ok, _ = set_draft_active(False)
             if ok:
                 st.rerun()
     with c3:
-        if st.button("Undo Last Pick", key="draft-undo-top"):
+        if st.button("Undo Last Pick", key="draft-undo-top", width="stretch"):
             ok, _ = undo_last_pick()
             if ok:
                 st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_draft_board(title, sequence, picks, field, state):
@@ -1691,30 +1710,49 @@ def make_player_pick(player):
 
 def render_available_teams(state):
     available = [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)]
-    for row_start in range(0, len(available), 4):
-        cols = st.columns(4)
-        for offset, team in enumerate(available[row_start:row_start + 4]):
-            with cols[offset]:
-                label = f"{team['flag']} {team['name']}"
-                st.markdown(info_link(team_info_url(team["name"]), f"{team['name']} info"), unsafe_allow_html=True)
-                if st.button(label, key=f"draft-team-{team['name']}", disabled=not state.get("draft_active")):
-                    ok, _ = make_team_pick(team["name"])
-                    if ok:
-                        st.rerun()
+    parts = ["<div class='draft-choice-grid'>"]
+    for team in available:
+        label = html.escape(display_team(team["name"], state["odds"].get(team["name"], "")))
+        info_html = info_link(team_info_url(team["name"]), f"{team['name']} info")
+        if state.get("draft_active"):
+            action = f"<a class='draft-choice-link' href='?draft_team={quote(team['name'])}'>{label}</a>"
+        else:
+            action = f"<span class='draft-choice-disabled'>{label}</span>"
+        parts.append(f"<div class='draft-choice-cell'>{action}<div class='draft-info-wrap'>{info_html}</div></div>")
+    parts.append("</div>")
+    st.markdown("".join(parts), unsafe_allow_html=True)
 
 
 def render_available_players(state):
     used = drafted_players(state)
     available = [player for player in state["players"] if player not in used]
-    for row_start in range(0, len(available), 3):
-        cols = st.columns(3)
-        for offset, player in enumerate(available[row_start:row_start + 3]):
-            with cols[offset]:
-                st.markdown(info_link(player_info_url(player), f"{player_base_name(player)} info"), unsafe_allow_html=True)
-                if st.button(display_player(player), key=f"draft-player-{normalize_player_name(player)}", disabled=not state.get("draft_active")):
-                    ok, _ = make_player_pick(player)
-                    if ok:
-                        st.rerun()
+    parts = ["<div class='draft-choice-grid'>"]
+    for player in available:
+        label = html.escape(display_player(player))
+        info_html = info_link(player_info_url(player), f"{player_base_name(player)} info")
+        if state.get("draft_active"):
+            action = f"<a class='draft-choice-link' href='?draft_player={quote(player)}'>{label}</a>"
+        else:
+            action = f"<span class='draft-choice-disabled'>{label}</span>"
+        parts.append(f"<div class='draft-choice-cell'>{action}<div class='draft-info-wrap'>{info_html}</div></div>")
+    parts.append("</div>")
+    st.markdown("".join(parts), unsafe_allow_html=True)
+
+
+def process_draft_query_params(state):
+    draft_team = st.query_params.get("draft_team")
+    draft_player = st.query_params.get("draft_player")
+    if draft_team:
+        ok, _ = make_team_pick(str(draft_team))
+        st.query_params.clear()
+        if ok:
+            st.rerun()
+        return
+    if draft_player:
+        ok, _ = make_player_pick(str(draft_player))
+        st.query_params.clear()
+        if ok:
+            st.rerun()
 
 
 def render_drafts(state):
@@ -2012,6 +2050,7 @@ if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_
     _, refreshed_state = refresh_api_scores()
     if refreshed_state:
         state = normalize_state(refreshed_state)
+process_draft_query_params(state)
 scores = calculate_scores(state)
 
 render_header(state)
