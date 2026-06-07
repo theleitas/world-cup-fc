@@ -70,7 +70,8 @@
       "color": "#FF3D3D",
       "image": "Spencer.png",
       "national_teams": [
-        "Korea Republic"
+        "Korea Republic",
+        "Côte d'Ivoire"
       ],
       "star_players": []
     }
@@ -131,6 +132,13 @@
       "coach": "Spencer",
       "team": "Korea Republic",
       "picked_at": "2026-06-07T08:55:36.743907-04:00"
+    },
+    {
+      "pick": 9,
+      "round": 2,
+      "coach": "Spencer",
+      "team": "Côte d'Ivoire",
+      "picked_at": "2026-06-07T09:14:46.320392-04:00"
     }
   ],
   "player_picks": [],
@@ -2485,5 +2493,5 @@
   "last_score_refresh_attempt_at": 1780838077,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780836936
+  "current_pick_started_at": 1780838086
 }
