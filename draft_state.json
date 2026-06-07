@@ -34,7 +34,8 @@
         "Japan",
         "Korea Republic",
         "Senegal",
-        "Argentina"
+        "Argentina",
+        "Norway"
       ],
       "star_players": []
     },
@@ -363,6 +364,13 @@
       "coach": "Chad",
       "team": "France",
       "picked_at": "2026-06-07T13:24:16.566502-04:00"
+    },
+    {
+      "pick": 38,
+      "round": 5,
+      "coach": "Peter",
+      "team": "Norway",
+      "picked_at": "2026-06-07T13:24:19.564741-04:00"
     }
   ],
   "player_picks": [],
@@ -2717,6 +2725,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853056,
+  "current_pick_started_at": 1780853059,
   "last_friendly_api_error": ""
 }
