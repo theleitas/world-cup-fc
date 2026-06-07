@@ -98,7 +98,9 @@
         "Croatia",
         "Switzerland"
       ],
-      "star_players": []
+      "star_players": [
+        "Lamine Yamal (Spain)"
+      ]
     },
     "Spencer": {
       "team_name": "Spencer",
@@ -462,6 +464,13 @@
       "coach": "Spencer",
       "player": "Michael Olise (France)",
       "picked_at": "2026-06-07T13:25:57.687093-04:00"
+    },
+    {
+      "pick": 50,
+      "round": 1,
+      "coach": "Jayme",
+      "player": "Lamine Yamal (Spain)",
+      "picked_at": "2026-06-07T13:26:00.484807-04:00"
     }
   ],
   "players": [
@@ -2815,6 +2824,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853157,
+  "current_pick_started_at": 1780853160,
   "last_friendly_api_error": ""
 }
