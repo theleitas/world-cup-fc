@@ -49,7 +49,7 @@ div[data-testid="stButton"] > button:disabled {
 div[data-testid="stExpander"] { background:#050505!important; border:1px solid #2e2e2e!important; border-radius:8px!important; }
 input, textarea, select { color:#fff!important; }
 .top-thumbnail-wrap { width:100%; display:flex; justify-content:center; margin:.2rem 0 .75rem; }
-.top-thumbnail { width:100%; max-width:840px; max-height:245px; object-fit:contain; border-radius:8px; display:block; }
+.top-thumbnail { width:100%; max-width:1080px; max-height:320px; object-fit:contain; border-radius:8px; display:block; }
 .hero-title { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px; margin:.25rem 0 1rem; }
 .hero-title h1 { margin:0; padding:0; font-size:clamp(1.75rem, 6.4vw, 3.35rem); line-height:.98; font-weight:1000; color:#ffd54a; }
 .hero-kicker { color:#00e5ff; text-transform:uppercase; font-size:.82rem; letter-spacing:.12em; font-weight:1000; }
@@ -93,10 +93,17 @@ input, textarea, select { color:#fff!important; }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
 .payout-item { border:1px solid #2d2d2d; border-radius:8px; padding:10px; background:#070707; }
 .payout-item b { color:#ffd54a; }
+.payout-desc { border-left:4px solid #ffd54a; background:#070707; border-radius:8px; padding:11px 13px; margin:.7rem 0; color:#eaf7fa; line-height:1.45; }
+.data-table { width:100%; border-collapse:collapse; background:#070707; border-radius:8px; overflow:hidden; font-size:.88rem; }
+.data-table th { text-align:left; color:#ffd54a; background:#101010; border-bottom:1px solid #333; padding:8px; }
+.data-table td { border-bottom:1px solid rgba(255,255,255,.1); padding:8px; vertical-align:middle; }
+.data-table tr:last-child td { border-bottom:none; }
+.coach-dot { display:inline-flex; width:.85rem; height:.85rem; border-radius:50%; background:var(--coach-color); box-shadow:0 0 8px var(--coach-color); margin-right:6px; vertical-align:-.12rem; }
 .admin-box { border:1px solid #333; background:#060606; border-radius:8px; padding:12px; margin:1rem 0; }
 @media (max-width:700px) {
     div[data-testid="stButton"] > button { min-height:42px!important; font-size:.84rem!important; padding:6px 7px!important; }
-    .top-thumbnail { max-height:24vh; }
+    .top-thumbnail-wrap { width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
+    .top-thumbnail { width:100vw; max-width:none; max-height:34vh; object-fit:cover; border-radius:0; }
     .coach-card { min-height:auto; }
     .coach-face, .coach-face-placeholder { width:60px; height:60px; }
     .score-badge { width:58px; height:58px; font-size:1.2rem; }
@@ -107,6 +114,8 @@ input, textarea, select { color:#fff!important; }
     .draft-board td { padding:3px; }
     .pick-cell { min-height:62px; padding:4px; }
     .pick-choice { font-size:.72rem; }
+    .data-table { font-size:.78rem; }
+    .data-table th, .data-table td { padding:6px 5px; }
 }
 </style>
 """,
@@ -418,7 +427,7 @@ PAYOUTS = [
     ("Bronze", "$100", "3rd overall by total points"),
     ("Group Stage Winner", "$90", "Most group-stage fantasy points"),
     ("Empire Builder", "$80", "Most teams reaching the Round of 16; tiebreaker goals"),
-    ("Cinderella Award", "$80", "Biggest actual-minus-expected team score"),
+    ("Cinderella Award", "$80", "Single drafted team with the biggest actual-minus-FIFA-baseline score"),
 ]
 
 
@@ -1084,6 +1093,34 @@ def team_goals_in_matches(matches, team_name):
     return goals
 
 
+def team_fantasy_points(state, team_name):
+    team_name = canonical_team_name(team_name)
+    match_points = sum(score_match_for_team(match, team_name) for match in state.get("matches", []))
+    advancement = state["advancement"].get(team_name, "Group Stage")
+    return match_points + ADVANCEMENT_BONUSES.get(advancement, 0)
+
+
+def cinderella_team_rows(state):
+    rows = []
+    for coach, data in state["teams"].items():
+        for team_name in data.get("national_teams", []):
+            current = team_fantasy_points(state, team_name)
+            baseline = fifa_expected_points(team_name)
+            rows.append(
+                {
+                    "coach": coach,
+                    "coach_name": data.get("team_name") or coach,
+                    "color": data.get("color") or "#FFD54A",
+                    "team": team_name,
+                    "rank": FIFA_RANKINGS.get(team_name, {}).get("rank"),
+                    "baseline": baseline,
+                    "current": current,
+                    "cinderella": current - baseline,
+                }
+            )
+    return sorted(rows, key=lambda item: (item["cinderella"], item["current"]), reverse=True)
+
+
 def calculate_scores(state):
     matches = state.get("matches", [])
     scores = {}
@@ -1092,21 +1129,22 @@ def calculate_scores(state):
         group_stage_points = 0
         empire_count = 0
         empire_goals = 0
-        expected_total = 0.0
         team_breakdown = []
+        best_cinderella = None
         for team_name in data.get("national_teams", []):
-            points = sum(score_match_for_team(match, team_name) for match in matches)
             group_points = sum(score_match_for_team(match, team_name) for match in matches if stage_is_group(match.get("stage")))
             advancement = state["advancement"].get(team_name, "Group Stage")
-            bonus = ADVANCEMENT_BONUSES.get(advancement, 0)
-            total = points + bonus
+            total = team_fantasy_points(state, team_name)
+            baseline = fifa_expected_points(team_name)
+            cinderella = total - baseline
             team_points += total
             group_stage_points += group_points
-            expected_total += fifa_expected_points(team_name)
             if advancement in ["Round of 16", "Quarterfinals", "Semifinals", "Final", "Champion"]:
                 empire_count += 1
                 empire_goals += team_goals_in_matches(matches, team_name)
-            team_breakdown.append((team_name, total, fifa_expected_points(team_name)))
+            team_breakdown.append((team_name, total, baseline, cinderella))
+            if best_cinderella is None or cinderella > best_cinderella["cinderella"]:
+                best_cinderella = {"team": team_name, "current": total, "baseline": baseline, "cinderella": cinderella}
 
         player_points = 0
         player_group_points = 0
@@ -1130,8 +1168,9 @@ def calculate_scores(state):
             "group_stage_points": group_stage_points + player_group_points,
             "empire_count": empire_count,
             "empire_goals": empire_goals,
-            "cinderella": team_points - expected_total,
-            "fifa_expected": expected_total,
+            "cinderella": best_cinderella["cinderella"] if best_cinderella else 0,
+            "cinderella_team": best_cinderella["team"] if best_cinderella else "",
+            "fifa_expected": best_cinderella["baseline"] if best_cinderella else 0,
             "team_breakdown": team_breakdown,
             "player_breakdown": player_breakdown,
         }
@@ -1146,10 +1185,11 @@ def award_leaders(scores):
     values = list(scores.values())
     if not values:
         return {}
+    cinderella_candidates = [item for item in values if item.get("cinderella_team")]
     return {
         "Group Stage Winner": max(values, key=lambda item: item["group_stage_points"]),
         "Empire Builder": max(values, key=lambda item: (item["empire_count"], item["empire_goals"], item["total_points"])),
-        "Cinderella Award": max(values, key=lambda item: item["cinderella"]),
+        "Cinderella Award": max(cinderella_candidates, key=lambda item: item["cinderella"]) if cinderella_candidates else None,
     }
 
 
@@ -1335,13 +1375,30 @@ Cinderella is actual team fantasy points minus locked FIFA-ranking expected poin
     )
 
 
-def render_payouts():
-    st.markdown("<div class='section-title'>Payouts</div>", unsafe_allow_html=True)
-    parts = ["<div class='payout-grid'>"]
-    for name, amount, description in PAYOUTS:
-        parts.append(f"<div class='payout-item'><b>{html.escape(name)}: {amount}</b><br><span class='subtle'>{html.escape(description)}</span></div>")
-    parts.append("</div>")
-    st.markdown("".join(parts), unsafe_allow_html=True)
+def render_payout_descriptions():
+    with st.expander("Payout Descriptions", expanded=False):
+        st.markdown(
+            f"""
+<div class='payout-desc'><b>Gold - $300.</b><br>
+Awarded to the coach who finishes first overall in total fantasy points. Total fantasy points are the sum of every drafted national team's match points and advancement bonuses plus every drafted star player's goal and assist points. National teams earn 3 points for a win, 1 for a draw, 1 for each goal scored, and 1 for a clean sheet. Players earn 4 points per goal and 3 per assist.</div>
+
+<div class='payout-desc'><b>Silver - $150.</b><br>
+Awarded to the coach who finishes second overall by total fantasy points, using the same full-tournament scoring calculation as Gold.</div>
+
+<div class='payout-desc'><b>Bronze - $100.</b><br>
+Awarded to the coach who finishes third overall by total fantasy points, using the same full-tournament scoring calculation as Gold and Silver.</div>
+
+<div class='payout-desc'><b>Group Stage Winner - $90.</b><br>
+Awarded to the coach with the most fantasy points earned during group-stage matches only. This includes group-stage national-team match points plus group-stage star-player goals and assists. Knockout advancement bonuses and knockout player production do not count for this side bet.</div>
+
+<div class='payout-desc'><b>Empire Builder - $80.</b><br>
+Awarded to the coach with the most drafted national teams that reach the Round of 16 or later. The app counts each drafted team whose advancement status is Round of 16, Quarterfinals, Semifinals, Final, or Champion. If coaches are tied on teams advanced, the tiebreaker is total goals scored by those advanced teams.</div>
+
+<div class='payout-desc'><b>Cinderella Award - $80.</b><br>
+Awarded to the coach who owns the single drafted national team with the largest overperformance against its locked FIFA ranking baseline. This is not a coach portfolio total. For each drafted team, the app calculates: current team fantasy points minus FIFA expected points. FIFA expected points are locked from the {html.escape(FIFA_RANKING_LOCK_DATE)} FIFA/Coca-Cola Men's World Ranking and scaled across the 48 qualified World Cup teams. The team with the highest positive delta wins the award for its coach.</div>
+""",
+            unsafe_allow_html=True,
+        )
 
 
 def render_standings(state, scores):
@@ -1360,7 +1417,7 @@ def render_standings(state, scores):
             badge = "Gold"
         awards = []
         for award_name, leader in leaders.items():
-            if leader["coach"] == coach:
+            if leader and leader["coach"] == coach:
                 awards.append(award_name)
         award_text = " | ".join(awards) if awards else "In the hunt"
         cards.append(
@@ -1379,7 +1436,7 @@ def render_standings(state, scores):
   <div class='metric-row'><span>Player Points</span><b>{int(item["player_points"])}</b></div>
   <div class='metric-row'><span>Group Stage</span><b>{int(item["group_stage_points"])}</b></div>
   <div class='metric-row'><span>Empire Builder</span><b>{int(item["empire_count"])} teams / {int(item["empire_goals"])} goals</b></div>
-  <div class='metric-row'><span>Cinderella</span><b>{item["cinderella"]:+.1f} vs FIFA</b></div>
+  <div class='metric-row'><span>Best Cinderella</span><b>{html.escape(item["cinderella_team"] or "None")} {item["cinderella"]:+.1f}</b></div>
   <div class='asset-list'><b>Teams:</b> {teams}</div>
   <div class='asset-list'><b>Players:</b> {players}</div>
 </div>
@@ -1387,6 +1444,36 @@ def render_standings(state, scores):
         )
     cards.append("</div>")
     st.markdown("".join(cards), unsafe_allow_html=True)
+
+
+def render_cinderella_standings(state):
+    rows = cinderella_team_rows(state)[:10]
+    st.markdown("<div class='section-title'>Cinderella Standings</div>", unsafe_allow_html=True)
+    if not rows:
+        st.caption("No drafted teams yet.")
+        return
+    html_rows = [
+        "<table class='data-table'><thead><tr>"
+        "<th>#</th><th>Team</th><th>Coach</th><th>FIFA</th><th>Baseline</th><th>Current</th><th>Cinderella</th>"
+        "</tr></thead><tbody>"
+    ]
+    for index, row in enumerate(rows, start=1):
+        color = html.escape(row["color"])
+        html_rows.append(
+            f"""
+<tr>
+  <td>{index}</td>
+  <td>{display_team_html(row["team"], "", include_info=True)}</td>
+  <td><span class='coach-dot' style='--coach-color:{color}'></span>{html.escape(row["coach_name"])}</td>
+  <td>#{html.escape(str(row["rank"] or "n/a"))}</td>
+  <td>{row["baseline"]:.1f}</td>
+  <td>{row["current"]:.1f}</td>
+  <td><b>{row["cinderella"]:+.1f}</b></td>
+</tr>
+"""
+        )
+    html_rows.append("</tbody></table>")
+    st.markdown("".join(html_rows), unsafe_allow_html=True)
 
 
 def render_draft_status(stage_label, current, state):
@@ -1876,8 +1963,9 @@ if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_
 scores = calculate_scores(state)
 
 render_header(state)
-render_payouts()
 render_standings(state, scores)
 render_live_matches(state)
 render_drafts(state)
+render_cinderella_standings(state)
+render_payout_descriptions()
 render_admin(state)

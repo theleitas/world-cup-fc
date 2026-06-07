@@ -59,7 +59,7 @@ Football-Data's official v4 docs show assist data both on goal events and on the
 
 ## Cinderella Scoring
 
-The Cinderella Award is automatic and uses a locked pre-tournament FIFA ranking baseline.
+The Cinderella Award is automatic and uses a locked pre-tournament FIFA ranking baseline. The award goes to the coach who owns the single drafted team with the biggest overperformance, not to the coach with the largest combined Cinderella portfolio.
 
 Baseline source: FIFA/Coca-Cola Men's World Ranking, locked to the April 1, 2026 update for the 48 qualified World Cup teams.
 
@@ -67,7 +67,7 @@ Formula:
 
 ```text
 team cinderella = actual team fantasy points - FIFA expected points
-coach cinderella = sum(team cinderella for that coach's drafted teams)
+Cinderella winner = highest team cinderella among all drafted teams
 ```
 
 FIFA expected points are scaled from FIFA ranking points among the 48-team World Cup field:
@@ -78,6 +78,8 @@ FIFA expected points = 6 + strength * 48
 ```
 
 That makes the top-ranked qualified team worth about 54 expected points and the lowest-ranked qualified team worth about 6 expected points before the tournament begins.
+
+The app also renders a `Cinderella Standings` table showing the top 10 drafted teams by this delta.
 
 ## Assets
 
