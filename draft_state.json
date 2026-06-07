@@ -21,7 +21,7 @@
     },
     "Jeff": {
       "team_name": "Jeff",
-      "color": "#00E5FF",
+      "color": "#FF7A1A",
       "image": "Jeff.png",
       "national_teams": [
         "IR Iran",
@@ -72,7 +72,7 @@
     },
     "Lamp": {
       "team_name": "Lamp",
-      "color": "#FF7A1A",
+      "color": "#FF3D3D",
       "image": "Lamp.png",
       "national_teams": [
         "Mexico",
@@ -123,7 +123,7 @@
     },
     "Spencer": {
       "team_name": "Spencer",
-      "color": "#FF3D3D",
+      "color": "#48FFD2",
       "image": "Spencer.png",
       "national_teams": [
         "Saudi Arabia",
