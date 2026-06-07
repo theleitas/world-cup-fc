@@ -14,7 +14,9 @@
         "Sweden",
         "Portugal"
       ],
-      "star_players": []
+      "star_players": [
+        "Michael Olise (France)"
+      ]
     },
     "Jeff": {
       "team_name": "Jeff",
@@ -516,6 +518,13 @@
       "coach": "Jeff",
       "player": "Vinicius Junior (Brazil)",
       "picked_at": "2026-06-07T10:32:55.287741-04:00"
+    },
+    {
+      "pick": 56,
+      "round": 1,
+      "coach": "Benji",
+      "player": "Michael Olise (France)",
+      "picked_at": "2026-06-07T10:33:49.184115-04:00"
     }
   ],
   "players": [
@@ -2869,5 +2878,5 @@
   "last_score_refresh_attempt_at": 1780842627,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842775
+  "current_pick_started_at": 1780842829
 }
