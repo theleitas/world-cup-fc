@@ -6,9 +6,7 @@
       "team_name": "Benji",
       "color": "#FFD54A",
       "image": "Benji.png",
-      "national_teams": [
-        "France"
-      ],
+      "national_teams": [],
       "star_players": []
     },
     "Jeff": {
@@ -61,15 +59,7 @@
       "star_players": []
     }
   },
-  "team_picks": [
-    {
-      "pick": 1,
-      "round": 1,
-      "coach": "Benji",
-      "team": "France",
-      "picked_at": "2026-06-07T19:51:57.820569-04:00"
-    }
-  ],
+  "team_picks": [],
   "player_picks": [],
   "players": [
     "Lamine Yamal (Spain)",
@@ -2422,6 +2412,6 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780876394,
+  "current_pick_started_at": 1780876396,
   "last_friendly_api_error": ""
 }
