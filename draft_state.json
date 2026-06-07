@@ -60,7 +60,9 @@
       "team_name": "Jayme",
       "color": "#B56CFF",
       "image": "Jayme.png",
-      "national_teams": [],
+      "national_teams": [
+        "Japan"
+      ],
       "star_players": []
     },
     "Spencer": {
@@ -113,6 +115,13 @@
       "coach": "Herb",
       "team": "Mexico",
       "picked_at": "2026-06-07T11:27:58.758989-04:00"
+    },
+    {
+      "pick": 7,
+      "round": 1,
+      "coach": "Jayme",
+      "team": "Japan",
+      "picked_at": "2026-06-07T11:28:07.250488-04:00"
     }
   ],
   "player_picks": [],
@@ -2467,5 +2476,5 @@
   "last_score_refresh_attempt_at": 1780846040,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780846078
+  "current_pick_started_at": 1780846087
 }
