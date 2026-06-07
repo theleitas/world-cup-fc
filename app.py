@@ -149,6 +149,18 @@ div[data-testid="stExpander"] summary p { color:#ffd54a!important; font-weight:1
 .data-table th { text-align:left; color:#ffd54a; background:#101010; border-bottom:1px solid #333; padding:8px; }
 .data-table td { border-bottom:1px solid rgba(255,255,255,.1); padding:8px; vertical-align:middle; }
 .data-table tr:last-child td { border-bottom:none; }
+.team-standings-table { table-layout:fixed; }
+.team-standings-table th:nth-child(1), .team-standings-table td:nth-child(1) { width:28%; }
+.team-standings-table th:nth-child(2), .team-standings-table td:nth-child(2) { width:24%; }
+.team-standings-table th:nth-child(3), .team-standings-table td:nth-child(3) { width:10%; text-align:center; }
+.team-standings-table th:nth-child(4), .team-standings-table td:nth-child(4) { width:14%; text-align:center; }
+.team-standings-table th:nth-child(5), .team-standings-table td:nth-child(5) { width:12%; text-align:center; }
+.team-standings-table th:nth-child(6), .team-standings-table td:nth-child(6) { width:12%; text-align:center; }
+.team-main-row td { border-bottom:0; font-weight:900; }
+.team-name-cell { overflow-wrap:anywhere; }
+.team-detail-row td { background:#050505; color:#b9c2c9; padding-top:2px; border-bottom:1px solid rgba(255,255,255,.16); }
+.team-detail-grid { display:grid; grid-template-columns:1.35fr 1fr; gap:8px; align-items:center; font-size:.8rem; line-height:1.25; }
+.team-detail-grid b { color:#ffd54a; }
 .coach-dot { display:inline-flex; width:.85rem; height:.85rem; border-radius:50%; background:var(--coach-color); box-shadow:0 0 8px var(--coach-color); margin-right:6px; vertical-align:-.12rem; }
 .coach-mini-face { width:22px; height:22px; border-radius:50%; object-fit:cover; border:2px solid var(--coach-color); box-shadow:0 0 8px var(--coach-color); vertical-align:middle; margin:0 4px 0 0; }
 .coach-mini-placeholder { display:inline-flex; width:22px; height:22px; border-radius:50%; border:2px solid var(--coach-color); color:var(--coach-color); align-items:center; justify-content:center; font-size:.58rem; font-weight:1000; vertical-align:middle; margin:0 4px 0 0; }
@@ -176,6 +188,17 @@ div[data-testid="stExpander"] summary p { color:#ffd54a!important; font-weight:1
     .info-link { font-size:.74rem; margin-left:1px; }
     .data-table { font-size:.78rem; }
     .data-table th, .data-table td { padding:6px 5px; }
+    .team-standings-table { font-size:.72rem; }
+    .team-standings-table th, .team-standings-table td { padding:5px 4px; }
+    .team-standings-table th:nth-child(1), .team-standings-table td:nth-child(1) { width:30%; }
+    .team-standings-table th:nth-child(2), .team-standings-table td:nth-child(2) { width:24%; }
+    .team-standings-table th:nth-child(3), .team-standings-table td:nth-child(3) { width:10%; }
+    .team-standings-table th:nth-child(4), .team-standings-table td:nth-child(4) { width:14%; }
+    .team-standings-table th:nth-child(5), .team-standings-table td:nth-child(5) { width:11%; }
+    .team-standings-table th:nth-child(6), .team-standings-table td:nth-child(6) { width:11%; }
+    .team-detail-grid { grid-template-columns:1fr; gap:3px; font-size:.7rem; }
+    .team-standings-table .coach-mini-face,
+    .team-standings-table .coach-mini-placeholder { width:18px; height:18px; margin-right:3px; }
 }
 </style>
 """,
@@ -1481,13 +1504,11 @@ def refresh_api_scores():
         state["last_score_refresh_attempt_at"] = int(time.time())
         try:
             matches = fetch_matches_from_football_data(FOOTBALL_DATA_TOKEN)
-            try:
-                friendly_matches = fetch_friendly_matches_from_football_data(FOOTBALL_DATA_TOKEN)
-                state["last_friendly_api_error"] = ""
-            except Exception as exc:
-                friendly_matches = []
-                state["last_friendly_api_error"] = str(exc)
-            matches = sorted(friendly_matches + matches, key=lambda match: match.get("date") or "")
+            state["last_friendly_api_error"] = ""
+            matches = sorted(
+                [match for match in matches if "friendly" not in str(match.get("stage") or "").lower()],
+                key=lambda match: match.get("date") or "",
+            )
             if matches:
                 state["matches"] = matches
                 match_stats = player_stats_from_matches(matches, state["players"])
@@ -1750,6 +1771,8 @@ def next_match_for_team(state, team_name):
     now = datetime.now(ZoneInfo("UTC"))
     candidates = []
     for match in state.get("matches", []):
+        if "friendly" in str(match.get("stage") or "").lower():
+            continue
         home = canonical_team_name(match.get("home"))
         away = canonical_team_name(match.get("away"))
         if team_name not in [home, away] or match_is_completed(match):
@@ -1768,8 +1791,6 @@ def next_match_for_team(state, team_name):
     _, match = sorted(candidates, key=lambda item: item[0])[0]
     opponent = canonical_team_name(match.get("away")) if canonical_team_name(match.get("home")) == team_name else canonical_team_name(match.get("home"))
     stage = str(match.get("stage") or "")
-    if "friendly" in stage.lower():
-        stage = "FRIENDLY"
     return f"{flag_for_team(opponent)} {opponent} - {stage} - {format_match_date(match.get('date'))}"
 
 
@@ -1824,12 +1845,11 @@ def team_standings_rows(state):
 
 def team_standings_table_html(rows):
     html_rows = [
-        "<table class='data-table'><thead><tr>"
-        "<th>Team</th><th>Coach</th><th>Group</th><th>Record</th><th>Points</th><th>Next Match</th><th>FIFA</th><th>Top Owned Players</th>"
+        "<table class='data-table team-standings-table'><thead><tr>"
+        "<th>Team</th><th>Coach</th><th>Group</th><th>Record</th><th>Points</th><th>FIFA</th>"
         "</tr></thead><tbody>"
     ]
     for row in rows:
-        color = html.escape(row["coach_color"])
         coach_html = (
             f"{coach_mini_html(row['coach'], row['coach_color'])}{html.escape(row['coach_name'])}"
             if row["coach"]
@@ -1837,15 +1857,21 @@ def team_standings_table_html(rows):
         )
         html_rows.append(
             f"""
-<tr>
-  <td>{display_team_html(row["team"], "", include_info=True)}</td>
+<tr class='team-main-row'>
+  <td class='team-name-cell'>{display_team_html(row["team"], "", include_info=False)}</td>
   <td>{coach_html}</td>
   <td>{html.escape(row["group"])}</td>
   <td>{html.escape(row["record"])}</td>
   <td>{int(row["result_points"])}</td>
-  <td>{html.escape(row["next_match"])}</td>
   <td>#{html.escape(str(row["fifa_rank"] or "n/a"))}</td>
-  <td>{row["players"]}</td>
+</tr>
+<tr class='team-detail-row'>
+  <td colspan='6'>
+    <div class='team-detail-grid'>
+      <span><b>Next:</b> {html.escape(row["next_match"])}</span>
+      <span><b>Owned:</b> {row["players"]}</span>
+    </div>
+  </td>
 </tr>
 """
         )
@@ -2208,6 +2234,7 @@ def match_status_label(match):
 
 
 def render_match_cards(state, matches, show_group=False):
+    matches = [match for match in matches if "friendly" not in str(match.get("stage") or "").lower()]
     if not matches:
         st.caption("No matches in this section yet.")
         return
@@ -2230,9 +2257,7 @@ def render_match_cards(state, matches, show_group=False):
                 )
         date_text = format_match_date(match.get("date"))
         stage = str(match.get("stage") or "")
-        if "friendly" in stage.lower():
-            stage = "FRIENDLY"
-        elif show_group and stage_is_group(stage):
+        if show_group and stage_is_group(stage):
             group = match_group_label(match)
             if group:
                 stage = f"Group {group}"
@@ -2258,7 +2283,7 @@ def render_match_cards(state, matches, show_group=False):
 def match_section_name(match):
     stage = str(match.get("stage") or "")
     if "friendly" in stage.lower():
-        return "Friendly Matches"
+        return ""
     stage_level = stage_to_advancement(stage)
     if not stage_level and stage_is_group(stage):
         return "Group Stages"
@@ -2289,39 +2314,40 @@ def render_group_stage_match_groups(state, matches):
 def render_live_matches(state):
     st.markdown("<div class='match-section-spacer'></div>", unsafe_allow_html=True)
     st.markdown("<div class='section-title'>World Cup Tracker</div>", unsafe_allow_html=True)
-    show_tracker = st.toggle("Past, Present, and Live Matches", value=False, key="show-match-tracker")
-    c1, c2 = st.columns([1, 2])
-    with c1:
-        if st.button("Refresh Scores"):
-            ok, _ = refresh_api_scores()
-            if ok:
-                st.rerun()
-    with c2:
-        if state.get("last_score_refresh_at"):
-            refreshed = datetime.fromtimestamp(int(state["last_score_refresh_at"]), tz=ZoneInfo("America/New_York"))
-            st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
-        if state.get("last_api_error"):
-            st.caption(state["last_api_error"])
-        if state.get("last_friendly_api_error"):
-            st.caption(f"Friendly lookup: {state['last_friendly_api_error']}")
-    st.caption("Data provided by football-data.org")
-    if not show_tracker:
-        return
+    with st.expander("Past, Present, and Live Matches", expanded=False):
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            if st.button("Refresh Scores"):
+                ok, _ = refresh_api_scores()
+                if ok:
+                    st.rerun()
+        with c2:
+            if state.get("last_score_refresh_at"):
+                refreshed = datetime.fromtimestamp(int(state["last_score_refresh_at"]), tz=ZoneInfo("America/New_York"))
+                st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
+            if state.get("last_api_error"):
+                st.caption(state["last_api_error"])
+        st.caption("Data provided by football-data.org")
 
-    matches = sorted(state.get("matches", []), key=lambda match: match.get("date") or "")
-    if not matches:
-        st.info("No matches loaded yet. Configure Football-Data token or add manual matches in Admin.")
-        return
+        matches = sorted(
+            [match for match in state.get("matches", []) if "friendly" not in str(match.get("stage") or "").lower()],
+            key=lambda match: match.get("date") or "",
+        )
+        if not matches:
+            st.info("No World Cup matches loaded yet. Configure Football-Data token or refresh scores.")
+            return
 
-    sections = {name: [] for name in ["Friendly Matches", "Group Stages", "Round of 32", "Round of 16", "Quarterfinals", "Championship"]}
-    for match in matches:
-        sections.setdefault(match_section_name(match), []).append(match)
-    section_options = [name for name in sections if sections[name]]
-    selected_section = st.selectbox("Match section", section_options or list(sections), key="match-tracker-section")
-    if selected_section == "Group Stages":
-        render_group_stage_match_groups(state, sections[selected_section])
-    else:
-        render_match_cards(state, sections[selected_section])
+        sections = {name: [] for name in ["Group Stages", "Round of 32", "Round of 16", "Quarterfinals", "Championship"]}
+        for match in matches:
+            section_name = match_section_name(match)
+            if section_name in sections:
+                sections[section_name].append(match)
+        section_options = [name for name in sections if sections[name]]
+        selected_section = st.selectbox("Match section", section_options or list(sections), key="match-tracker-section")
+        if selected_section == "Group Stages":
+            render_group_stage_match_groups(state, sections[selected_section])
+        else:
+            render_match_cards(state, sections[selected_section])
 
 
 def format_match_date(value):
