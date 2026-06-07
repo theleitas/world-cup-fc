@@ -34,7 +34,8 @@
         "Iraq",
         "Uzbekistan",
         "Senegal",
-        "Colombia"
+        "Colombia",
+        "Ghana"
       ],
       "star_players": []
     },
@@ -363,6 +364,13 @@
       "coach": "Chad",
       "team": "England",
       "picked_at": "2026-06-07T11:49:32.058170-04:00"
+    },
+    {
+      "pick": 38,
+      "round": 5,
+      "coach": "Peter",
+      "team": "Ghana",
+      "picked_at": "2026-06-07T11:49:44.582774-04:00"
     }
   ],
   "player_picks": [],
@@ -2717,5 +2725,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847372
+  "current_pick_started_at": 1780847384
 }
