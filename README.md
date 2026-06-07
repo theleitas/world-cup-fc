@@ -44,6 +44,17 @@ Admin cannot edit draft order.
 - Futures odds are seeded from current pre-tournament winner markets and remain editable in Admin.
 - Match data can refresh from Football-Data.org when a token is configured; otherwise use the manual match table in Admin.
 
+## Live Data
+
+When `FOOTBALL_DATA.TOKEN` is configured, the app refreshes automatically about every five minutes and also exposes a manual `Refresh Scores` button.
+
+It uses:
+
+- `GET /v4/competitions/WC/matches?season=2026` with `X-Unfold-Goals: true` for fixtures, live scores, final scores, goal scorers, assists, group-stage player stats, and knockout-stage advancement.
+- `GET /v4/competitions/WC/scorers?season=2026&limit=100` as an aggregate backup for player goals and assists.
+
+Football-Data's official v4 docs show assist data both on goal events and on the competition scorers endpoint. If an assist is returned as `null` for a goal, the app leaves it uncounted.
+
 ## Assets
 
 Root-level assets expected by the app:

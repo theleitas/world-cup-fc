@@ -372,6 +372,57 @@ def player_country(player):
     return canonical_team_name(match.group(1)) if match else ""
 
 
+def player_base_name(player):
+    return re.sub(r"\s*\([^)]*\)\s*$", "", str(player or "")).strip()
+
+
+def normalize_player_name(value):
+    text = clean_key(value)
+    replacements = {
+        "mbappe": "mbappe",
+        "mbappé": "mbappe",
+        "vinicius jr": "vinicius junior",
+        "vinicius jr.": "vinicius junior",
+        "neymar": "neymar jr",
+        "cristiano ronaldo dos santos aveiro": "cristiano ronaldo",
+        "lamine yamal nasraoui ebana": "lamine yamal",
+        "arda güler": "arda guler",
+        "victor gyökeres": "victor gyokeres",
+        "ousmane dembélé": "ousmane dembele",
+        "désiré doué": "desire doue",
+        "lautaro martinez": "lautaro martinez",
+        "julián alvarez": "julian alvarez",
+        "luis díaz": "luis diaz",
+    }
+    text = replacements.get(text, text)
+    text = re.sub(r"\b(jr|jr\.)\b", "junior", text)
+    text = re.sub(r"[^a-z0-9 ]", "", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def player_lookup(players):
+    lookup = {}
+    for player in players:
+        base = player_base_name(player)
+        lookup[normalize_player_name(base)] = player
+        parts = normalize_player_name(base).split()
+        if len(parts) >= 2:
+            lookup.setdefault(" ".join(parts[-2:]), player)
+            lookup.setdefault(parts[-1], player)
+    return lookup
+
+
+def match_player_to_pool(name, players):
+    normalized = normalize_player_name(name)
+    lookup = player_lookup(players)
+    if normalized in lookup:
+        return lookup[normalized]
+    for key, player in lookup.items():
+        if key and (key in normalized or normalized in key):
+            return player
+    return ""
+
+
 def display_player(player):
     country = player_country(player)
     return f"{flag_for_team(country)} {player}" if country else str(player)
@@ -601,15 +652,21 @@ def apply_picks_to_rosters(state):
 
 def normalize_match(match, index):
     match = match if isinstance(match, dict) else {}
+    goals = match.get("goals") if isinstance(match.get("goals"), list) else []
+    score_node = match.get("score_node") if isinstance(match.get("score_node"), dict) else {}
     return {
         "id": str(match.get("id") or f"match-{index + 1:03d}"),
         "date": str(match.get("date") or ""),
         "stage": str(match.get("stage") or "Group Stage"),
+        "group": match.get("group"),
+        "matchday": none_or_int(match.get("matchday")),
         "home": canonical_team_name(match.get("home")),
         "away": canonical_team_name(match.get("away")),
         "home_score": none_or_int(match.get("home_score")),
         "away_score": none_or_int(match.get("away_score")),
         "status": str(match.get("status") or "Scheduled"),
+        "score_node": score_node,
+        "goals": [normalize_goal_event(goal) for goal in goals],
     }
 
 
@@ -634,6 +691,66 @@ def normalize_player_stats(raw_stats, players):
             "group_assists": none_or_int(prior.get("group_assists")) or 0,
         }
     return stats
+
+
+def extract_score_node(match):
+    score = match.get("score") if isinstance(match.get("score"), dict) else {}
+    full_time = score.get("fullTime") if isinstance(score.get("fullTime"), dict) else {}
+    regular_time = score.get("regularTime") if isinstance(score.get("regularTime"), dict) else {}
+    penalties = score.get("penalties") if isinstance(score.get("penalties"), dict) else {}
+    return {
+        "winner": score.get("winner"),
+        "full_time": {
+            "home": none_or_int(full_time.get("home")),
+            "away": none_or_int(full_time.get("away")),
+        },
+        "regular_time": {
+            "home": none_or_int(regular_time.get("home")),
+            "away": none_or_int(regular_time.get("away")),
+        },
+        "penalties": {
+            "home": none_or_int(penalties.get("home")),
+            "away": none_or_int(penalties.get("away")),
+        },
+    }
+
+
+def normalize_goal_event(goal):
+    goal = goal if isinstance(goal, dict) else {}
+    scorer = goal.get("scorer") if isinstance(goal.get("scorer"), dict) else {}
+    assist = goal.get("assist") if isinstance(goal.get("assist"), dict) else {}
+    team = goal.get("team") if isinstance(goal.get("team"), dict) else {}
+    return {
+        "minute": none_or_int(goal.get("minute")),
+        "injury_time": none_or_int(goal.get("injuryTime")),
+        "type": str(goal.get("type") or ""),
+        "team": canonical_team_name(team.get("name") or team.get("shortName")),
+        "scorer": str(scorer.get("name") or "").strip(),
+        "assist": str(assist.get("name") or "").strip(),
+    }
+
+
+def parse_match_payload_item(item, index):
+    score_node = extract_score_node(item)
+    full_time = score_node["full_time"]
+    goals = [normalize_goal_event(goal) for goal in (item.get("goals") or []) if isinstance(goal, dict)]
+    return normalize_match(
+        {
+            "id": str(item.get("id") or f"match-{index + 1:03d}"),
+            "date": str(item.get("utcDate") or ""),
+            "stage": str(item.get("stage") or "GROUP_STAGE").replace("_", " ").title(),
+            "home": (item.get("homeTeam") or {}).get("name"),
+            "away": (item.get("awayTeam") or {}).get("name"),
+            "home_score": full_time.get("home"),
+            "away_score": full_time.get("away"),
+            "status": str(item.get("status") or "Scheduled").title(),
+            "score_node": score_node,
+            "goals": goals,
+            "group": item.get("group"),
+            "matchday": item.get("matchday"),
+        },
+        index,
+    )
 
 
 def github_file_url():
@@ -764,8 +881,6 @@ def drafted_players(state):
 
 
 def score_match_for_team(match, team_name):
-    if str(match.get("status", "")).lower() not in ["finished", "final", "post", "complete", "completed"]:
-        return 0
     home = canonical_team_name(match.get("home"))
     away = canonical_team_name(match.get("away"))
     if team_name not in [home, away]:
@@ -773,6 +888,9 @@ def score_match_for_team(match, team_name):
     home_score = match.get("home_score")
     away_score = match.get("away_score")
     if home_score is None or away_score is None:
+        return 0
+    status = str(match.get("status", "")).lower()
+    if status in ["scheduled", "timed", "postponed", "cancelled", "canceled", "suspended"]:
         return 0
     goals_for = home_score if team_name == home else away_score
     goals_against = away_score if team_name == home else home_score
@@ -867,30 +985,129 @@ def award_leaders(scores):
 def fetch_matches_from_football_data(token):
     if not token:
         return []
-    headers = {"X-Auth-Token": token}
-    resp = requests.get("https://api.football-data.org/v4/competitions/WC/matches", headers=headers, timeout=15)
+    headers = {"X-Auth-Token": token, "X-Unfold-Goals": "true"}
+    resp = requests.get(
+        "https://api.football-data.org/v4/competitions/WC/matches",
+        headers=headers,
+        params={"season": "2026"},
+        timeout=15,
+    )
     resp.raise_for_status()
     payload = resp.json()
-    matches = []
-    for item in payload.get("matches", []):
-        home = canonical_team_name((item.get("homeTeam") or {}).get("name"))
-        away = canonical_team_name((item.get("awayTeam") or {}).get("name"))
-        score = item.get("score") or {}
-        full_time = score.get("fullTime") or {}
-        stage = str(item.get("stage") or "Group Stage").replace("_", " ").title()
-        matches.append(
-            {
-                "id": str(item.get("id") or ""),
-                "date": str(item.get("utcDate") or ""),
-                "stage": stage,
-                "home": home,
-                "away": away,
-                "home_score": full_time.get("home"),
-                "away_score": full_time.get("away"),
-                "status": str(item.get("status") or "Scheduled").title(),
-            }
-        )
-    return [normalize_match(match, index) for index, match in enumerate(matches) if match.get("home") and match.get("away")]
+    return [
+        parse_match_payload_item(item, index)
+        for index, item in enumerate(payload.get("matches", []))
+        if (item.get("homeTeam") or {}).get("name") and (item.get("awayTeam") or {}).get("name")
+    ]
+
+
+@st.cache_data(ttl=180, show_spinner=False)
+def fetch_scorers_from_football_data(token):
+    if not token:
+        return {}
+    headers = {"X-Auth-Token": token}
+    resp = requests.get(
+        "https://api.football-data.org/v4/competitions/WC/scorers",
+        headers=headers,
+        params={"season": "2026", "limit": 100},
+        timeout=15,
+    )
+    resp.raise_for_status()
+    payload = resp.json()
+    scorers = {}
+    for item in payload.get("scorers", []):
+        player = item.get("player") if isinstance(item.get("player"), dict) else {}
+        name = str(player.get("name") or "").strip()
+        if not name:
+            continue
+        scorers[name] = {
+            "goals": none_or_int(item.get("goals")) or 0,
+            "assists": none_or_int(item.get("assists")) or 0,
+        }
+    return scorers
+
+
+def stage_to_advancement(stage):
+    key = clean_key(str(stage or "").replace("_", " "))
+    if key in ["last 32", "round of 32"]:
+        return "Round of 32"
+    if key in ["last 16", "round of 16"]:
+        return "Round of 16"
+    if key in ["quarter finals", "quarterfinals", "quarter finals"]:
+        return "Quarterfinals"
+    if key in ["semi finals", "semifinals"]:
+        return "Semifinals"
+    if key == "final":
+        return "Final"
+    return ""
+
+
+def advancement_rank(level):
+    return ADVANCEMENT_LEVELS.index(level) if level in ADVANCEMENT_LEVELS else 0
+
+
+def derive_advancement_from_matches(matches):
+    advancement = {team["name"]: "Group Stage" for team in WORLD_CUP_TEAMS}
+    for match in matches:
+        stage_level = stage_to_advancement(match.get("stage"))
+        if not stage_level:
+            continue
+        for team_name in [match.get("home"), match.get("away")]:
+            team_name = canonical_team_name(team_name)
+            if team_name and advancement_rank(stage_level) > advancement_rank(advancement.get(team_name, "Group Stage")):
+                advancement[team_name] = stage_level
+        if stage_level == "Final" and str(match.get("status", "")).lower() in ["finished", "final", "post", "complete", "completed"]:
+            winner = match_winner_team(match)
+            if winner:
+                advancement[winner] = "Champion"
+    return advancement
+
+
+def match_winner_team(match):
+    score_node = match.get("score_node") if isinstance(match.get("score_node"), dict) else {}
+    winner = str(score_node.get("winner") or "").upper()
+    if winner == "HOME_TEAM":
+        return canonical_team_name(match.get("home"))
+    if winner == "AWAY_TEAM":
+        return canonical_team_name(match.get("away"))
+    home_score = match.get("home_score")
+    away_score = match.get("away_score")
+    if home_score is None or away_score is None:
+        return ""
+    if home_score > away_score:
+        return canonical_team_name(match.get("home"))
+    if away_score > home_score:
+        return canonical_team_name(match.get("away"))
+    return ""
+
+
+def player_stats_from_matches(matches, players):
+    stats = {player: {"goals": 0, "assists": 0, "group_goals": 0, "group_assists": 0} for player in players}
+    for match in matches:
+        is_group = stage_is_group(match.get("stage"))
+        for goal in match.get("goals", []):
+            scorer = match_player_to_pool(goal.get("scorer"), players)
+            if scorer:
+                stats[scorer]["goals"] += 1
+                if is_group:
+                    stats[scorer]["group_goals"] += 1
+            assist = match_player_to_pool(goal.get("assist"), players)
+            if assist:
+                stats[assist]["assists"] += 1
+                if is_group:
+                    stats[assist]["group_assists"] += 1
+    return stats
+
+
+def merge_scorer_aggregates(stats, scorers, players):
+    merged = copy.deepcopy(stats)
+    for api_name, values in scorers.items():
+        player = match_player_to_pool(api_name, players)
+        if not player:
+            continue
+        merged[player]["goals"] = max(merged[player]["goals"], int(values.get("goals", 0)))
+        merged[player]["assists"] = max(merged[player]["assists"], int(values.get("assists", 0)))
+    return merged
 
 
 def refresh_api_scores():
@@ -901,6 +1118,13 @@ def refresh_api_scores():
             matches = fetch_matches_from_football_data(FOOTBALL_DATA_TOKEN)
             if matches:
                 state["matches"] = matches
+                match_stats = player_stats_from_matches(matches, state["players"])
+                try:
+                    scorers = fetch_scorers_from_football_data(FOOTBALL_DATA_TOKEN)
+                except Exception:
+                    scorers = {}
+                state["player_stats"] = merge_scorer_aggregates(match_stats, scorers, state["players"])
+                state["advancement"] = derive_advancement_from_matches(matches)
                 state["last_score_refresh_at"] = int(time.time())
                 state["last_api_error"] = ""
                 return True
@@ -1157,6 +1381,7 @@ def render_live_matches(state):
             st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
         elif state.get("last_api_error"):
             st.caption(state["last_api_error"])
+    st.caption("Data provided by football-data.org")
 
     matches = sorted(state.get("matches", []), key=lambda match: match.get("date") or "")
     if not matches:
@@ -1374,6 +1599,10 @@ def render_admin(state):
 
 state, sha = load_state_from_github()
 state = normalize_state(state)
+if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_attempt_at") or 0) >= AUTO_SCORE_REFRESH_SECONDS:
+    _, refreshed_state = refresh_api_scores()
+    if refreshed_state:
+        state = normalize_state(refreshed_state)
 scores = calculate_scores(state)
 
 render_header(state)
