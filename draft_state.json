@@ -7,7 +7,8 @@
       "color": "#FFD54A",
       "image": "Benji.png",
       "national_teams": [
-        "Brazil"
+        "Brazil",
+        "South Africa"
       ],
       "star_players": []
     },
@@ -187,6 +188,13 @@
       "coach": "Jeff",
       "team": "Curaçao",
       "picked_at": "2026-06-07T09:16:15.285410-04:00"
+    },
+    {
+      "pick": 16,
+      "round": 2,
+      "coach": "Benji",
+      "team": "South Africa",
+      "picked_at": "2026-06-07T09:16:23.601386-04:00"
     }
   ],
   "player_picks": [],
@@ -2541,5 +2549,5 @@
   "last_score_refresh_attempt_at": 1780838077,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780838175
+  "current_pick_started_at": 1780838183
 }
