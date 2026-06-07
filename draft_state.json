@@ -57,7 +57,8 @@
       "national_teams": [
         "IR Iran",
         "Scotland",
-        "Paraguay"
+        "Paraguay",
+        "Iraq"
       ],
       "star_players": []
     },
@@ -291,6 +292,13 @@
       "coach": "Chad",
       "team": "Egypt",
       "picked_at": "2026-06-07T09:31:16.682007-04:00"
+    },
+    {
+      "pick": 29,
+      "round": 4,
+      "coach": "Lamp",
+      "team": "Iraq",
+      "picked_at": "2026-06-07T09:32:18.828116-04:00"
     }
   ],
   "player_picks": [],
@@ -2645,5 +2653,5 @@
   "last_score_refresh_attempt_at": 1780839043,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780839076
+  "current_pick_started_at": 1780839138
 }
