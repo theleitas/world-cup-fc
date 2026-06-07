@@ -117,7 +117,8 @@
         "Bosnia and Herzegovina"
       ],
       "star_players": [
-        "Harry Kane (England)"
+        "Harry Kane (England)",
+        "Julian Alvarez (Argentina)"
       ]
     },
     "Spencer": {
@@ -573,6 +574,13 @@
       "coach": "Herb",
       "player": "Lautaro Martinez (Argentina)",
       "picked_at": "2026-06-07T10:35:40.003879-04:00"
+    },
+    {
+      "pick": 63,
+      "round": 2,
+      "coach": "Jayme",
+      "player": "Julian Alvarez (Argentina)",
+      "picked_at": "2026-06-07T10:37:31.465300-04:00"
     }
   ],
   "players": [
@@ -2926,5 +2934,5 @@
   "last_score_refresh_attempt_at": 1780842935,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842940
+  "current_pick_started_at": 1780843051
 }
