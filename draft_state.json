@@ -49,7 +49,8 @@
         "New Zealand"
       ],
       "star_players": [
-        "Harry Kane (England)"
+        "Harry Kane (England)",
+        "Bukayo Saka (England)"
       ]
     },
     "Chad": {
@@ -541,6 +542,13 @@
       "coach": "Jeff",
       "player": "Antoine Semenyo (Ghana)",
       "picked_at": "2026-06-07T13:30:27.520936-04:00"
+    },
+    {
+      "pick": 59,
+      "round": 2,
+      "coach": "Peter",
+      "player": "Bukayo Saka (England)",
+      "picked_at": "2026-06-07T13:30:31.641404-04:00"
     }
   ],
   "players": [
@@ -2894,6 +2902,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853427,
+  "current_pick_started_at": 1780853431,
   "last_friendly_api_error": ""
 }
