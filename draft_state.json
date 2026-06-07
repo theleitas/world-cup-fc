@@ -16,7 +16,8 @@
       "color": "#00E5FF",
       "image": "Jeff.png",
       "national_teams": [
-        "Colombia"
+        "Colombia",
+        "Curaçao"
       ],
       "star_players": []
     },
@@ -179,6 +180,13 @@
       "coach": "Peter",
       "team": "Spain",
       "picked_at": "2026-06-07T09:15:55.984662-04:00"
+    },
+    {
+      "pick": 15,
+      "round": 2,
+      "coach": "Jeff",
+      "team": "Curaçao",
+      "picked_at": "2026-06-07T09:16:15.285410-04:00"
     }
   ],
   "player_picks": [],
@@ -2533,5 +2541,5 @@
   "last_score_refresh_attempt_at": 1780838077,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780838155
+  "current_pick_started_at": 1780838175
 }
