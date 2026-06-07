@@ -51,6 +51,18 @@ div[data-testid="stButton"] > button:disabled {
     background:#202020!important; color:#7e7e7e!important; border-color:#333!important; opacity:1!important;
 }
 div[data-testid="stExpander"] { background:#050505!important; border:1px solid #2e2e2e!important; border-radius:8px!important; }
+div[data-testid="stExpander"] details > summary,
+div[data-testid="stExpander"] details[open] > summary,
+div[data-testid="stExpander"] summary:hover,
+div[data-testid="stExpander"] summary:focus,
+div[data-testid="stExpander"] summary:active {
+    background:#050505!important; color:#ffd54a!important; border-radius:8px!important;
+}
+div[data-testid="stExpander"] summary p,
+div[data-testid="stExpander"] summary span { color:#ffd54a!important; font-weight:1000!important; }
+div[data-testid="stExpander"] summary svg {
+    color:#ffd54a!important; fill:#ffd54a!important; stroke:#ffd54a!important;
+}
 input, textarea, select { color:#fff!important; }
 .top-thumbnail-wrap { width:100%; display:flex; justify-content:center; margin:.2rem 0 .75rem; }
 .top-thumbnail { width:100%; max-width:1080px; max-height:320px; object-fit:contain; border-radius:8px; display:block; }
@@ -138,7 +150,7 @@ input, textarea, select { color:#fff!important; }
 .matches-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
 .match-section-spacer { height:14px; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
-div[data-testid="stExpander"] summary p { color:#ffd54a!important; font-weight:1000; font-size:1.03rem; }
+div[data-testid="stExpander"] summary p { font-size:1.03rem; }
 .drafted-chip { display:inline-flex; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
 .payout-item { border:1px solid #2d2d2d; border-radius:8px; padding:10px; background:#070707; }
@@ -1850,8 +1862,9 @@ def team_standings_table_html(rows):
         "</tr></thead><tbody>"
     ]
     for row in rows:
+        color = html.escape(row["coach_color"])
         coach_html = (
-            f"{coach_mini_html(row['coach'], row['coach_color'])}{html.escape(row['coach_name'])}"
+            f"<span class='coach-dot' style='--coach-color:{color}'></span>{html.escape(row['coach_name'])}"
             if row["coach"]
             else "<span class='subtle'>Undrafted</span>"
         )
@@ -2400,204 +2413,201 @@ def draft_status_summary(state):
 
 def render_admin(state):
     st.markdown("<div class='section-title'>Admin</div>", unsafe_allow_html=True)
-    show_admin = st.toggle("Show Admin Controls", value=st.session_state.get("admin_open", False), key="show-admin-controls")
-    if not show_admin:
-        return
-    st.caption("Admin controls are open for this private league app.")
+    with st.expander("Admin", expanded=st.session_state.get("admin_open", False)):
+        st.caption("Admin controls are open for this private league app.")
 
-    status_label, status_text = draft_status_summary(state)
-    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-    st.subheader("Draft Controls")
-    st.caption(f"Status: {status_label}")
-    st.caption(status_text)
-    st.caption("Draft order is fixed and intentionally not editable.")
-    draft_live = bool(state.get("draft_active"))
-    has_any_picks = bool(state.get("team_picks") or state.get("player_picks"))
-    c1, c2, c3, c4 = st.columns(4, gap="small")
-    with c1:
-        if st.button("Enable Draft", key="admin-enable-draft"):
-            ok, _ = set_draft_enabled(True)
+        status_label, status_text = draft_status_summary(state)
+        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+        st.subheader("Draft Controls")
+        st.caption(f"Status: {status_label}")
+        st.caption(status_text)
+        st.caption("Draft order is fixed and intentionally not editable.")
+        draft_live = bool(state.get("draft_active"))
+        has_any_picks = bool(state.get("team_picks") or state.get("player_picks"))
+        c1, c2, c3, c4 = st.columns(4, gap="small")
+        with c1:
+            if st.button("Enable Draft", key="admin-enable-draft"):
+                ok, _ = set_draft_enabled(True)
+                if ok:
+                    st.rerun()
+        with c2:
+            if st.button("Disable Draft", key="admin-disable-draft"):
+                ok, _ = set_draft_enabled(False)
+                if ok:
+                    st.rerun()
+        with c3:
+            if st.button("Start Draft", key="admin-start-draft", disabled=draft_live):
+                ok, _ = set_draft_active(True)
+                if ok:
+                    st.rerun()
+        with c4:
+            if st.button("Stop Draft", key="admin-stop-draft", disabled=not draft_live):
+                ok, _ = set_draft_active(False)
+                if ok:
+                    st.rerun()
+        if st.button("Undo Last Pick", key="admin-undo-last-pick-top", width="stretch", disabled=not has_any_picks):
+            ok, _ = undo_last_pick()
             if ok:
                 st.rerun()
-    with c2:
-        if st.button("Disable Draft", key="admin-disable-draft"):
-            ok, _ = set_draft_enabled(False)
+
+        st.markdown("**Protected Reset**")
+        reset_confirmed = st.checkbox("I understand this clears every roster and every draft pick.", key="reset-rosters-confirm-checkbox")
+        reset_text = st.text_input("Type RESET to confirm roster reset", key="reset-rosters-confirm-text")
+        if st.button("Reset Rosters", key="admin-reset-rosters", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET")):
+            ok, _ = reset_rosters_and_draft()
+            if ok:
+                st.session_state["admin_open"] = False
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+        st.subheader("Coach Colors")
+        color_labels = [label for label, _ in TEAM_COLOR_OPTIONS]
+        label_by_hex = {hex_value: label for label, hex_value in TEAM_COLOR_OPTIONS}
+        color_by_label = {label: hex_value for label, hex_value in TEAM_COLOR_OPTIONS}
+        changed_colors = {}
+        for row_start in range(0, len(COACHES), 4):
+            cols = st.columns(4, gap="small")
+            for col, coach in zip(cols, COACHES[row_start:row_start + 4]):
+                with col:
+                    current_hex = state["teams"][coach]["color"]
+                    selected = st.selectbox(
+                        coach,
+                        color_labels,
+                        index=color_labels.index(label_by_hex.get(current_hex, color_labels[0])),
+                        key=f"admin-color-{coach}",
+                    )
+                    changed_colors[coach] = color_by_label[selected]
+        if st.button("Save Coach Colors"):
+            def mutator(fresh):
+                fresh = normalize_state(fresh)
+                for coach, color in changed_colors.items():
+                    fresh["teams"][coach]["color"] = color
+                return True
+            ok, _ = mutate_shared_state(mutator, "Update coach colors")
             if ok:
                 st.rerun()
-    with c3:
-        if st.button("Start Draft", key="admin-start-draft", disabled=draft_live):
-            ok, _ = set_draft_active(True)
-            if ok:
-                st.rerun()
-    with c4:
-        if st.button("Stop Draft", key="admin-stop-draft", disabled=not draft_live):
-            ok, _ = set_draft_active(False)
-            if ok:
-                st.rerun()
-    if st.button("Undo Last Pick", key="admin-undo-last-pick-top", width="stretch", disabled=not has_any_picks):
-        ok, _ = undo_last_pick()
-        if ok:
-            st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("**Protected Reset**")
-    reset_confirmed = st.checkbox("I understand this clears every roster and every draft pick.", key="reset-rosters-confirm-checkbox")
-    reset_text = st.text_input("Type RESET to confirm roster reset", key="reset-rosters-confirm-text")
-    if st.button("Reset Rosters", key="admin-reset-rosters", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET")):
-        ok, _ = reset_rosters_and_draft()
-        if ok:
-            st.session_state["show-admin-controls"] = False
-            st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+        with st.expander("Emergency Manual Overrides", expanded=False):
+            st.caption("Normal scoring is automatic from Football-Data. Use these only if the API is wrong, delayed, or unavailable.")
 
-    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-    st.subheader("Coach Colors")
-    color_labels = [label for label, _ in TEAM_COLOR_OPTIONS]
-    label_by_hex = {hex_value: label for label, hex_value in TEAM_COLOR_OPTIONS}
-    color_by_label = {label: hex_value for label, hex_value in TEAM_COLOR_OPTIONS}
-    changed_colors = {}
-    for row_start in range(0, len(COACHES), 4):
-        cols = st.columns(4, gap="small")
-        for col, coach in zip(cols, COACHES[row_start:row_start + 4]):
-            with col:
-                current_hex = state["teams"][coach]["color"]
-                selected = st.selectbox(
-                    coach,
-                    color_labels,
-                    index=color_labels.index(label_by_hex.get(current_hex, color_labels[0])),
-                    key=f"admin-color-{coach}",
-                )
-                changed_colors[coach] = color_by_label[selected]
-    if st.button("Save Coach Colors"):
-        def mutator(fresh):
-            fresh = normalize_state(fresh)
-            for coach, color in changed_colors.items():
-                fresh["teams"][coach]["color"] = color
-            return True
-        ok, _ = mutate_shared_state(mutator, "Update coach colors")
-        if ok:
-            st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Editable Player Pool")
+            players_text = st.text_area("25 players, one per line", value="\n".join(state["players"]), height=260)
+            if st.button("Save Player Pool"):
+                players = [line.strip() for line in players_text.splitlines() if line.strip()]
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    fresh["players"] = players[:25]
+                    fresh["player_stats"] = normalize_player_stats(fresh.get("player_stats"), fresh["players"])
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update player pool")
+                if ok:
+                    st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-    st.subheader("Editable Player Pool")
-    players_text = st.text_area("25 players, one per line", value="\n".join(state["players"]), height=260)
-    if st.button("Save Player Pool"):
-        players = [line.strip() for line in players_text.splitlines() if line.strip()]
-        def mutator(fresh):
-            fresh = normalize_state(fresh)
-            fresh["players"] = players[:25]
-            fresh["player_stats"] = normalize_player_stats(fresh.get("player_stats"), fresh["players"])
-            return True
-        ok, _ = mutate_shared_state(mutator, "Update player pool")
-        if ok:
-            st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Odds")
+            st.caption(f"Cinderella baselines are locked to FIFA men's rankings from {FIFA_RANKING_LOCK_DATE}, not edited here.")
+            odds_df = pd.DataFrame(
+                [
+                    {
+                        "Team": team["name"],
+                        "Odds": state["odds"].get(team["name"], ""),
+                        "FIFA Rank": FIFA_RANKINGS.get(team["name"], {}).get("rank"),
+                        "FIFA Expected": round(fifa_expected_points(team["name"]), 1),
+                    }
+                    for team in WORLD_CUP_TEAMS
+                ]
+            )
+            edited_odds = st.data_editor(
+                odds_df,
+                hide_index=True,
+                width="stretch",
+                num_rows="fixed",
+                disabled=["Team", "FIFA Rank", "FIFA Expected"],
+            )
+            if st.button("Save Odds"):
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    for _, row in edited_odds.iterrows():
+                        team_name = canonical_team_name(row["Team"])
+                        fresh["odds"][team_name] = str(row["Odds"]).strip()
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update World Cup odds")
+                if ok:
+                    st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-    st.subheader("Odds")
-    st.caption(f"Cinderella baselines are locked to FIFA men's rankings from {FIFA_RANKING_LOCK_DATE}, not edited here.")
-    odds_df = pd.DataFrame(
-        [
-            {
-                "Team": team["name"],
-                "Odds": state["odds"].get(team["name"], ""),
-                "FIFA Rank": FIFA_RANKINGS.get(team["name"], {}).get("rank"),
-                "FIFA Expected": round(fifa_expected_points(team["name"]), 1),
-            }
-            for team in WORLD_CUP_TEAMS
-        ]
-    )
-    edited_odds = st.data_editor(
-        odds_df,
-        hide_index=True,
-        width="stretch",
-        num_rows="fixed",
-        disabled=["Team", "FIFA Rank", "FIFA Expected"],
-    )
-    if st.button("Save Odds"):
-        def mutator(fresh):
-            fresh = normalize_state(fresh)
-            for _, row in edited_odds.iterrows():
-                team_name = canonical_team_name(row["Team"])
-                fresh["odds"][team_name] = str(row["Odds"]).strip()
-            return True
-        ok, _ = mutate_shared_state(mutator, "Update World Cup odds")
-        if ok:
-            st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Manual Match Results")
+            matches_df = pd.DataFrame(state.get("matches", []))
+            edited_matches = st.data_editor(matches_df, hide_index=True, width="stretch", num_rows="dynamic")
+            if st.button("Save Matches"):
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    fresh["matches"] = [normalize_match(row.to_dict(), index) for index, row in edited_matches.iterrows()]
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update matches")
+                if ok:
+                    st.rerun()
+            st.caption("Finished matches should use status Finished or Final. Dates can be ISO timestamps.")
+            st.markdown("</div>", unsafe_allow_html=True)
 
-    show_overrides = st.toggle("Emergency Manual Overrides", value=False, key="show-manual-overrides")
-    if not show_overrides:
-        return
-    st.caption("Normal scoring is automatic from Football-Data. Use these only if the API is wrong, delayed, or unavailable.")
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Manual Player Stats")
+            stats_df = pd.DataFrame(
+                [
+                    {"Player": player, **state["player_stats"].get(player, {"goals": 0, "assists": 0, "group_goals": 0, "group_assists": 0})}
+                    for player in state["players"]
+                ]
+            )
+            edited_stats = st.data_editor(stats_df, hide_index=True, width="stretch", num_rows="fixed")
+            if st.button("Save Player Stats"):
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    stats = {}
+                    for _, row in edited_stats.iterrows():
+                        player = str(row["Player"]).strip()
+                        if not player:
+                            continue
+                        stats[player] = {
+                            "goals": none_or_int(row.get("goals")) or 0,
+                            "assists": none_or_int(row.get("assists")) or 0,
+                            "group_goals": none_or_int(row.get("group_goals")) or 0,
+                            "group_assists": none_or_int(row.get("group_assists")) or 0,
+                        }
+                    fresh["player_stats"] = stats
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update player stats")
+                if ok:
+                    st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
-    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-    st.subheader("Manual Match Results")
-    matches_df = pd.DataFrame(state.get("matches", []))
-    edited_matches = st.data_editor(matches_df, hide_index=True, width="stretch", num_rows="dynamic")
-    if st.button("Save Matches"):
-        def mutator(fresh):
-            fresh = normalize_state(fresh)
-            fresh["matches"] = [normalize_match(row.to_dict(), index) for index, row in edited_matches.iterrows()]
-            return True
-        ok, _ = mutate_shared_state(mutator, "Update matches")
-        if ok:
-            st.rerun()
-    st.caption("Finished matches should use status Finished or Final. Dates can be ISO timestamps.")
-    st.markdown("</div>", unsafe_allow_html=True)
-
-    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-    st.subheader("Manual Player Stats")
-    stats_df = pd.DataFrame(
-        [
-            {"Player": player, **state["player_stats"].get(player, {"goals": 0, "assists": 0, "group_goals": 0, "group_assists": 0})}
-            for player in state["players"]
-        ]
-    )
-    edited_stats = st.data_editor(stats_df, hide_index=True, width="stretch", num_rows="fixed")
-    if st.button("Save Player Stats"):
-        def mutator(fresh):
-            fresh = normalize_state(fresh)
-            stats = {}
-            for _, row in edited_stats.iterrows():
-                player = str(row["Player"]).strip()
-                if not player:
-                    continue
-                stats[player] = {
-                    "goals": none_or_int(row.get("goals")) or 0,
-                    "assists": none_or_int(row.get("assists")) or 0,
-                    "group_goals": none_or_int(row.get("group_goals")) or 0,
-                    "group_assists": none_or_int(row.get("group_assists")) or 0,
-                }
-            fresh["player_stats"] = stats
-            return True
-        ok, _ = mutate_shared_state(mutator, "Update player stats")
-        if ok:
-            st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-    st.subheader("Manual Advancement Override")
-    advancement_rows = [{"Team": team["name"], "Advancement": state["advancement"].get(team["name"], "Group Stage")} for team in WORLD_CUP_TEAMS]
-    advancement_df = pd.DataFrame(advancement_rows)
-    edited_advancement = st.data_editor(
-        advancement_df,
-        hide_index=True,
-        width="stretch",
-        num_rows="fixed",
-        column_config={"Advancement": st.column_config.SelectboxColumn(options=ADVANCEMENT_LEVELS)},
-    )
-    if st.button("Save Advancement"):
-        def mutator(fresh):
-            fresh = normalize_state(fresh)
-            for _, row in edited_advancement.iterrows():
-                team_name = canonical_team_name(row["Team"])
-                level = str(row["Advancement"] or "Group Stage")
-                fresh["advancement"][team_name] = level if level in ADVANCEMENT_BONUSES else "Group Stage"
-            return True
-        ok, _ = mutate_shared_state(mutator, "Update advancement bonuses")
-        if ok:
-            st.rerun()
-    st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Manual Advancement Override")
+            advancement_rows = [{"Team": team["name"], "Advancement": state["advancement"].get(team["name"], "Group Stage")} for team in WORLD_CUP_TEAMS]
+            advancement_df = pd.DataFrame(advancement_rows)
+            edited_advancement = st.data_editor(
+                advancement_df,
+                hide_index=True,
+                width="stretch",
+                num_rows="fixed",
+                column_config={"Advancement": st.column_config.SelectboxColumn(options=ADVANCEMENT_LEVELS)},
+            )
+            if st.button("Save Advancement"):
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    for _, row in edited_advancement.iterrows():
+                        team_name = canonical_team_name(row["Team"])
+                        level = str(row["Advancement"] or "Group Stage")
+                        fresh["advancement"][team_name] = level if level in ADVANCEMENT_BONUSES else "Group Stage"
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update advancement bonuses")
+                if ok:
+                    st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 state, sha = load_state_from_github()
 state = normalize_state(state)
 draft_in_progress = state.get("draft_active") and not full_draft_complete(state)
