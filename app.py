@@ -103,7 +103,7 @@ input, textarea, select { color:#fff!important; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
-.on-deck-line { color:var(--coach-color); text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:-.3rem 0 .8rem; text-shadow:0 0 10px var(--coach-color); }
+.on-deck-line { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:6px; text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:-.85rem 0 .55rem; text-shadow:0 0 10px var(--coach-color); }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
 .draft-control-row { margin:.2rem 0 .5rem; }
@@ -1950,6 +1950,11 @@ def next_pick_after_current(stage_label, state):
 
 def render_pick_timer(stage_label, current, color, started_at):
     total_picks = draft_total_for_stage(stage_label)
+    image_data_uri = image_to_data_uri(coach_photo_filename(current["coach"]), max_width=44, max_height=44, quality=70)
+    if image_data_uri:
+        coach_icon = f"<img class='coach-timer-face' src='{html.escape(image_data_uri, quote=True)}' alt=''>"
+    else:
+        coach_icon = f"<span class='coach-timer-placeholder'>{html.escape(str(current['coach'])[:1])}</span>"
     payload = {
         "stage": str(stage_label),
         "pick": int(current["pick"]),
@@ -1987,12 +1992,38 @@ body {{ padding:10px 0 8px; }}
   font-weight:1000;
 }}
 .accent {{ color:{html.escape(payload["color"])}; }}
+.pick-line {{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+  flex-wrap:wrap;
+}}
+.coach-timer-face,
+.coach-timer-placeholder {{
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  object-fit:cover;
+  border:2px solid {html.escape(payload["color"])};
+  box-shadow:0 0 10px {html.escape(payload["color"])};
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  color:{html.escape(payload["color"])};
+  font-size:.85rem;
+  font-weight:1000;
+  flex:0 0 auto;
+}}
 </style>
 </head>
 <body>
 <div class="current-pick-box">
-  {html.escape(payload["stage"])} Pick {payload["pick"]} of {payload["total"]}: <span class="accent">{html.escape(payload["coach"])}</span> is On The Clock
-  <span class="accent">🕒 <span id="timer">00:00:00</span></span>
+  <div class="pick-line">
+    {coach_icon}
+    <span>{html.escape(payload["stage"])} Pick {payload["pick"]} of {payload["total"]}: <span class="accent">{html.escape(payload["coach"])}</span> is On The Clock</span>
+    <span class="accent">🕒 <span id="timer">00:00:00</span></span>
+  </div>
 </div>
 <script>
 const startedAt = {payload["startedAt"]};
@@ -2040,7 +2071,7 @@ def render_draft_status(stage_label, current, state):
         if on_deck:
             on_deck_color = state["teams"][on_deck["coach"]]["color"]
             st.markdown(
-                f"<div class='on-deck-line' style='--coach-color:{html.escape(on_deck_color)}'>{html.escape(on_deck['coach'])} is ON-DECK</div>",
+                f"<div class='on-deck-line' style='--coach-color:{html.escape(on_deck_color)}'>{coach_mini_html(on_deck['coach'], on_deck_color)}<span>{html.escape(on_deck['coach'])} is ON-DECK</span></div>",
                 unsafe_allow_html=True,
             )
     st.markdown(
