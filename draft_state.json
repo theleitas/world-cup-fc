@@ -70,7 +70,8 @@
         "Mexico",
         "Côte d'Ivoire",
         "South Africa",
-        "Korea Republic"
+        "Korea Republic",
+        "Portugal"
       ],
       "star_players": []
     },
@@ -339,6 +340,13 @@
       "coach": "Jayme",
       "team": "Algeria",
       "picked_at": "2026-06-07T11:48:46.471077-04:00"
+    },
+    {
+      "pick": 35,
+      "round": 5,
+      "coach": "Herb",
+      "team": "Portugal",
+      "picked_at": "2026-06-07T11:48:53.762281-04:00"
     }
   ],
   "player_picks": [],
@@ -2693,5 +2701,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847326
+  "current_pick_started_at": 1780847333
 }
