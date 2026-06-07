@@ -755,6 +755,7 @@ def default_state():
         "last_score_refresh_at": 0,
         "last_score_refresh_attempt_at": 0,
         "last_api_error": "",
+        "last_friendly_api_error": "",
         "current_pick_started_at": int(time.time()),
     }
 
@@ -778,6 +779,7 @@ def normalize_state(state):
     state.setdefault("last_score_refresh_at", 0)
     state.setdefault("last_score_refresh_attempt_at", 0)
     state.setdefault("last_api_error", "")
+    state.setdefault("last_friendly_api_error", "")
     state.setdefault("current_pick_started_at", int(time.time()))
 
     state["players"] = [str(player).strip() for player in state.get("players", []) if str(player).strip()]
@@ -1292,32 +1294,50 @@ def fetch_friendly_matches_from_football_data(token):
     if not token:
         return []
     headers = {"X-Auth-Token": token, "X-Unfold-Goals": "true"}
-    resp = requests.get(
-        "https://api.football-data.org/v4/matches",
+    team_names = {team["name"] for team in WORLD_CUP_TEAMS}
+    teams_resp = requests.get(
+        "https://api.football-data.org/v4/competitions/WC/teams",
         headers=headers,
-        params={"dateFrom": "2026-05-15", "dateTo": "2026-06-12"},
+        params={"season": "2026"},
         timeout=15,
     )
-    resp.raise_for_status()
-    payload = resp.json()
-    team_names = {team["name"] for team in WORLD_CUP_TEAMS}
-    matches = []
-    for index, item in enumerate(payload.get("matches", [])):
-        competition = item.get("competition") if isinstance(item.get("competition"), dict) else {}
-        stage = str(item.get("stage") or "")
-        competition_name = str(competition.get("name") or "").strip()
-        competition_code = str(competition.get("code") or "").strip().upper()
-        home = canonical_team_name((item.get("homeTeam") or {}).get("name"))
-        away = canonical_team_name((item.get("awayTeam") or {}).get("name"))
-        if home not in team_names and away not in team_names:
-            continue
-        if competition_code == "WC":
-            continue
-        match = parse_friendly_match_payload_item(item, index)
-        if "friendly" not in f"{competition_name} {stage}".lower():
-            match["stage"] = f"FRIENDLY - {competition_name or 'International'}"
-        matches.append(match)
-    return matches
+    teams_resp.raise_for_status()
+    team_payload = teams_resp.json()
+    team_ids = {}
+    for item in team_payload.get("teams", []):
+        team_id = item.get("id")
+        team_name = canonical_team_name(item.get("name"))
+        if team_name in team_names and team_id:
+            team_ids[team_name] = int(team_id)
+    if not team_ids:
+        raise RuntimeError("Football-Data returned no World Cup team ids for friendly lookup.")
+
+    matches_by_id = {}
+    for team_name, team_id in team_ids.items():
+        resp = requests.get(
+            f"https://api.football-data.org/v4/teams/{team_id}/matches",
+            headers=headers,
+            params={"dateFrom": "2026-05-15", "dateTo": "2026-06-12", "limit": 100},
+            timeout=15,
+        )
+        resp.raise_for_status()
+        payload = resp.json()
+        for item in payload.get("matches", []):
+            competition = item.get("competition") if isinstance(item.get("competition"), dict) else {}
+            competition_name = str(competition.get("name") or "").strip()
+            competition_code = str(competition.get("code") or "").strip().upper()
+            stage = str(item.get("stage") or "")
+            home = canonical_team_name((item.get("homeTeam") or {}).get("name"))
+            away = canonical_team_name((item.get("awayTeam") or {}).get("name"))
+            if home not in team_names and away not in team_names:
+                continue
+            if competition_code == "WC":
+                continue
+            match = parse_friendly_match_payload_item(item, len(matches_by_id))
+            if "friendly" not in f"{competition_name} {stage}".lower():
+                match["stage"] = f"FRIENDLY - {competition_name or 'International'}"
+            matches_by_id[match["id"]] = match
+    return sorted(matches_by_id.values(), key=lambda match: match.get("date") or "")
 
 
 @st.cache_data(ttl=180, show_spinner=False)
@@ -1439,8 +1459,10 @@ def refresh_api_scores():
             matches = fetch_matches_from_football_data(FOOTBALL_DATA_TOKEN)
             try:
                 friendly_matches = fetch_friendly_matches_from_football_data(FOOTBALL_DATA_TOKEN)
-            except Exception:
+                state["last_friendly_api_error"] = ""
+            except Exception as exc:
                 friendly_matches = []
+                state["last_friendly_api_error"] = str(exc)
             matches = sorted(friendly_matches + matches, key=lambda match: match.get("date") or "")
             if matches:
                 state["matches"] = matches
@@ -2251,6 +2273,8 @@ def render_live_matches(state):
                 st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
             if state.get("last_api_error"):
                 st.caption(state["last_api_error"])
+            if state.get("last_friendly_api_error"):
+                st.caption(f"Friendly lookup: {state['last_friendly_api_error']}")
         st.caption("Data provided by football-data.org")
 
         matches = sorted(state.get("matches", []), key=lambda match: match.get("date") or "")
@@ -2283,9 +2307,84 @@ def format_match_date(value):
         return text
 
 
+def draft_status_summary(state):
+    team_picks = len(state.get("team_picks", []))
+    player_picks = len(state.get("player_picks", []))
+    team_total = len(TEAM_DRAFT_SEQUENCE)
+    player_total = len(PLAYER_DRAFT_SEQUENCE)
+    teams_per_coach = team_total // len(COACHES)
+    players_per_coach = player_total // len(COACHES)
+    if full_draft_complete(state):
+        return (
+            "Completed",
+            f"Full rosters are locked: {teams_per_coach} teams and {players_per_coach} players per coach "
+            f"({team_picks}/{team_total} team picks, {player_picks}/{player_total} player picks).",
+        )
+    if state.get("draft_enabled") and state.get("draft_active"):
+        current = current_pick(
+            PLAYER_DRAFT_SEQUENCE if team_draft_complete(state) else TEAM_DRAFT_SEQUENCE,
+            state["player_picks"] if team_draft_complete(state) else state["team_picks"],
+        )
+        on_clock = f" {current['coach']} is on the clock." if current else ""
+        return (
+            "On-going",
+            f"{team_picks}/{team_total} team picks and {player_picks}/{player_total} player picks complete.{on_clock}",
+        )
+    if state.get("draft_enabled"):
+        return (
+            "Stopped",
+            f"The draft room is enabled but paused at {team_picks}/{team_total} team picks and {player_picks}/{player_total} player picks.",
+        )
+    return (
+        "Disabled",
+        f"The draft room is hidden. Current progress: {team_picks}/{team_total} team picks and {player_picks}/{player_total} player picks.",
+    )
+
+
 def render_admin(state):
     with st.expander("Admin"):
         st.caption("Admin controls are open for this private league app.")
+
+        status_label, status_text = draft_status_summary(state)
+        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+        st.subheader("Draft Controls")
+        st.caption(f"Status: {status_label}")
+        st.caption(status_text)
+        st.caption("Draft order is fixed and intentionally not editable.")
+        c1, c2, c3, c4 = st.columns(4, gap="small")
+        with c1:
+            if st.button("Enable Draft", key="admin-enable-draft"):
+                ok, _ = set_draft_enabled(True)
+                if ok:
+                    st.rerun()
+        with c2:
+            if st.button("Disable Draft", key="admin-disable-draft"):
+                ok, _ = set_draft_enabled(False)
+                if ok:
+                    st.rerun()
+        with c3:
+            if st.button("Start Draft", key="admin-start-draft"):
+                ok, _ = set_draft_active(True)
+                if ok:
+                    st.rerun()
+        with c4:
+            if st.button("Stop Draft", key="admin-stop-draft"):
+                ok, _ = set_draft_active(False)
+                if ok:
+                    st.rerun()
+        if st.button("Undo Last Pick", key="admin-undo-last-pick-top", width="stretch"):
+            ok, _ = undo_last_pick()
+            if ok:
+                st.rerun()
+
+        st.markdown("**Protected Reset**")
+        reset_confirmed = st.checkbox("I understand this clears every roster and every draft pick.", key="reset-rosters-confirm-checkbox")
+        reset_text = st.text_input("Type RESET to confirm roster reset", key="reset-rosters-confirm-text")
+        if st.button("Reset Rosters", key="admin-reset-rosters", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET")):
+            ok, _ = reset_rosters_and_draft()
+            if ok:
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Coach Colors")
@@ -2434,36 +2533,6 @@ def render_admin(state):
                 if ok:
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
-
-        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-        st.subheader("Draft Controls")
-        st.caption("Draft order is fixed and intentionally not editable.")
-        c1, c2, c3 = st.columns(3)
-        with c1:
-            if st.button("Enable Draft"):
-                ok, _ = set_draft_enabled(True)
-                if ok:
-                    st.rerun()
-        with c2:
-            if st.button("Disable Draft"):
-                ok, _ = set_draft_enabled(False)
-                if ok:
-                    st.rerun()
-        with c3:
-            if st.button("Undo Last Pick", key="admin-undo-last-pick"):
-                ok, _ = undo_last_pick()
-                if ok:
-                    st.rerun()
-
-        st.markdown("**Protected Reset**")
-        reset_confirmed = st.checkbox("I understand this clears every roster and every draft pick.", key="reset-rosters-confirm-checkbox")
-        reset_text = st.text_input("Type RESET to confirm roster reset", key="reset-rosters-confirm-text")
-        if st.button("Reset Rosters", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET")):
-            ok, _ = reset_rosters_and_draft()
-            if ok:
-                st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
-
 
 state, sha = load_state_from_github()
 state = normalize_state(state)
