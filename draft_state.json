@@ -78,7 +78,8 @@
       "image": "Spencer.png",
       "national_teams": [
         "Australia",
-        "Congo DR"
+        "Congo DR",
+        "Bosnia and Herzegovina"
       ],
       "star_players": []
     }
@@ -195,6 +196,13 @@
       "coach": "Benji",
       "team": "Belgium",
       "picked_at": "2026-06-07T11:29:44.882956-04:00"
+    },
+    {
+      "pick": 17,
+      "round": 3,
+      "coach": "Spencer",
+      "team": "Bosnia and Herzegovina",
+      "picked_at": "2026-06-07T11:29:54.409606-04:00"
     }
   ],
   "player_picks": [],
@@ -2549,5 +2557,5 @@
   "last_score_refresh_attempt_at": 1780846040,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780846184
+  "current_pick_started_at": 1780846194
 }
