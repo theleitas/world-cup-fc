@@ -1905,26 +1905,26 @@ def save_draft_pick(action, value, label):
     st.warning(f"Could not save {label}. It may already be drafted, or the draft may be paused.")
 
 
-def render_draft_controls(state):
+def render_draft_controls(state, key_prefix="draft-controls"):
     st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
     c1, c2, c3 = st.columns([1, 1, 1], gap="large")
     with c1:
         st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
-        if st.button("Start Draft", key="draft-start-top", width="stretch"):
+        if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch"):
             ok, _ = set_draft_active(True)
             if ok:
                 rerun_draft_scope()
         st.markdown("</div>", unsafe_allow_html=True)
     with c2:
         st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
-        if st.button("Stop Draft", key="draft-stop-top", width="stretch"):
+        if st.button("Stop Draft", key=f"{key_prefix}-stop", width="stretch"):
             ok, _ = set_draft_active(False)
             if ok:
                 rerun_draft_scope()
         st.markdown("</div>", unsafe_allow_html=True)
     with c3:
         st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
-        if st.button("Undo Last Pick", key="draft-undo-top", width="stretch"):
+        if st.button("Undo Last Pick", key=f"{key_prefix}-undo", width="stretch"):
             ok, _ = undo_last_pick()
             if ok:
                 rerun_draft_scope()
@@ -2100,7 +2100,7 @@ def render_drafts(state):
         "<div class='draft-help'>Tap a draft button once. The app will show \"Updating roster\" while it saves the pick and refreshes the board.</div>",
         unsafe_allow_html=True,
     )
-    render_draft_controls(state)
+    render_draft_controls(state, key_prefix=f"{active_stage.lower()}-draft-top")
 
     if not team_complete:
         render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
@@ -2117,7 +2117,7 @@ def render_drafts(state):
     render_draft_status(active_stage, active_pick, state)
     player_pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
     if player_pick:
-        render_draft_controls(state)
+        render_draft_controls(state, key_prefix="player-draft-bottom")
         render_available_players(state)
 
 
@@ -2212,6 +2212,7 @@ def render_group_stage_match_groups(state, matches):
 
 def render_live_matches(state):
     st.markdown("<div class='match-section-spacer'></div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title'>World Cup Tracker</div>", unsafe_allow_html=True)
     with st.expander("Past, Present, and Live Matches", expanded=False):
         c1, c2 = st.columns([1, 2])
         with c1:
