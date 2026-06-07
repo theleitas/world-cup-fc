@@ -83,7 +83,8 @@
         "Croatia"
       ],
       "star_players": [
-        "Ousmane Dembele (France)"
+        "Ousmane Dembele (France)",
+        "Cristiano Ronaldo (Portugal)"
       ]
     },
     "Herb": {
@@ -557,6 +558,13 @@
       "coach": "Chad",
       "player": "Raphinha (Brazil)",
       "picked_at": "2026-06-07T10:34:36.939689-04:00"
+    },
+    {
+      "pick": 61,
+      "round": 2,
+      "coach": "Lamp",
+      "player": "Cristiano Ronaldo (Portugal)",
+      "picked_at": "2026-06-07T10:34:47.603069-04:00"
     }
   ],
   "players": [
@@ -2910,5 +2918,5 @@
   "last_score_refresh_attempt_at": 1780842627,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842876
+  "current_pick_started_at": 1780842887
 }
