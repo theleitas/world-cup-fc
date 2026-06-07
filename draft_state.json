@@ -134,7 +134,8 @@
         "Türkiye"
       ],
       "star_players": [
-        "Lamine Yamal (Spain)"
+        "Lamine Yamal (Spain)",
+        "Antoine Semenyo (Ghana)"
       ]
     }
   },
@@ -581,6 +582,13 @@
       "coach": "Jayme",
       "player": "Luis Diaz (Colombia)",
       "picked_at": "2026-06-07T12:06:27.721822-04:00"
+    },
+    {
+      "pick": 64,
+      "round": 2,
+      "coach": "Spencer",
+      "player": "Antoine Semenyo (Ghana)",
+      "picked_at": "2026-06-07T12:07:10.166801-04:00"
     }
   ],
   "players": [
@@ -2934,5 +2942,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848387
+  "current_pick_started_at": 1780848430
 }
