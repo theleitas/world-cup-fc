@@ -69,7 +69,8 @@
       "national_teams": [
         "Uzbekistan",
         "Australia",
-        "Côte d'Ivoire"
+        "Côte d'Ivoire",
+        "Paraguay"
       ],
       "star_players": []
     },
@@ -299,6 +300,13 @@
       "coach": "Lamp",
       "team": "Ecuador",
       "picked_at": "2026-06-07T13:23:40.743559-04:00"
+    },
+    {
+      "pick": 30,
+      "round": 4,
+      "coach": "Herb",
+      "team": "Paraguay",
+      "picked_at": "2026-06-07T13:23:46.454568-04:00"
     }
   ],
   "player_picks": [],
@@ -2653,6 +2661,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853020,
+  "current_pick_started_at": 1780853026,
   "last_friendly_api_error": ""
 }
