@@ -69,7 +69,9 @@
       "team_name": "Spencer",
       "color": "#FF3D3D",
       "image": "Spencer.png",
-      "national_teams": [],
+      "national_teams": [
+        "Saudi Arabia"
+      ],
       "star_players": []
     }
   },
@@ -122,6 +124,13 @@
       "coach": "Jayme",
       "team": "USA",
       "picked_at": "2026-06-07T12:47:11.199977-04:00"
+    },
+    {
+      "pick": 8,
+      "round": 1,
+      "coach": "Spencer",
+      "team": "Saudi Arabia",
+      "picked_at": "2026-06-07T12:47:16.035058-04:00"
     }
   ],
   "player_picks": [],
@@ -2476,6 +2485,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780850831,
+  "current_pick_started_at": 1780850836,
   "last_friendly_api_error": ""
 }
