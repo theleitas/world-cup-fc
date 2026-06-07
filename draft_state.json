@@ -1,0 +1,408 @@
+{
+  "app_title": "World Cup FC",
+  "draft_active": true,
+  "teams": {
+    "Benji": {
+      "team_name": "Benji",
+      "color": "#FFD54A",
+      "image": "Benji.png",
+      "national_teams": [],
+      "star_players": []
+    },
+    "Jeff": {
+      "team_name": "Jeff",
+      "color": "#00E5FF",
+      "image": "Jeff.png",
+      "national_teams": [],
+      "star_players": []
+    },
+    "Peter": {
+      "team_name": "Peter",
+      "color": "#FF2DAA",
+      "image": "Peter.png",
+      "national_teams": [],
+      "star_players": []
+    },
+    "Chad": {
+      "team_name": "Chad",
+      "color": "#40FF6A",
+      "image": "Chad.png",
+      "national_teams": [],
+      "star_players": []
+    },
+    "Lamp": {
+      "team_name": "Lamp",
+      "color": "#FF7A1A",
+      "image": "Lamp.png",
+      "national_teams": [],
+      "star_players": []
+    },
+    "Herb": {
+      "team_name": "Herb",
+      "color": "#3F7BFF",
+      "image": "Herb.png",
+      "national_teams": [],
+      "star_players": []
+    },
+    "Jayme": {
+      "team_name": "Jayme",
+      "color": "#B56CFF",
+      "image": "Jayme.png",
+      "national_teams": [],
+      "star_players": []
+    },
+    "Spencer": {
+      "team_name": "Spencer",
+      "color": "#FF3D3D",
+      "image": "Spencer.png",
+      "national_teams": [],
+      "star_players": []
+    }
+  },
+  "team_picks": [],
+  "player_picks": [],
+  "players": [
+    "Lamine Yamal (Spain)",
+    "Kylian Mbappe (France)",
+    "Harry Kane (England)",
+    "Ousmane Dembele (France)",
+    "Michael Olise (France)",
+    "Erling Haaland (Norway)",
+    "Vinicius Junior (Brazil)",
+    "Julian Alvarez (Argentina)",
+    "Raphinha (Brazil)",
+    "Lionel Messi (Argentina)",
+    "Luis Diaz (Colombia)",
+    "Antoine Semenyo (Ghana)",
+    "Lautaro Martinez (Argentina)",
+    "Bukayo Saka (England)",
+    "Desire Doue (France)",
+    "Jeremy Doku (Belgium)",
+    "Cristiano Ronaldo (Portugal)",
+    "Neymar Jr. (Brazil)",
+    "Sadio Mane (Senegal)",
+    "Nico Williams (Spain)",
+    "Mohamed Salah (Egypt)",
+    "Omar Marmoush (Egypt)",
+    "Patrick Schick (Czechia)",
+    "Victor Gyokeres (Sweden)",
+    "Arda Guler (Türkiye)"
+  ],
+  "odds": {
+    "Spain": "+400",
+    "France": "+450",
+    "England": "+600",
+    "Brazil": "+800",
+    "Argentina": "+800",
+    "Portugal": "+800",
+    "Germany": "+1400",
+    "Netherlands": "+2000",
+    "Norway": "+2500",
+    "Belgium": "+3300",
+    "Colombia": "+3300",
+    "Morocco": "+5000",
+    "Japan": "+5000",
+    "USA": "+6600",
+    "Mexico": "+6600",
+    "Uruguay": "+6600",
+    "Switzerland": "+8000",
+    "Croatia": "+8000",
+    "Türkiye": "+8000",
+    "Ecuador": "+10000",
+    "Sweden": "+10000",
+    "Senegal": "+15000",
+    "Canada": "+15000",
+    "Austria": "+15000",
+    "Paraguay": "+15000",
+    "Scotland": "+25000",
+    "Bosnia and Herzegovina": "+25000",
+    "Côte d'Ivoire": "+30000",
+    "Czechia": "+30000",
+    "Egypt": "+30000",
+    "Ghana": "+35000",
+    "Algeria": "+40000",
+    "Korea Republic": "+40000",
+    "Australia": "+50000",
+    "Tunisia": "+50000",
+    "IR Iran": "+50000",
+    "Congo DR": "+75000",
+    "South Africa": "+90000",
+    "Saudi Arabia": "+100000",
+    "Qatar": "+100000",
+    "Panama": "+100000",
+    "Iraq": "+100000",
+    "New Zealand": "+100000",
+    "Cabo Verde": "+100000",
+    "Uzbekistan": "+100000",
+    "Jordan": "+100000",
+    "Haiti": "+100000",
+    "Curaçao": "+100000"
+  },
+  "expected_points": {
+    "Spain": 54.0,
+    "France": 54.0,
+    "England": 44.0,
+    "Brazil": 44.0,
+    "Argentina": 44.0,
+    "Portugal": 44.0,
+    "Germany": 35.0,
+    "Netherlands": 35.0,
+    "Norway": 35.0,
+    "Belgium": 26.0,
+    "Colombia": 26.0,
+    "Morocco": 26.0,
+    "Japan": 26.0,
+    "USA": 26.0,
+    "Mexico": 26.0,
+    "Uruguay": 26.0,
+    "Switzerland": 18.0,
+    "Croatia": 18.0,
+    "Türkiye": 18.0,
+    "Ecuador": 18.0,
+    "Sweden": 18.0,
+    "Senegal": 18.0,
+    "Canada": 18.0,
+    "Austria": 18.0,
+    "Paraguay": 18.0,
+    "Scotland": 12.0,
+    "Bosnia and Herzegovina": 12.0,
+    "Côte d'Ivoire": 12.0,
+    "Czechia": 12.0,
+    "Egypt": 12.0,
+    "Ghana": 12.0,
+    "Algeria": 12.0,
+    "Korea Republic": 12.0,
+    "Australia": 7.0,
+    "Tunisia": 7.0,
+    "IR Iran": 7.0,
+    "Congo DR": 7.0,
+    "South Africa": 7.0,
+    "Saudi Arabia": 7.0,
+    "Qatar": 7.0,
+    "Panama": 7.0,
+    "Iraq": 7.0,
+    "New Zealand": 7.0,
+    "Cabo Verde": 7.0,
+    "Uzbekistan": 7.0,
+    "Jordan": 7.0,
+    "Haiti": 7.0,
+    "Curaçao": 7.0
+  },
+  "matches": [
+    {
+      "id": "match-001",
+      "date": "2026-06-11T20:00:00-04:00",
+      "stage": "Group Stage",
+      "home": "Mexico",
+      "away": "South Africa",
+      "home_score": null,
+      "away_score": null,
+      "status": "Scheduled"
+    }
+  ],
+  "player_stats": {
+    "Lamine Yamal (Spain)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Kylian Mbappe (France)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Harry Kane (England)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Ousmane Dembele (France)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Michael Olise (France)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Erling Haaland (Norway)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Vinicius Junior (Brazil)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Julian Alvarez (Argentina)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Raphinha (Brazil)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Lionel Messi (Argentina)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Luis Diaz (Colombia)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Antoine Semenyo (Ghana)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Lautaro Martinez (Argentina)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Bukayo Saka (England)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Desire Doue (France)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Jeremy Doku (Belgium)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Cristiano Ronaldo (Portugal)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Neymar Jr. (Brazil)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Sadio Mane (Senegal)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Nico Williams (Spain)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Mohamed Salah (Egypt)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Omar Marmoush (Egypt)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Patrick Schick (Czechia)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Victor Gyokeres (Sweden)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    },
+    "Arda Guler (Türkiye)": {
+      "goals": 0,
+      "assists": 0,
+      "group_goals": 0,
+      "group_assists": 0
+    }
+  },
+  "advancement": {
+    "Canada": "Group Stage",
+    "Mexico": "Group Stage",
+    "USA": "Group Stage",
+    "Australia": "Group Stage",
+    "Iraq": "Group Stage",
+    "IR Iran": "Group Stage",
+    "Japan": "Group Stage",
+    "Jordan": "Group Stage",
+    "Korea Republic": "Group Stage",
+    "Qatar": "Group Stage",
+    "Saudi Arabia": "Group Stage",
+    "Uzbekistan": "Group Stage",
+    "Algeria": "Group Stage",
+    "Cabo Verde": "Group Stage",
+    "Congo DR": "Group Stage",
+    "Côte d'Ivoire": "Group Stage",
+    "Egypt": "Group Stage",
+    "Ghana": "Group Stage",
+    "Morocco": "Group Stage",
+    "Senegal": "Group Stage",
+    "South Africa": "Group Stage",
+    "Tunisia": "Group Stage",
+    "Curaçao": "Group Stage",
+    "Haiti": "Group Stage",
+    "Panama": "Group Stage",
+    "Argentina": "Group Stage",
+    "Brazil": "Group Stage",
+    "Colombia": "Group Stage",
+    "Ecuador": "Group Stage",
+    "Paraguay": "Group Stage",
+    "Uruguay": "Group Stage",
+    "New Zealand": "Group Stage",
+    "Austria": "Group Stage",
+    "Belgium": "Group Stage",
+    "Bosnia and Herzegovina": "Group Stage",
+    "Croatia": "Group Stage",
+    "Czechia": "Group Stage",
+    "England": "Group Stage",
+    "France": "Group Stage",
+    "Germany": "Group Stage",
+    "Netherlands": "Group Stage",
+    "Norway": "Group Stage",
+    "Portugal": "Group Stage",
+    "Scotland": "Group Stage",
+    "Spain": "Group Stage",
+    "Sweden": "Group Stage",
+    "Switzerland": "Group Stage",
+    "Türkiye": "Group Stage"
+  },
+  "last_score_refresh_at": 0,
+  "last_score_refresh_attempt_at": 0,
+  "last_api_error": ""
+}
