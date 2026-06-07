@@ -68,6 +68,8 @@ input, textarea, select { color:#fff!important; }
 .award-line { color:var(--coach-color); font-size:.84rem; line-height:1.18; font-weight:950; text-shadow:0 0 7px var(--coach-color); }
 .metric-row { display:flex; justify-content:space-between; gap:10px; border-bottom:1px solid rgba(255,255,255,.11); padding:7px 0; font-size:.92rem; }
 .metric-row b { color:#fff; }
+.points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
+.draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
 .asset-list { color:#e8f6f8; font-size:.88rem; line-height:1.45; margin-top:9px; }
 .draft-board { overflow-x:auto; width:100%; margin:.45rem 0 1rem; }
 .draft-board table { width:100%; border-collapse:collapse; min-width:820px; font-size:.82rem; table-layout:fixed; }
@@ -163,8 +165,9 @@ TITLE_THUMBNAIL_PATH = "titlethumb.png"
 AUTO_SCORE_REFRESH_SECONDS = 5 * 60
 KICKOFF_DEADLINE = "Thursday, June 11 at 8:00 PM EST"
 
-TEAM_ROUND_DIRECTIONS = ["forward", "reverse", "reverse", "forward", "reverse", "forward", "reverse", "forward"]
+TEAM_ROUND_DIRECTIONS = ["forward", "reverse", "reverse", "forward", "reverse", "forward"]
 PLAYER_ROUND_DIRECTIONS = ["reverse", "forward"]
+DRAFT_BUTTON_COLUMNS = 2
 
 TEAM_COLOR_OPTIONS = [
     ("Gold", "#FFD54A"),
@@ -246,13 +249,13 @@ WORLD_CUP_TEAMS = [
     {"name": "Bosnia and Herzegovina", "flag": "🇧🇦", "confed": "UEFA"},
     {"name": "Croatia", "flag": "🇭🇷", "confed": "UEFA"},
     {"name": "Czechia", "flag": "🇨🇿", "confed": "UEFA"},
-    {"name": "England", "flag": "🏴", "confed": "UEFA"},
+    {"name": "England", "flag": "🇬🇧", "confed": "UEFA"},
     {"name": "France", "flag": "🇫🇷", "confed": "UEFA"},
     {"name": "Germany", "flag": "🇩🇪", "confed": "UEFA"},
     {"name": "Netherlands", "flag": "🇳🇱", "confed": "UEFA"},
     {"name": "Norway", "flag": "🇳🇴", "confed": "UEFA"},
     {"name": "Portugal", "flag": "🇵🇹", "confed": "UEFA"},
-    {"name": "Scotland", "flag": "🏴", "confed": "UEFA"},
+    {"name": "Scotland", "flag": "\U0001F3F4\U000E0067\U000E0062\U000E0073\U000E0063\U000E0074\U000E007F", "confed": "UEFA"},
     {"name": "Spain", "flag": "🇪🇸", "confed": "UEFA"},
     {"name": "Sweden", "flag": "🇸🇪", "confed": "UEFA"},
     {"name": "Switzerland", "flag": "🇨🇭", "confed": "UEFA"},
@@ -619,9 +622,9 @@ def default_team_color(index):
     return TEAM_COLOR_OPTIONS[index % len(TEAM_COLOR_OPTIONS)][1]
 
 
-def build_draft_sequence(round_directions):
+def build_draft_sequence(round_directions, start_pick=1):
     sequence = []
-    pick_number = 1
+    pick_number = start_pick
     for round_index, direction in enumerate(round_directions, start=1):
         coaches = list(COACHES) if direction == "forward" else list(reversed(COACHES))
         for slot_index, coach in enumerate(coaches, start=1):
@@ -639,7 +642,7 @@ def build_draft_sequence(round_directions):
 
 
 TEAM_DRAFT_SEQUENCE = build_draft_sequence(TEAM_ROUND_DIRECTIONS)
-PLAYER_DRAFT_SEQUENCE = build_draft_sequence(PLAYER_ROUND_DIRECTIONS)
+PLAYER_DRAFT_SEQUENCE = build_draft_sequence(PLAYER_ROUND_DIRECTIONS, start_pick=len(TEAM_DRAFT_SEQUENCE) + 1)
 
 
 def odds_to_expected_points(odds):
@@ -816,6 +819,7 @@ def normalize_state(state):
 def normalize_pick_list(raw_picks, sequence, field):
     picks = []
     seen_pick_numbers = set()
+    sequence_by_pick = {item["pick"]: item for item in sequence}
     for raw in raw_picks or []:
         if not isinstance(raw, dict):
             continue
@@ -823,9 +827,9 @@ def normalize_pick_list(raw_picks, sequence, field):
             pick_number = int(raw.get("pick"))
         except (TypeError, ValueError):
             continue
-        if pick_number < 1 or pick_number > len(sequence) or pick_number in seen_pick_numbers:
+        if pick_number not in sequence_by_pick or pick_number in seen_pick_numbers:
             continue
-        expected = sequence[pick_number - 1]
+        expected = sequence_by_pick[pick_number]
         choice = raw.get(field)
         choice = canonical_team_name(choice) if field == "team" else str(choice or "").strip()
         if not choice:
@@ -1273,7 +1277,7 @@ def fetch_friendly_matches_from_football_data(token):
     resp = requests.get(
         "https://api.football-data.org/v4/matches",
         headers=headers,
-        params={"dateFrom": "2026-05-15", "dateTo": "2026-06-10"},
+        params={"dateFrom": "2026-05-15", "dateTo": "2026-06-11"},
         timeout=15,
     )
     resp.raise_for_status()
@@ -1281,9 +1285,14 @@ def fetch_friendly_matches_from_football_data(token):
     team_names = {team["name"] for team in WORLD_CUP_TEAMS}
     matches = []
     for index, item in enumerate(payload.get("matches", [])):
+        competition = item.get("competition") if isinstance(item.get("competition"), dict) else {}
+        stage = str(item.get("stage") or "")
+        competition_name = str(competition.get("name") or "").strip()
+        if "friendly" not in f"{competition_name} {stage}".lower():
+            continue
         home = canonical_team_name((item.get("homeTeam") or {}).get("name"))
         away = canonical_team_name((item.get("awayTeam") or {}).get("name"))
-        if home in team_names and away in team_names:
+        if home in team_names or away in team_names:
             matches.append(parse_friendly_match_payload_item(item, index))
     return matches
 
@@ -1508,8 +1517,7 @@ def render_standings(state, scores):
     <div class='score-badge'>{int(item["total_points"])}</div>
   </div>
   <div class='metric-row'><span>Overall</span><b>{html.escape(badge)}</b></div>
-  <div class='metric-row'><span>Team Points</span><b>{int(item["team_points"])}</b></div>
-  <div class='metric-row'><span>Player Points</span><b>{int(item["player_points"])}</b></div>
+  <div class='metric-row points-pair'><span>Team Points <b>{int(item["team_points"])}</b></span><span>Player Points <b>{int(item["player_points"])}</b></span></div>
   <div class='metric-row'><span>Group Stage</span><b>{int(item["group_stage_points"])}</b></div>
   <div class='metric-row'><span>Empire Builder</span><b>{int(item["empire_count"])} teams / {int(item["empire_goals"])} goals</b></div>
   <div class='metric-row'><span>Best Cinderella</span><b>{html.escape(item["cinderella_team"] or "None")} {item["cinderella"]:+.1f}</b></div>
@@ -1779,6 +1787,10 @@ def team_standings_table_html(rows):
 def render_team_standings(state):
     rows = team_standings_rows(state)
     st.markdown("<div class='section-title'>Team Standings</div>", unsafe_allow_html=True)
+    st.caption(
+        f"FIFA rank is the locked {FIFA_RANKING_LOCK_DATE} FIFA/Coca-Cola men's world ranking. "
+        "FIFA determines it from national-team results and ranking points; this app keeps that baseline fixed for the tournament."
+    )
     st.markdown(team_standings_table_html(rows[:10]), unsafe_allow_html=True)
     if len(rows) > 10:
         with st.expander("More Teams", expanded=False):
@@ -1855,6 +1867,15 @@ def reset_rosters_and_draft():
 
 def rerun_draft_scope():
     st.rerun()
+
+
+def save_draft_pick(action, value, label):
+    st.toast("Updating roster...")
+    with st.spinner("Updating roster and saving pick..."):
+        ok, _ = action(value)
+    if ok:
+        rerun_draft_scope()
+    st.warning(f"Could not save {label}. It may already be drafted, or the draft may be paused.")
 
 
 def render_draft_controls(state):
@@ -1975,29 +1996,25 @@ def make_player_pick(player):
 
 def render_available_teams(state):
     available = [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)]
-    for row_start in range(0, len(available), 4):
-        cols = st.columns(4, gap="small")
-        for col, team in zip(cols, available[row_start:row_start + 4]):
+    for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
+        cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
+        for col, team in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
             with col:
                 label = display_team(team["name"], state["odds"].get(team["name"], ""))
                 if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=not state.get("draft_active")):
-                    ok, _ = make_team_pick(team["name"])
-                    if ok:
-                        rerun_draft_scope()
+                    save_draft_pick(make_team_pick, team["name"], label)
 
 
 def render_available_players(state):
     used = drafted_players(state)
     available = [player for player in state["players"] if player not in used]
-    for row_start in range(0, len(available), 4):
-        cols = st.columns(4, gap="small")
-        for col, player in zip(cols, available[row_start:row_start + 4]):
+    for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
+        cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
+        for col, player in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
             with col:
                 label = display_player(player)
                 if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=not state.get("draft_active")):
-                    ok, _ = make_player_pick(player)
-                    if ok:
-                        rerun_draft_scope()
+                    save_draft_pick(make_player_pick, player, label)
 
 
 def render_drafts(state):
@@ -2016,6 +2033,10 @@ def render_drafts(state):
 
     st.markdown("<div class='section-title'>Draft Room</div>", unsafe_allow_html=True)
     render_draft_status(active_stage, active_pick, state)
+    st.markdown(
+        "<div class='draft-help'>Tap a draft button once. The app will show \"Updating roster\" while it saves the pick and refreshes the board.</div>",
+        unsafe_allow_html=True,
+    )
     render_draft_controls(state)
 
     render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
@@ -2362,10 +2383,10 @@ scores = calculate_scores(state)
 
 render_header(state)
 render_standings(state, scores)
-render_live_matches(state)
 render_drafts(state)
-render_drafted_player_stats(state)
+render_live_matches(state)
 render_team_standings(state)
+render_drafted_player_stats(state)
 render_cinderella_standings(state)
 render_payout_descriptions()
 render_admin(state)
