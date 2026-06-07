@@ -46,7 +46,8 @@
         "Jordan",
         "IR Iran",
         "Morocco",
-        "Croatia"
+        "Croatia",
+        "England"
       ],
       "star_players": []
     },
@@ -355,6 +356,13 @@
       "coach": "Lamp",
       "team": "Germany",
       "picked_at": "2026-06-07T11:49:12.910653-04:00"
+    },
+    {
+      "pick": 37,
+      "round": 5,
+      "coach": "Chad",
+      "team": "England",
+      "picked_at": "2026-06-07T11:49:32.058170-04:00"
     }
   ],
   "player_picks": [],
@@ -2709,5 +2717,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847352
+  "current_pick_started_at": 1780847372
 }
