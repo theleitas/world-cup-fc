@@ -98,7 +98,9 @@
         "Algeria",
         "Spain"
       ],
-      "star_players": []
+      "star_players": [
+        "Kylian Mbappe (France)"
+      ]
     },
     "Spencer": {
       "team_name": "Spencer",
@@ -462,6 +464,13 @@
       "coach": "Spencer",
       "player": "Lamine Yamal (Spain)",
       "picked_at": "2026-06-07T12:00:07.005916-04:00"
+    },
+    {
+      "pick": 50,
+      "round": 1,
+      "coach": "Jayme",
+      "player": "Kylian Mbappe (France)",
+      "picked_at": "2026-06-07T12:00:24.931046-04:00"
     }
   ],
   "players": [
@@ -2815,5 +2824,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848007
+  "current_pick_started_at": 1780848024
 }
