@@ -1822,6 +1822,17 @@ def draft_total_for_stage(stage_label):
     return len(TEAM_DRAFT_SEQUENCE) if stage_label == "Team" else len(TEAM_DRAFT_SEQUENCE) + len(PLAYER_DRAFT_SEQUENCE)
 
 
+def button_text_color_for_background(color):
+    value = str(color or "").strip().lstrip("#")
+    if len(value) != 6 or any(ch not in "0123456789abcdefABCDEF" for ch in value):
+        return "#F5F5F5"
+    red = int(value[0:2], 16)
+    green = int(value[2:4], 16)
+    blue = int(value[4:6], 16)
+    luminance = (0.2126 * red) + (0.7152 * green) + (0.0722 * blue)
+    return "#111111" if luminance >= 170 else "#F5F5F5"
+
+
 def render_draft_status(stage_label, current, state):
     if current:
         color = state["teams"][current["coach"]]["color"]
@@ -2027,15 +2038,17 @@ def render_available_teams(state):
     saving = st.session_state.get("draft_saving", False)
     current = current_pick(TEAM_DRAFT_SEQUENCE, state["team_picks"])
     coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
-    hover_color = f"color-mix(in srgb, {coach_color} 28%, #121212)"
+    button_text_color = button_text_color_for_background(coach_color)
+    base_color = f"color-mix(in srgb, {coach_color} 34%, #101010)"
+    hover_color = f"color-mix(in srgb, {coach_color} 48%, #101010)"
     st.markdown(
         f"""
 <style>
 .st-key-team-pick-buttons {{
-    --draft-button-bg:{coach_color};
+    --draft-button-bg:{base_color};
     --draft-button-border:{coach_color};
     --draft-button-hover:{hover_color};
-    --draft-button-fg:#000;
+    --draft-button-fg:{button_text_color};
 }}
 </style>
 """,
@@ -2057,15 +2070,17 @@ def render_available_players(state):
     saving = st.session_state.get("draft_saving", False)
     current = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
     coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
-    hover_color = f"color-mix(in srgb, {coach_color} 28%, #121212)"
+    button_text_color = button_text_color_for_background(coach_color)
+    base_color = f"color-mix(in srgb, {coach_color} 34%, #101010)"
+    hover_color = f"color-mix(in srgb, {coach_color} 48%, #101010)"
     st.markdown(
         f"""
 <style>
 .st-key-player-pick-buttons {{
-    --draft-button-bg:{coach_color};
+    --draft-button-bg:{base_color};
     --draft-button-border:{coach_color};
     --draft-button-hover:{hover_color};
-    --draft-button-fg:#000;
+    --draft-button-fg:{button_text_color};
 }}
 </style>
 """,
