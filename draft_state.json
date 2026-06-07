@@ -117,7 +117,8 @@
         "Spain"
       ],
       "star_players": [
-        "Kylian Mbappe (France)"
+        "Kylian Mbappe (France)",
+        "Luis Diaz (Colombia)"
       ]
     },
     "Spencer": {
@@ -573,6 +574,13 @@
       "coach": "Herb",
       "player": "Jeremy Doku (Belgium)",
       "picked_at": "2026-06-07T12:05:25.113619-04:00"
+    },
+    {
+      "pick": 63,
+      "round": 2,
+      "coach": "Jayme",
+      "player": "Luis Diaz (Colombia)",
+      "picked_at": "2026-06-07T12:06:27.721822-04:00"
     }
   ],
   "players": [
@@ -2926,5 +2934,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848325
+  "current_pick_started_at": 1780848387
 }
