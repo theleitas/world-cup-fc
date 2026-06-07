@@ -1,6 +1,6 @@
 {
   "app_title": "World Cup FC",
-  "draft_active": true,
+  "draft_active": false,
   "teams": {
     "Benji": {
       "team_name": "Benji",
