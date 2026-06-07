@@ -53,7 +53,8 @@
         "France",
         "Senegal",
         "Egypt",
-        "Czechia"
+        "Czechia",
+        "Türkiye"
       ],
       "star_players": []
     },
@@ -411,6 +412,13 @@
       "coach": "Peter",
       "team": "Japan",
       "picked_at": "2026-06-07T09:58:51.213067-04:00"
+    },
+    {
+      "pick": 44,
+      "round": 6,
+      "coach": "Chad",
+      "team": "Türkiye",
+      "picked_at": "2026-06-07T09:59:15.101802-04:00"
     }
   ],
   "player_picks": [],
@@ -2765,5 +2773,5 @@
   "last_score_refresh_attempt_at": 1780840463,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780840731
+  "current_pick_started_at": 1780840755
 }
