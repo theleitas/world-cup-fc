@@ -100,7 +100,8 @@
         "Germany"
       ],
       "star_players": [
-        "Erling Haaland (Norway)"
+        "Erling Haaland (Norway)",
+        "Lautaro Martinez (Argentina)"
       ]
     },
     "Jayme": {
@@ -565,6 +566,13 @@
       "coach": "Lamp",
       "player": "Cristiano Ronaldo (Portugal)",
       "picked_at": "2026-06-07T10:34:47.603069-04:00"
+    },
+    {
+      "pick": 62,
+      "round": 2,
+      "coach": "Herb",
+      "player": "Lautaro Martinez (Argentina)",
+      "picked_at": "2026-06-07T10:35:40.003879-04:00"
     }
   ],
   "players": [
@@ -2918,5 +2926,5 @@
   "last_score_refresh_attempt_at": 1780842935,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842887
+  "current_pick_started_at": 1780842940
 }
