@@ -1522,17 +1522,6 @@ def render_standings(state, scores):
     st.markdown("".join(cards), unsafe_allow_html=True)
 
 
-if hasattr(st, "fragment"):
-    @st.fragment(run_every=1)
-    def render_standings_fragment(initial_state):
-        fragment_state = st.session_state.get("draft_fragment_state", initial_state)
-        fragment_state = normalize_state(fragment_state)
-        render_standings(fragment_state, calculate_scores(fragment_state))
-else:
-    def render_standings_fragment(initial_state):
-        render_standings(initial_state, calculate_scores(initial_state))
-
-
 def coach_mini_html(coach, color):
     image_path = coach_photo_filename(coach)
     data_uri = image_to_data_uri(image_path)
@@ -1837,15 +1826,7 @@ def reset_rosters_and_draft():
 
 
 def rerun_draft_scope():
-    try:
-        st.rerun(scope="fragment")
-    except Exception:
-        st.rerun()
-
-
-def remember_draft_fragment_state(state):
-    if state:
-        st.session_state["draft_fragment_state"] = normalize_state(state)
+    st.rerun()
 
 
 def render_draft_controls(state):
@@ -1854,25 +1835,22 @@ def render_draft_controls(state):
     with c1:
         st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
         if st.button("Start Draft", key="draft-start-top", width="stretch"):
-            ok, updated_state = set_draft_active(True)
+            ok, _ = set_draft_active(True)
             if ok:
-                remember_draft_fragment_state(updated_state)
                 rerun_draft_scope()
         st.markdown("</div>", unsafe_allow_html=True)
     with c2:
         st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
         if st.button("Stop Draft", key="draft-stop-top", width="stretch"):
-            ok, updated_state = set_draft_active(False)
+            ok, _ = set_draft_active(False)
             if ok:
-                remember_draft_fragment_state(updated_state)
                 rerun_draft_scope()
         st.markdown("</div>", unsafe_allow_html=True)
     with c3:
         st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
         if st.button("Undo Last Pick", key="draft-undo-top", width="stretch"):
-            ok, updated_state = undo_last_pick()
+            ok, _ = undo_last_pick()
             if ok:
-                remember_draft_fragment_state(updated_state)
                 rerun_draft_scope()
         st.markdown("</div>", unsafe_allow_html=True)
     st.markdown("</div>", unsafe_allow_html=True)
@@ -1899,7 +1877,7 @@ def render_draft_board(title, sequence, picks, field, state):
             coach_color = state["teams"][item["coach"]]["color"]
             if pick:
                 choice = pick[field]
-                label = display_team_html(choice, state["odds"].get(choice)) if field == "team" else display_player_html(choice)
+                label = display_team_html(choice, state["odds"].get(choice), include_info=False) if field == "team" else display_player_html(choice, include_info=False)
             else:
                 label = "On deck" if current and item["pick"] == current["pick"] else "Open"
             rows.append(
@@ -1974,15 +1952,10 @@ def render_available_teams(state):
         for col, team in zip(cols, available[row_start:row_start + 4]):
             with col:
                 label = display_team(team["name"], state["odds"].get(team["name"], ""))
-                button_col, info_col = st.columns([6, 1], gap="small", vertical_alignment="center")
-                with button_col:
-                    if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=not state.get("draft_active")):
-                        ok, updated_state = make_team_pick(team["name"])
-                        if ok:
-                            remember_draft_fragment_state(updated_state)
-                            rerun_draft_scope()
-                with info_col:
-                    st.markdown(info_link(team_info_url(team["name"]), f"{team['name']} info"), unsafe_allow_html=True)
+                if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=not state.get("draft_active")):
+                    ok, _ = make_team_pick(team["name"])
+                    if ok:
+                        rerun_draft_scope()
 
 
 def render_available_players(state):
@@ -1993,15 +1966,10 @@ def render_available_players(state):
         for col, player in zip(cols, available[row_start:row_start + 4]):
             with col:
                 label = display_player(player)
-                button_col, info_col = st.columns([6, 1], gap="small", vertical_alignment="center")
-                with button_col:
-                    if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=not state.get("draft_active")):
-                        ok, updated_state = make_player_pick(player)
-                        if ok:
-                            remember_draft_fragment_state(updated_state)
-                            rerun_draft_scope()
-                with info_col:
-                    st.markdown(info_link(player_info_url(player), f"{player_base_name(player)} info"), unsafe_allow_html=True)
+                if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=not state.get("draft_active")):
+                    ok, _ = make_player_pick(player)
+                    if ok:
+                        rerun_draft_scope()
 
 
 def render_drafts(state):
@@ -2035,16 +2003,6 @@ def render_drafts(state):
         player_pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
         if player_pick:
             render_available_players(state)
-
-
-if hasattr(st, "fragment"):
-    @st.fragment(run_every=1)
-    def render_drafts_fragment(initial_state):
-        fragment_state = st.session_state.get("draft_fragment_state", initial_state)
-        render_drafts(normalize_state(fragment_state))
-else:
-    def render_drafts_fragment(initial_state):
-        render_drafts(initial_state)
 
 
 def drafted_coach_for_team(state, team_name):
@@ -2157,21 +2115,6 @@ def format_match_date(value):
         return parsed.astimezone(ZoneInfo("America/New_York")).strftime("%b %d, %I:%M %p ET")
     except Exception:
         return text
-
-
-if hasattr(st, "fragment"):
-    @st.fragment(run_every=1)
-    def render_draft_tables_fragment(initial_state):
-        fragment_state = st.session_state.get("draft_fragment_state", initial_state)
-        fragment_state = normalize_state(fragment_state)
-        render_drafted_player_stats(fragment_state)
-        render_team_standings(fragment_state)
-        render_cinderella_standings(fragment_state)
-else:
-    def render_draft_tables_fragment(initial_state):
-        render_drafted_player_stats(initial_state)
-        render_team_standings(initial_state)
-        render_cinderella_standings(initial_state)
 
 
 def render_admin(state):
@@ -2363,13 +2306,14 @@ if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_
     _, refreshed_state = refresh_api_scores()
     if refreshed_state:
         state = normalize_state(refreshed_state)
-if "draft_fragment_state" not in st.session_state:
-    remember_draft_fragment_state(state)
+scores = calculate_scores(state)
 
 render_header(state)
-render_standings_fragment(state)
+render_standings(state, scores)
 render_live_matches(state)
-render_drafts_fragment(state)
-render_draft_tables_fragment(state)
+render_drafts(state)
+render_drafted_player_stats(state)
+render_team_standings(state)
+render_cinderella_standings(state)
 render_payout_descriptions()
 render_admin(state)
