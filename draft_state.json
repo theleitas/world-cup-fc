@@ -6,591 +6,61 @@
       "team_name": "Benji",
       "color": "#FFD54A",
       "image": "Benji.png",
-      "national_teams": [
-        "Brazil",
-        "South Africa",
-        "Qatar",
-        "Jordan",
-        "Sweden",
-        "Portugal"
-      ],
-      "star_players": [
-        "Michael Olise (France)",
-        "Antoine Semenyo (Ghana)"
-      ]
+      "national_teams": [],
+      "star_players": []
     },
     "Jeff": {
       "team_name": "Jeff",
       "color": "#00E5FF",
       "image": "Jeff.png",
-      "national_teams": [
-        "Colombia",
-        "Curaçao",
-        "Cabo Verde",
-        "Uzbekistan",
-        "Netherlands",
-        "Belgium"
-      ],
-      "star_players": [
-        "Vinicius Junior (Brazil)",
-        "Bukayo Saka (England)"
-      ]
+      "national_teams": [],
+      "star_players": []
     },
     "Peter": {
       "team_name": "Peter",
       "color": "#FF2DAA",
       "image": "Peter.png",
-      "national_teams": [
-        "Mexico",
-        "Spain",
-        "Haiti",
-        "Congo DR",
-        "England",
-        "Japan"
-      ],
-      "star_players": [
-        "Kylian Mbappe (France)",
-        "Lionel Messi (Argentina)"
-      ]
+      "national_teams": [],
+      "star_players": []
     },
     "Chad": {
       "team_name": "Chad",
       "color": "#40FF6A",
       "image": "Chad.png",
-      "national_teams": [
-        "Australia",
-        "France",
-        "Senegal",
-        "Egypt",
-        "Czechia",
-        "Türkiye"
-      ],
-      "star_players": [
-        "Lamine Yamal (Spain)",
-        "Raphinha (Brazil)"
-      ]
+      "national_teams": [],
+      "star_players": []
     },
     "Lamp": {
       "team_name": "Lamp",
       "color": "#FF7A1A",
       "image": "Lamp.png",
-      "national_teams": [
-        "IR Iran",
-        "Scotland",
-        "Paraguay",
-        "Iraq",
-        "New Zealand",
-        "Croatia"
-      ],
-      "star_players": [
-        "Ousmane Dembele (France)",
-        "Cristiano Ronaldo (Portugal)"
-      ]
+      "national_teams": [],
+      "star_players": []
     },
     "Herb": {
       "team_name": "Herb",
       "color": "#3F7BFF",
       "image": "Herb.png",
-      "national_teams": [
-        "USA",
-        "Tunisia",
-        "Ecuador",
-        "Morocco",
-        "Norway",
-        "Germany"
-      ],
-      "star_players": [
-        "Erling Haaland (Norway)",
-        "Lautaro Martinez (Argentina)"
-      ]
+      "national_teams": [],
+      "star_players": []
     },
     "Jayme": {
       "team_name": "Jayme",
       "color": "#B56CFF",
       "image": "Jayme.png",
-      "national_teams": [
-        "Canada",
-        "Ghana",
-        "Algeria",
-        "Panama",
-        "Argentina",
-        "Bosnia and Herzegovina"
-      ],
-      "star_players": [
-        "Harry Kane (England)",
-        "Julian Alvarez (Argentina)"
-      ]
+      "national_teams": [],
+      "star_players": []
     },
     "Spencer": {
       "team_name": "Spencer",
       "color": "#FF3D3D",
       "image": "Spencer.png",
-      "national_teams": [
-        "Korea Republic",
-        "Côte d'Ivoire",
-        "Saudi Arabia",
-        "Uruguay",
-        "Austria",
-        "Switzerland"
-      ],
-      "star_players": [
-        "Arda Guler (Türkiye)",
-        "Neymar Jr. (Brazil)"
-      ]
+      "national_teams": [],
+      "star_players": []
     }
   },
-  "team_picks": [
-    {
-      "pick": 1,
-      "round": 1,
-      "coach": "Benji",
-      "team": "Brazil",
-      "picked_at": "2026-06-07T01:39:35.125481-04:00"
-    },
-    {
-      "pick": 2,
-      "round": 1,
-      "coach": "Jeff",
-      "team": "Colombia",
-      "picked_at": "2026-06-07T01:39:50.230031-04:00"
-    },
-    {
-      "pick": 3,
-      "round": 1,
-      "coach": "Peter",
-      "team": "Mexico",
-      "picked_at": "2026-06-07T08:52:33.177336-04:00"
-    },
-    {
-      "pick": 4,
-      "round": 1,
-      "coach": "Chad",
-      "team": "Australia",
-      "picked_at": "2026-06-07T08:52:38.262170-04:00"
-    },
-    {
-      "pick": 5,
-      "round": 1,
-      "coach": "Lamp",
-      "team": "IR Iran",
-      "picked_at": "2026-06-07T08:52:40.845182-04:00"
-    },
-    {
-      "pick": 6,
-      "round": 1,
-      "coach": "Herb",
-      "team": "USA",
-      "picked_at": "2026-06-07T08:52:47.172671-04:00"
-    },
-    {
-      "pick": 7,
-      "round": 1,
-      "coach": "Jayme",
-      "team": "Canada",
-      "picked_at": "2026-06-07T08:52:48.571076-04:00"
-    },
-    {
-      "pick": 8,
-      "round": 1,
-      "coach": "Spencer",
-      "team": "Korea Republic",
-      "picked_at": "2026-06-07T08:55:36.743907-04:00"
-    },
-    {
-      "pick": 9,
-      "round": 2,
-      "coach": "Spencer",
-      "team": "Côte d'Ivoire",
-      "picked_at": "2026-06-07T09:14:46.320392-04:00"
-    },
-    {
-      "pick": 10,
-      "round": 2,
-      "coach": "Jayme",
-      "team": "Ghana",
-      "picked_at": "2026-06-07T09:14:53.315465-04:00"
-    },
-    {
-      "pick": 11,
-      "round": 2,
-      "coach": "Herb",
-      "team": "Tunisia",
-      "picked_at": "2026-06-07T09:14:56.752638-04:00"
-    },
-    {
-      "pick": 12,
-      "round": 2,
-      "coach": "Lamp",
-      "team": "Scotland",
-      "picked_at": "2026-06-07T09:15:11.351971-04:00"
-    },
-    {
-      "pick": 13,
-      "round": 2,
-      "coach": "Chad",
-      "team": "France",
-      "picked_at": "2026-06-07T09:15:50.081955-04:00"
-    },
-    {
-      "pick": 14,
-      "round": 2,
-      "coach": "Peter",
-      "team": "Spain",
-      "picked_at": "2026-06-07T09:15:55.984662-04:00"
-    },
-    {
-      "pick": 15,
-      "round": 2,
-      "coach": "Jeff",
-      "team": "Curaçao",
-      "picked_at": "2026-06-07T09:16:15.285410-04:00"
-    },
-    {
-      "pick": 16,
-      "round": 2,
-      "coach": "Benji",
-      "team": "South Africa",
-      "picked_at": "2026-06-07T09:16:23.601386-04:00"
-    },
-    {
-      "pick": 17,
-      "round": 3,
-      "coach": "Spencer",
-      "team": "Saudi Arabia",
-      "picked_at": "2026-06-07T09:16:29.717167-04:00"
-    },
-    {
-      "pick": 18,
-      "round": 3,
-      "coach": "Jayme",
-      "team": "Algeria",
-      "picked_at": "2026-06-07T09:16:39.622391-04:00"
-    },
-    {
-      "pick": 19,
-      "round": 3,
-      "coach": "Herb",
-      "team": "Ecuador",
-      "picked_at": "2026-06-07T09:16:46.039001-04:00"
-    },
-    {
-      "pick": 20,
-      "round": 3,
-      "coach": "Lamp",
-      "team": "Paraguay",
-      "picked_at": "2026-06-07T09:18:59.990519-04:00"
-    },
-    {
-      "pick": 21,
-      "round": 3,
-      "coach": "Chad",
-      "team": "Senegal",
-      "picked_at": "2026-06-07T09:19:02.707733-04:00"
-    },
-    {
-      "pick": 22,
-      "round": 3,
-      "coach": "Peter",
-      "team": "Haiti",
-      "picked_at": "2026-06-07T09:19:15.151984-04:00"
-    },
-    {
-      "pick": 23,
-      "round": 3,
-      "coach": "Jeff",
-      "team": "Cabo Verde",
-      "picked_at": "2026-06-07T09:19:25.790284-04:00"
-    },
-    {
-      "pick": 24,
-      "round": 3,
-      "coach": "Benji",
-      "team": "Qatar",
-      "picked_at": "2026-06-07T09:30:27.101848-04:00"
-    },
-    {
-      "pick": 25,
-      "round": 4,
-      "coach": "Benji",
-      "team": "Jordan",
-      "picked_at": "2026-06-07T09:30:47.671069-04:00"
-    },
-    {
-      "pick": 26,
-      "round": 4,
-      "coach": "Jeff",
-      "team": "Uzbekistan",
-      "picked_at": "2026-06-07T09:31:02.332406-04:00"
-    },
-    {
-      "pick": 27,
-      "round": 4,
-      "coach": "Peter",
-      "team": "Congo DR",
-      "picked_at": "2026-06-07T09:31:10.913234-04:00"
-    },
-    {
-      "pick": 28,
-      "round": 4,
-      "coach": "Chad",
-      "team": "Egypt",
-      "picked_at": "2026-06-07T09:31:16.682007-04:00"
-    },
-    {
-      "pick": 29,
-      "round": 4,
-      "coach": "Lamp",
-      "team": "Iraq",
-      "picked_at": "2026-06-07T09:32:18.828116-04:00"
-    },
-    {
-      "pick": 30,
-      "round": 4,
-      "coach": "Herb",
-      "team": "Morocco",
-      "picked_at": "2026-06-07T09:32:27.139445-04:00"
-    },
-    {
-      "pick": 31,
-      "round": 4,
-      "coach": "Jayme",
-      "team": "Panama",
-      "picked_at": "2026-06-07T09:34:00.392760-04:00"
-    },
-    {
-      "pick": 32,
-      "round": 4,
-      "coach": "Spencer",
-      "team": "Uruguay",
-      "picked_at": "2026-06-07T09:34:12.861143-04:00"
-    },
-    {
-      "pick": 33,
-      "round": 5,
-      "coach": "Spencer",
-      "team": "Austria",
-      "picked_at": "2026-06-07T09:34:20.187084-04:00"
-    },
-    {
-      "pick": 34,
-      "round": 5,
-      "coach": "Jayme",
-      "team": "Argentina",
-      "picked_at": "2026-06-07T09:55:25.535988-04:00"
-    },
-    {
-      "pick": 35,
-      "round": 5,
-      "coach": "Herb",
-      "team": "Norway",
-      "picked_at": "2026-06-07T09:55:42.104055-04:00"
-    },
-    {
-      "pick": 36,
-      "round": 5,
-      "coach": "Lamp",
-      "team": "New Zealand",
-      "picked_at": "2026-06-07T09:55:57.404932-04:00"
-    },
-    {
-      "pick": 37,
-      "round": 5,
-      "coach": "Chad",
-      "team": "Czechia",
-      "picked_at": "2026-06-07T09:55:58.742083-04:00"
-    },
-    {
-      "pick": 38,
-      "round": 5,
-      "coach": "Peter",
-      "team": "England",
-      "picked_at": "2026-06-07T09:56:07.370460-04:00"
-    },
-    {
-      "pick": 39,
-      "round": 5,
-      "coach": "Jeff",
-      "team": "Netherlands",
-      "picked_at": "2026-06-07T09:58:09.324390-04:00"
-    },
-    {
-      "pick": 40,
-      "round": 5,
-      "coach": "Benji",
-      "team": "Sweden",
-      "picked_at": "2026-06-07T09:58:20.888340-04:00"
-    },
-    {
-      "pick": 41,
-      "round": 6,
-      "coach": "Benji",
-      "team": "Portugal",
-      "picked_at": "2026-06-07T09:58:42.902941-04:00"
-    },
-    {
-      "pick": 42,
-      "round": 6,
-      "coach": "Jeff",
-      "team": "Belgium",
-      "picked_at": "2026-06-07T09:58:44.404156-04:00"
-    },
-    {
-      "pick": 43,
-      "round": 6,
-      "coach": "Peter",
-      "team": "Japan",
-      "picked_at": "2026-06-07T09:58:51.213067-04:00"
-    },
-    {
-      "pick": 44,
-      "round": 6,
-      "coach": "Chad",
-      "team": "Türkiye",
-      "picked_at": "2026-06-07T09:59:15.101802-04:00"
-    },
-    {
-      "pick": 45,
-      "round": 6,
-      "coach": "Lamp",
-      "team": "Croatia",
-      "picked_at": "2026-06-07T09:59:28.504437-04:00"
-    },
-    {
-      "pick": 46,
-      "round": 6,
-      "coach": "Herb",
-      "team": "Germany",
-      "picked_at": "2026-06-07T10:00:18.448716-04:00"
-    },
-    {
-      "pick": 47,
-      "round": 6,
-      "coach": "Jayme",
-      "team": "Bosnia and Herzegovina",
-      "picked_at": "2026-06-07T10:00:31.999923-04:00"
-    },
-    {
-      "pick": 48,
-      "round": 6,
-      "coach": "Spencer",
-      "team": "Switzerland",
-      "picked_at": "2026-06-07T10:03:35.484540-04:00"
-    }
-  ],
-  "player_picks": [
-    {
-      "pick": 49,
-      "round": 1,
-      "coach": "Spencer",
-      "player": "Arda Guler (Türkiye)",
-      "picked_at": "2026-06-07T10:30:31.934855-04:00"
-    },
-    {
-      "pick": 50,
-      "round": 1,
-      "coach": "Jayme",
-      "player": "Harry Kane (England)",
-      "picked_at": "2026-06-07T10:30:44.833614-04:00"
-    },
-    {
-      "pick": 51,
-      "round": 1,
-      "coach": "Herb",
-      "player": "Erling Haaland (Norway)",
-      "picked_at": "2026-06-07T10:31:46.583333-04:00"
-    },
-    {
-      "pick": 52,
-      "round": 1,
-      "coach": "Lamp",
-      "player": "Ousmane Dembele (France)",
-      "picked_at": "2026-06-07T10:32:21.035403-04:00"
-    },
-    {
-      "pick": 53,
-      "round": 1,
-      "coach": "Chad",
-      "player": "Lamine Yamal (Spain)",
-      "picked_at": "2026-06-07T10:32:33.979794-04:00"
-    },
-    {
-      "pick": 54,
-      "round": 1,
-      "coach": "Peter",
-      "player": "Kylian Mbappe (France)",
-      "picked_at": "2026-06-07T10:32:53.988969-04:00"
-    },
-    {
-      "pick": 55,
-      "round": 1,
-      "coach": "Jeff",
-      "player": "Vinicius Junior (Brazil)",
-      "picked_at": "2026-06-07T10:32:55.287741-04:00"
-    },
-    {
-      "pick": 56,
-      "round": 1,
-      "coach": "Benji",
-      "player": "Michael Olise (France)",
-      "picked_at": "2026-06-07T10:33:49.184115-04:00"
-    },
-    {
-      "pick": 57,
-      "round": 2,
-      "coach": "Benji",
-      "player": "Antoine Semenyo (Ghana)",
-      "picked_at": "2026-06-07T10:34:06.286924-04:00"
-    },
-    {
-      "pick": 58,
-      "round": 2,
-      "coach": "Jeff",
-      "player": "Bukayo Saka (England)",
-      "picked_at": "2026-06-07T10:34:16.301711-04:00"
-    },
-    {
-      "pick": 59,
-      "round": 2,
-      "coach": "Peter",
-      "player": "Lionel Messi (Argentina)",
-      "picked_at": "2026-06-07T10:34:26.606656-04:00"
-    },
-    {
-      "pick": 60,
-      "round": 2,
-      "coach": "Chad",
-      "player": "Raphinha (Brazil)",
-      "picked_at": "2026-06-07T10:34:36.939689-04:00"
-    },
-    {
-      "pick": 61,
-      "round": 2,
-      "coach": "Lamp",
-      "player": "Cristiano Ronaldo (Portugal)",
-      "picked_at": "2026-06-07T10:34:47.603069-04:00"
-    },
-    {
-      "pick": 62,
-      "round": 2,
-      "coach": "Herb",
-      "player": "Lautaro Martinez (Argentina)",
-      "picked_at": "2026-06-07T10:35:40.003879-04:00"
-    },
-    {
-      "pick": 63,
-      "round": 2,
-      "coach": "Jayme",
-      "player": "Julian Alvarez (Argentina)",
-      "picked_at": "2026-06-07T10:37:31.465300-04:00"
-    },
-    {
-      "pick": 64,
-      "round": 2,
-      "coach": "Spencer",
-      "player": "Neymar Jr. (Brazil)",
-      "picked_at": "2026-06-07T10:37:45.492608-04:00"
-    }
-  ],
+  "team_picks": [],
+  "player_picks": [],
   "players": [
     "Lamine Yamal (Spain)",
     "Kylian Mbappe (France)",
@@ -2942,5 +2412,5 @@
   "last_score_refresh_attempt_at": 1780845666,
   "last_api_error": "",
   "draft_enabled": false,
-  "current_pick_started_at": 1780843065
+  "current_pick_started_at": 1780845937
 }
