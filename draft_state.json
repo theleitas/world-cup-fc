@@ -95,7 +95,8 @@
         "Ghana",
         "Cabo Verde",
         "Austria",
-        "Croatia"
+        "Croatia",
+        "Switzerland"
       ],
       "star_players": []
     },
@@ -435,6 +436,13 @@
       "coach": "Herb",
       "team": "Türkiye",
       "picked_at": "2026-06-07T13:25:31.000852-04:00"
+    },
+    {
+      "pick": 47,
+      "round": 6,
+      "coach": "Jayme",
+      "team": "Switzerland",
+      "picked_at": "2026-06-07T13:25:35.709901-04:00"
     }
   ],
   "player_picks": [],
@@ -2789,6 +2797,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853131,
+  "current_pick_started_at": 1780853135,
   "last_friendly_api_error": ""
 }
