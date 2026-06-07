@@ -69,6 +69,7 @@ input, textarea, select { color:#fff!important; }
 .metric-row { display:flex; justify-content:space-between; gap:10px; border-bottom:1px solid rgba(255,255,255,.11); padding:7px 0; font-size:.92rem; }
 .metric-row b { color:#fff; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
+.points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
 .draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
 .asset-list { color:#e8f6f8; font-size:.88rem; line-height:1.45; margin-top:9px; }
 .draft-board { overflow-x:auto; width:100%; margin:.45rem 0 1rem; }
@@ -1797,6 +1798,10 @@ def render_team_standings(state):
             st.markdown(team_standings_table_html(rows[10:]), unsafe_allow_html=True)
 
 
+def draft_total_for_stage(stage_label):
+    return len(TEAM_DRAFT_SEQUENCE) if stage_label == "Team" else len(TEAM_DRAFT_SEQUENCE) + len(PLAYER_DRAFT_SEQUENCE)
+
+
 def render_draft_status(stage_label, current, state):
     if current:
         color = state["teams"][current["coach"]]["color"]
@@ -1806,8 +1811,9 @@ def render_draft_status(stage_label, current, state):
             started_at = int(time.time())
         elapsed = max(0, int(time.time()) - started_at)
         elapsed_text = time.strftime("%H:%M:%S", time.gmtime(elapsed))
+        total_picks = draft_total_for_stage(stage_label)
         st.markdown(
-            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']}: <span>{html.escape(current['coach'])}</span> is On The Clock 🕒 {html.escape(elapsed_text)}</div>",
+            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']} of {total_picks}: <span>{html.escape(current['coach'])}</span> is On The Clock 🕒 {html.escape(elapsed_text)}</div>",
             unsafe_allow_html=True,
         )
     st.markdown(
@@ -1870,11 +1876,14 @@ def rerun_draft_scope():
 
 
 def save_draft_pick(action, value, label):
+    st.session_state["draft_saving"] = True
     st.toast("Updating roster...")
     with st.spinner("Updating roster and saving pick..."):
         ok, _ = action(value)
     if ok:
+        st.session_state["draft_saving"] = False
         rerun_draft_scope()
+    st.session_state["draft_saving"] = False
     st.warning(f"Could not save {label}. It may already be drafted, or the draft may be paused.")
 
 
@@ -1996,24 +2005,26 @@ def make_player_pick(player):
 
 def render_available_teams(state):
     available = [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)]
+    saving = st.session_state.get("draft_saving", False)
     for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
         cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
         for col, team in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
             with col:
                 label = display_team(team["name"], state["odds"].get(team["name"], ""))
-                if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=not state.get("draft_active")):
+                if st.button(label, key=f"draft-team-{team['name']}", width="stretch", disabled=(not state.get("draft_active") or saving)):
                     save_draft_pick(make_team_pick, team["name"], label)
 
 
 def render_available_players(state):
     used = drafted_players(state)
     available = [player for player in state["players"] if player not in used]
+    saving = st.session_state.get("draft_saving", False)
     for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
         cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
         for col, player in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
             with col:
                 label = display_player(player)
-                if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=not state.get("draft_active")):
+                if st.button(label, key=f"draft-player-{player}", width="stretch", disabled=(not state.get("draft_active") or saving)):
                     save_draft_pick(make_player_pick, player, label)
 
 
@@ -2021,11 +2032,12 @@ def render_drafts(state):
     if not state.get("draft_enabled") or full_draft_complete(state):
         return
 
+    team_complete = team_draft_complete(state)
     team_pick = current_pick(TEAM_DRAFT_SEQUENCE, state["team_picks"])
     active_sequence = TEAM_DRAFT_SEQUENCE
     active_picks = state["team_picks"]
     active_stage = "Team"
-    if team_pick is None and team_draft_complete(state):
+    if team_complete:
         active_sequence = PLAYER_DRAFT_SEQUENCE
         active_picks = state["player_picks"]
         active_stage = "Player"
@@ -2039,19 +2051,23 @@ def render_drafts(state):
     )
     render_draft_controls(state)
 
-    render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
-    render_draft_status(active_stage, active_pick, state)
-    if team_pick:
+    if not team_complete:
+        render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
+        render_draft_status(active_stage, active_pick, state)
         render_available_teams(state)
-    else:
+        return
+
+    with st.expander("Completed Team Draft Board", expanded=False):
+        render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
+    if not player_draft_complete(state):
         st.success("Team draft complete. Player draft is open.")
 
-    if team_draft_complete(state):
-        render_draft_board("Player Draft", PLAYER_DRAFT_SEQUENCE, state["player_picks"], "player", state)
-        render_draft_status(active_stage, active_pick, state)
-        player_pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
-        if player_pick:
-            render_available_players(state)
+    render_draft_board("Player Draft", PLAYER_DRAFT_SEQUENCE, state["player_picks"], "player", state)
+    render_draft_status(active_stage, active_pick, state)
+    player_pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
+    if player_pick:
+        render_draft_controls(state)
+        render_available_players(state)
 
 
 def drafted_coach_for_team(state, team_name):
@@ -2382,8 +2398,12 @@ if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_
 scores = calculate_scores(state)
 
 render_header(state)
-render_standings(state, scores)
-render_drafts(state)
+draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
+if draft_visible:
+    render_drafts(state)
+    render_standings(state, scores)
+else:
+    render_standings(state, scores)
 render_live_matches(state)
 render_team_standings(state)
 render_drafted_player_stats(state)
