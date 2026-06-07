@@ -56,7 +56,9 @@
         "Czechia",
         "Türkiye"
       ],
-      "star_players": []
+      "star_players": [
+        "Lamine Yamal (Spain)"
+      ]
     },
     "Lamp": {
       "team_name": "Lamp",
@@ -489,6 +491,13 @@
       "coach": "Lamp",
       "player": "Ousmane Dembele (France)",
       "picked_at": "2026-06-07T10:32:21.035403-04:00"
+    },
+    {
+      "pick": 53,
+      "round": 1,
+      "coach": "Chad",
+      "player": "Lamine Yamal (Spain)",
+      "picked_at": "2026-06-07T10:32:33.979794-04:00"
     }
   ],
   "players": [
@@ -2842,5 +2851,5 @@
   "last_score_refresh_attempt_at": 1780842627,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842741
+  "current_pick_started_at": 1780842753
 }
