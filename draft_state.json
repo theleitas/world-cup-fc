@@ -21,7 +21,8 @@
       "national_teams": [
         "Colombia",
         "Curaçao",
-        "Cabo Verde"
+        "Cabo Verde",
+        "Uzbekistan"
       ],
       "star_players": []
     },
@@ -267,6 +268,13 @@
       "coach": "Benji",
       "team": "Jordan",
       "picked_at": "2026-06-07T09:30:47.671069-04:00"
+    },
+    {
+      "pick": 26,
+      "round": 4,
+      "coach": "Jeff",
+      "team": "Uzbekistan",
+      "picked_at": "2026-06-07T09:31:02.332406-04:00"
     }
   ],
   "player_picks": [],
@@ -2621,5 +2629,5 @@
   "last_score_refresh_attempt_at": 1780839043,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780839047
+  "current_pick_started_at": 1780839062
 }
