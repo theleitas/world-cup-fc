@@ -15,6 +15,7 @@ from zoneinfo import ZoneInfo
 import pandas as pd
 import requests
 import streamlit as st
+import streamlit.components.v1 as components
 
 try:
     from PIL import Image
@@ -1933,6 +1934,75 @@ def draft_total_for_stage(stage_label):
     return len(TEAM_DRAFT_SEQUENCE) if stage_label == "Team" else len(TEAM_DRAFT_SEQUENCE) + len(PLAYER_DRAFT_SEQUENCE)
 
 
+def render_pick_timer(stage_label, current, color, started_at):
+    total_picks = draft_total_for_stage(stage_label)
+    payload = {
+        "stage": str(stage_label),
+        "pick": int(current["pick"]),
+        "total": int(total_picks),
+        "coach": str(current["coach"]),
+        "color": str(color),
+        "startedAt": int(started_at),
+    }
+    components.html(
+        f"""
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<style>
+html, body {{
+  margin:0;
+  padding:0;
+  background:#000;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}}
+body {{ padding:10px 0 8px; }}
+.current-pick-box {{
+  box-sizing:border-box;
+  width:100%;
+  border:3px solid {html.escape(payload["color"])};
+  box-shadow:0 0 18px {html.escape(payload["color"])};
+  border-radius:8px;
+  padding:12px;
+  margin:0;
+  text-align:center;
+  font-size:clamp(1.05rem, 4vw, 1.65rem);
+  line-height:1.2;
+  font-weight:1000;
+}}
+.accent {{ color:{html.escape(payload["color"])}; }}
+</style>
+</head>
+<body>
+<div class="current-pick-box">
+  {html.escape(payload["stage"])} Pick {payload["pick"]} of {payload["total"]}: <span class="accent">{html.escape(payload["coach"])}</span> is On The Clock
+  <span class="accent">🕒 <span id="timer">00:00:00</span></span>
+</div>
+<script>
+const startedAt = {payload["startedAt"]};
+const timer = document.getElementById("timer");
+function pad(value) {{
+  return String(value).padStart(2, "0");
+}}
+function tick() {{
+  const elapsed = Math.max(0, Math.floor(Date.now() / 1000) - startedAt);
+  const hours = Math.floor(elapsed / 3600);
+  const minutes = Math.floor((elapsed % 3600) / 60);
+  const seconds = elapsed % 60;
+  timer.textContent = `${{pad(hours)}}:${{pad(minutes)}}:${{pad(seconds)}}`;
+}}
+tick();
+setInterval(tick, 1000);
+</script>
+</body>
+</html>
+""",
+        height=112,
+    )
+
+
 def button_text_color_for_background(color):
     value = str(color or "").strip().lstrip("#")
     if len(value) != 6 or any(ch not in "0123456789abcdefABCDEF" for ch in value):
@@ -1951,13 +2021,7 @@ def render_draft_status(stage_label, current, state):
             started_at = int(state.get("current_pick_started_at") or time.time())
         except (TypeError, ValueError):
             started_at = int(time.time())
-        elapsed = max(0, int(time.time()) - started_at)
-        elapsed_text = time.strftime("%H:%M:%S", time.gmtime(elapsed))
-        total_picks = draft_total_for_stage(stage_label)
-        st.markdown(
-            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']} of {total_picks}: <span>{html.escape(current['coach'])}</span> is On The Clock <span class='current-pick-accent'>🕒 {html.escape(elapsed_text)}</span></div>",
-            unsafe_allow_html=True,
-        )
+        render_pick_timer(stage_label, current, color, started_at)
     st.markdown(
         f"<div class='draft-status-line'><b>Deadline:</b> {html.escape(KICKOFF_DEADLINE)} <b>Status:</b> {'Live' if state.get('draft_active') else 'Paused'}</div>",
         unsafe_allow_html=True,
