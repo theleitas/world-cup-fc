@@ -84,7 +84,9 @@
         "Norway",
         "Germany"
       ],
-      "star_players": []
+      "star_players": [
+        "Erling Haaland (Norway)"
+      ]
     },
     "Jayme": {
       "team_name": "Jayme",
@@ -471,6 +473,13 @@
       "coach": "Jayme",
       "player": "Harry Kane (England)",
       "picked_at": "2026-06-07T10:30:44.833614-04:00"
+    },
+    {
+      "pick": 51,
+      "round": 1,
+      "coach": "Herb",
+      "player": "Erling Haaland (Norway)",
+      "picked_at": "2026-06-07T10:31:46.583333-04:00"
     }
   ],
   "players": [
@@ -2824,5 +2833,5 @@
   "last_score_refresh_attempt_at": 1780842627,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842644
+  "current_pick_started_at": 1780842706
 }
