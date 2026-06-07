@@ -100,7 +100,8 @@
         "Türkiye"
       ],
       "star_players": [
-        "Kylian Mbappe (France)"
+        "Kylian Mbappe (France)",
+        "Julian Alvarez (Argentina)"
       ]
     },
     "Jayme": {
@@ -565,6 +566,13 @@
       "coach": "Lamp",
       "player": "Ousmane Dembele (France)",
       "picked_at": "2026-06-07T13:30:38.342640-04:00"
+    },
+    {
+      "pick": 62,
+      "round": 2,
+      "coach": "Herb",
+      "player": "Julian Alvarez (Argentina)",
+      "picked_at": "2026-06-07T13:30:41.521691-04:00"
     }
   ],
   "players": [
@@ -2918,6 +2926,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853438,
+  "current_pick_started_at": 1780853441,
   "last_friendly_api_error": ""
 }
