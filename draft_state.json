@@ -134,7 +134,8 @@
         "Switzerland"
       ],
       "star_players": [
-        "Arda Guler (Türkiye)"
+        "Arda Guler (Türkiye)",
+        "Neymar Jr. (Brazil)"
       ]
     }
   },
@@ -581,6 +582,13 @@
       "coach": "Jayme",
       "player": "Julian Alvarez (Argentina)",
       "picked_at": "2026-06-07T10:37:31.465300-04:00"
+    },
+    {
+      "pick": 64,
+      "round": 2,
+      "coach": "Spencer",
+      "player": "Neymar Jr. (Brazil)",
+      "picked_at": "2026-06-07T10:37:45.492608-04:00"
     }
   ],
   "players": [
@@ -2934,5 +2942,5 @@
   "last_score_refresh_attempt_at": 1780842935,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780843051
+  "current_pick_started_at": 1780843065
 }
