@@ -2501,7 +2501,26 @@ def draft_status_summary(state):
 
 def render_admin(state):
     st.markdown("<div class='section-title'>Admin</div>", unsafe_allow_html=True)
-    with st.expander("Admin", expanded=st.session_state.get("admin_open", False)):
+    if st.session_state.pop("clear_admin_password", False):
+        st.session_state["admin-password-entry"] = ""
+    if not st.session_state.get("admin_unlocked", False):
+        with st.expander("Admin", expanded=False):
+            password = st.text_input("Admin Password", type="password", key="admin-password-entry")
+            if st.button("Unlock Admin", key="admin-unlock-button", width="stretch"):
+                if password == "0102":
+                    st.session_state["admin_unlocked"] = True
+                    st.session_state["admin_open"] = True
+                    st.rerun()
+                else:
+                    st.warning("Incorrect admin password.")
+        return
+
+    with st.expander("Admin", expanded=True):
+        if st.button("Lock / Close Admin", key="admin-lock-button", width="stretch"):
+            st.session_state["admin_unlocked"] = False
+            st.session_state["admin_open"] = False
+            st.session_state["clear_admin_password"] = True
+            st.rerun()
         st.caption("Admin controls are open for this private league app.")
 
         status_label, status_text = draft_status_summary(state)
@@ -2544,7 +2563,9 @@ def render_admin(state):
         if st.button("Reset Rosters", key="admin-reset-rosters", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET")):
             ok, _ = reset_rosters_and_draft()
             if ok:
+                st.session_state["admin_unlocked"] = False
                 st.session_state["admin_open"] = False
+                st.session_state["clear_admin_password"] = True
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
 
