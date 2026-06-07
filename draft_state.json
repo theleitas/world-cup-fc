@@ -43,7 +43,8 @@
       "color": "#FF7A1A",
       "image": "Lamp.png",
       "national_teams": [
-        "Mexico"
+        "Mexico",
+        "Iraq"
       ],
       "star_players": []
     },
@@ -155,6 +156,13 @@
       "coach": "Herb",
       "team": "Australia",
       "picked_at": "2026-06-07T12:47:55.571978-04:00"
+    },
+    {
+      "pick": 12,
+      "round": 2,
+      "coach": "Lamp",
+      "team": "Iraq",
+      "picked_at": "2026-06-07T12:48:02.407245-04:00"
     }
   ],
   "player_picks": [],
@@ -2509,6 +2517,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780850875,
+  "current_pick_started_at": 1780850882,
   "last_friendly_api_error": ""
 }
