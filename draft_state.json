@@ -70,7 +70,8 @@
       "color": "#FF3D3D",
       "image": "Spencer.png",
       "national_teams": [
-        "Saudi Arabia"
+        "Saudi Arabia",
+        "Congo DR"
       ],
       "star_players": []
     }
@@ -131,6 +132,13 @@
       "coach": "Spencer",
       "team": "Saudi Arabia",
       "picked_at": "2026-06-07T12:47:16.035058-04:00"
+    },
+    {
+      "pick": 9,
+      "round": 2,
+      "coach": "Spencer",
+      "team": "Congo DR",
+      "picked_at": "2026-06-07T12:47:20.201606-04:00"
     }
   ],
   "player_picks": [],
@@ -2485,6 +2493,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780850836,
+  "current_pick_started_at": 1780850840,
   "last_friendly_api_error": ""
 }
