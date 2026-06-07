@@ -29,8 +29,6 @@ st.set_page_config(
     initial_sidebar_state="collapsed",
 )
 
-st_autorefresh(interval=5 * 60 * 1000, key="world_cup_fc_refresh")
-
 st.markdown(
     """
 <style>
@@ -78,11 +76,13 @@ input, textarea, select { color:#fff!important; }
 .draft-board td { border:1px solid #242424; padding:5px; vertical-align:top; background:#060606; }
 .round-head { width:64px; color:#00e5ff!important; }
 .pick-cell { border:2px solid var(--coach-color); border-left-width:5px; min-height:74px; border-radius:6px; padding:6px; background:linear-gradient(135deg, rgba(255,255,255,.035), rgba(0,0,0,.02)); box-shadow:inset 0 0 0 1px rgba(255,255,255,.04); }
+.pick-cell:hover { background:color-mix(in srgb, var(--coach-color) 22%, #111); box-shadow:0 0 12px var(--coach-color), inset 0 0 0 1px rgba(255,255,255,.06); }
 .pick-num { color:#00e5ff; font-size:.75rem; font-weight:1000; }
 .pick-coach { font-weight:1000; color:var(--coach-color); font-size:.78rem; }
 .pick-choice { color:#ffd54a; font-weight:900; margin-top:3px; overflow-wrap:anywhere; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
+.current-pick-accent { color:var(--coach-color); }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
 .draft-control-row { margin:.3rem 0 .8rem; }
@@ -1278,7 +1278,7 @@ def fetch_friendly_matches_from_football_data(token):
     resp = requests.get(
         "https://api.football-data.org/v4/matches",
         headers=headers,
-        params={"dateFrom": "2026-05-15", "dateTo": "2026-06-11"},
+        params={"dateFrom": "2026-05-15", "dateTo": "2026-06-12"},
         timeout=15,
     )
     resp.raise_for_status()
@@ -1289,12 +1289,17 @@ def fetch_friendly_matches_from_football_data(token):
         competition = item.get("competition") if isinstance(item.get("competition"), dict) else {}
         stage = str(item.get("stage") or "")
         competition_name = str(competition.get("name") or "").strip()
-        if "friendly" not in f"{competition_name} {stage}".lower():
-            continue
+        competition_code = str(competition.get("code") or "").strip().upper()
         home = canonical_team_name((item.get("homeTeam") or {}).get("name"))
         away = canonical_team_name((item.get("awayTeam") or {}).get("name"))
-        if home in team_names or away in team_names:
-            matches.append(parse_friendly_match_payload_item(item, index))
+        if home not in team_names and away not in team_names:
+            continue
+        if competition_code == "WC":
+            continue
+        match = parse_friendly_match_payload_item(item, index)
+        if "friendly" not in f"{competition_name} {stage}".lower():
+            match["stage"] = f"FRIENDLY - {competition_name or 'International'}"
+        matches.append(match)
     return matches
 
 
@@ -1813,7 +1818,7 @@ def render_draft_status(stage_label, current, state):
         elapsed_text = time.strftime("%H:%M:%S", time.gmtime(elapsed))
         total_picks = draft_total_for_stage(stage_label)
         st.markdown(
-            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']} of {total_picks}: <span>{html.escape(current['coach'])}</span> is On The Clock 🕒 {html.escape(elapsed_text)}</div>",
+            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']} of {total_picks}: <span>{html.escape(current['coach'])}</span> is On The Clock <span class='current-pick-accent'>🕒 {html.escape(elapsed_text)}</span></div>",
             unsafe_allow_html=True,
         )
     st.markdown(
@@ -1919,20 +1924,20 @@ def render_draft_board(title, sequence, picks, field, state):
     pick_map = pick_by_number(picks)
     rounds = max(item["round"] for item in sequence)
     rows = []
+    current = current_pick(sequence, picks)
+    active_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
     rows.append("<div class='draft-board'><table><thead><tr>")
     rows.append("<th class='round-head'>Round</th>")
     for coach in COACHES:
         color = state["teams"][coach]["color"]
         rows.append(f"<th style='border-top:4px solid {html.escape(color)}'>{html.escape(coach)}</th>")
     rows.append("</tr></thead><tbody>")
-    current = current_pick(sequence, picks)
     for round_number in range(1, rounds + 1):
         rows.append("<tr>")
         rows.append(f"<th class='round-head'>{round_number}</th>")
         for coach in COACHES:
             item = next(seq for seq in sequence if seq["round"] == round_number and seq["coach"] == coach)
             pick = pick_map.get(item["pick"])
-            coach_color = state["teams"][item["coach"]]["color"]
             if pick:
                 choice = pick[field]
                 label = display_team_html(choice, include_info=False) if field == "team" else display_player_html(choice, include_info=False)
@@ -1940,7 +1945,7 @@ def render_draft_board(title, sequence, picks, field, state):
                 label = "On deck" if current and item["pick"] == current["pick"] else "Open"
             rows.append(
                 f"""
-<td><div class='pick-cell' style='--coach-color:{html.escape(coach_color)}'>
+<td><div class='pick-cell' style='--coach-color:{html.escape(active_color)}'>
   <div class='pick-num'>Pick {item["pick"]}</div>
   <div class='pick-choice'>{label}</div>
 </div></td>
@@ -2172,7 +2177,7 @@ def render_live_matches(state):
             if state.get("last_score_refresh_at"):
                 refreshed = datetime.fromtimestamp(int(state["last_score_refresh_at"]), tz=ZoneInfo("America/New_York"))
                 st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
-            elif state.get("last_api_error"):
+            if state.get("last_api_error"):
                 st.caption(state["last_api_error"])
         st.caption("Data provided by football-data.org")
 
@@ -2334,30 +2339,29 @@ def render_admin(state):
                 if ok:
                     st.rerun()
             st.markdown("</div>", unsafe_allow_html=True)
-
-        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-        st.subheader("Advancement Bonuses")
-        advancement_rows = [{"Team": team["name"], "Advancement": state["advancement"].get(team["name"], "Group Stage")} for team in WORLD_CUP_TEAMS]
-        advancement_df = pd.DataFrame(advancement_rows)
-        edited_advancement = st.data_editor(
-            advancement_df,
-            hide_index=True,
-            width="stretch",
-            num_rows="fixed",
-            column_config={"Advancement": st.column_config.SelectboxColumn(options=ADVANCEMENT_LEVELS)},
-        )
-        if st.button("Save Advancement"):
-            def mutator(fresh):
-                fresh = normalize_state(fresh)
-                for _, row in edited_advancement.iterrows():
-                    team_name = canonical_team_name(row["Team"])
-                    level = str(row["Advancement"] or "Group Stage")
-                    fresh["advancement"][team_name] = level if level in ADVANCEMENT_BONUSES else "Group Stage"
-                return True
-            ok, _ = mutate_shared_state(mutator, "Update advancement bonuses")
-            if ok:
-                st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+            st.subheader("Manual Advancement Override")
+            advancement_rows = [{"Team": team["name"], "Advancement": state["advancement"].get(team["name"], "Group Stage")} for team in WORLD_CUP_TEAMS]
+            advancement_df = pd.DataFrame(advancement_rows)
+            edited_advancement = st.data_editor(
+                advancement_df,
+                hide_index=True,
+                width="stretch",
+                num_rows="fixed",
+                column_config={"Advancement": st.column_config.SelectboxColumn(options=ADVANCEMENT_LEVELS)},
+            )
+            if st.button("Save Advancement"):
+                def mutator(fresh):
+                    fresh = normalize_state(fresh)
+                    for _, row in edited_advancement.iterrows():
+                        team_name = canonical_team_name(row["Team"])
+                        level = str(row["Advancement"] or "Group Stage")
+                        fresh["advancement"][team_name] = level if level in ADVANCEMENT_BONUSES else "Group Stage"
+                    return True
+                ok, _ = mutate_shared_state(mutator, "Update advancement bonuses")
+                if ok:
+                    st.rerun()
+            st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Draft Controls")
@@ -2391,7 +2395,10 @@ def render_admin(state):
 
 state, sha = load_state_from_github()
 state = normalize_state(state)
-if FOOTBALL_DATA_TOKEN and int(time.time()) - int(state.get("last_score_refresh_attempt_at") or 0) >= AUTO_SCORE_REFRESH_SECONDS:
+draft_in_progress = state.get("draft_active") and not full_draft_complete(state)
+if not draft_in_progress:
+    st_autorefresh(interval=5 * 60 * 1000, key="world_cup_fc_refresh")
+if FOOTBALL_DATA_TOKEN and (not draft_in_progress) and int(time.time()) - int(state.get("last_score_refresh_attempt_at") or 0) >= AUTO_SCORE_REFRESH_SECONDS:
     _, refreshed_state = refresh_api_scores()
     if refreshed_state:
         state = normalize_state(refreshed_state)
