@@ -33,7 +33,8 @@
       "national_teams": [
         "Japan",
         "Korea Republic",
-        "Senegal"
+        "Senegal",
+        "Argentina"
       ],
       "star_players": []
     },
@@ -275,6 +276,13 @@
       "coach": "Jeff",
       "team": "Curaçao",
       "picked_at": "2026-06-07T13:19:45.406536-04:00"
+    },
+    {
+      "pick": 27,
+      "round": 4,
+      "coach": "Peter",
+      "team": "Argentina",
+      "picked_at": "2026-06-07T13:19:48.758952-04:00"
     }
   ],
   "player_picks": [],
@@ -2629,6 +2637,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780852785,
+  "current_pick_started_at": 1780852788,
   "last_friendly_api_error": ""
 }
