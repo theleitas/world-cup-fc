@@ -68,7 +68,8 @@
       "image": "Jayme.png",
       "national_teams": [
         "USA",
-        "Ghana"
+        "Ghana",
+        "Cabo Verde"
       ],
       "star_players": []
     },
@@ -203,6 +204,13 @@
       "coach": "Spencer",
       "team": "Morocco",
       "picked_at": "2026-06-07T13:12:41.333100-04:00"
+    },
+    {
+      "pick": 18,
+      "round": 3,
+      "coach": "Jayme",
+      "team": "Cabo Verde",
+      "picked_at": "2026-06-07T13:12:45.675048-04:00"
     }
   ],
   "player_picks": [],
@@ -2557,6 +2565,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780852361,
+  "current_pick_started_at": 1780852365,
   "last_friendly_api_error": ""
 }
