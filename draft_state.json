@@ -66,7 +66,8 @@
         "Ecuador"
       ],
       "star_players": [
-        "Vinicius Junior (Brazil)"
+        "Vinicius Junior (Brazil)",
+        "Victor Gyokeres (Sweden)"
       ]
     },
     "Lamp": {
@@ -549,6 +550,13 @@
       "coach": "Peter",
       "player": "Raphinha (Brazil)",
       "picked_at": "2026-06-07T12:03:53.300657-04:00"
+    },
+    {
+      "pick": 60,
+      "round": 2,
+      "coach": "Chad",
+      "player": "Victor Gyokeres (Sweden)",
+      "picked_at": "2026-06-07T12:04:23.800280-04:00"
     }
   ],
   "players": [
@@ -2902,5 +2910,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848233
+  "current_pick_started_at": 1780848263
 }
