@@ -22,7 +22,8 @@
         "IR Iran",
         "Qatar",
         "Haiti",
-        "Curaçao"
+        "Curaçao",
+        "Portugal"
       ],
       "star_players": []
     },
@@ -371,6 +372,13 @@
       "coach": "Peter",
       "team": "Norway",
       "picked_at": "2026-06-07T13:24:19.564741-04:00"
+    },
+    {
+      "pick": 39,
+      "round": 5,
+      "coach": "Jeff",
+      "team": "Portugal",
+      "picked_at": "2026-06-07T13:24:24.272148-04:00"
     }
   ],
   "player_picks": [],
@@ -2725,6 +2733,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853059,
+  "current_pick_started_at": 1780853064,
   "last_friendly_api_error": ""
 }
