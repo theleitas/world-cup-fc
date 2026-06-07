@@ -45,7 +45,8 @@
       "national_teams": [
         "Jordan",
         "IR Iran",
-        "Morocco"
+        "Morocco",
+        "Croatia"
       ],
       "star_players": []
     },
@@ -283,6 +284,13 @@
       "coach": "Peter",
       "team": "Colombia",
       "picked_at": "2026-06-07T11:33:10.991727-04:00"
+    },
+    {
+      "pick": 28,
+      "round": 4,
+      "coach": "Chad",
+      "team": "Croatia",
+      "picked_at": "2026-06-07T11:34:15.663779-04:00"
     }
   ],
   "player_picks": [],
@@ -2637,5 +2645,5 @@
   "last_score_refresh_attempt_at": 1780846343,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780846390
+  "current_pick_started_at": 1780846455
 }
