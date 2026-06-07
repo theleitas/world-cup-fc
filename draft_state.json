@@ -109,8 +109,7 @@
         "Côte d'Ivoire",
         "Saudi Arabia",
         "Uruguay",
-        "Austria",
-        "Switzerland"
+        "Austria"
       ],
       "star_players": []
     }
@@ -444,13 +443,6 @@
       "coach": "Jayme",
       "team": "Bosnia and Herzegovina",
       "picked_at": "2026-06-07T10:00:31.999923-04:00"
-    },
-    {
-      "pick": 48,
-      "round": 6,
-      "coach": "Spencer",
-      "team": "Switzerland",
-      "picked_at": "2026-06-07T10:00:33.664744-04:00"
     }
   ],
   "player_picks": [],
@@ -2805,5 +2797,5 @@
   "last_score_refresh_attempt_at": 1780840763,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780840833
+  "current_pick_started_at": 1780841003
 }
