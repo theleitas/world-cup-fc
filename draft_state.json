@@ -56,7 +56,9 @@
         "England",
         "Ecuador"
       ],
-      "star_players": []
+      "star_players": [
+        "Vinicius Junior (Brazil)"
+      ]
     },
     "Lamp": {
       "team_name": "Lamp",
@@ -489,6 +491,13 @@
       "coach": "Lamp",
       "player": "Harry Kane (England)",
       "picked_at": "2026-06-07T12:00:36.067670-04:00"
+    },
+    {
+      "pick": 53,
+      "round": 1,
+      "coach": "Chad",
+      "player": "Vinicius Junior (Brazil)",
+      "picked_at": "2026-06-07T12:02:28.099369-04:00"
     }
   ],
   "players": [
@@ -2842,5 +2851,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848036
+  "current_pick_started_at": 1780848148
 }
