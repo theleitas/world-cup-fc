@@ -49,7 +49,8 @@
         "Japan"
       ],
       "star_players": [
-        "Kylian Mbappe (France)"
+        "Kylian Mbappe (France)",
+        "Lionel Messi (Argentina)"
       ]
     },
     "Chad": {
@@ -541,6 +542,13 @@
       "coach": "Jeff",
       "player": "Bukayo Saka (England)",
       "picked_at": "2026-06-07T10:34:16.301711-04:00"
+    },
+    {
+      "pick": 59,
+      "round": 2,
+      "coach": "Peter",
+      "player": "Lionel Messi (Argentina)",
+      "picked_at": "2026-06-07T10:34:26.606656-04:00"
     }
   ],
   "players": [
@@ -2894,5 +2902,5 @@
   "last_score_refresh_attempt_at": 1780842627,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780842856
+  "current_pick_started_at": 1780842866
 }
