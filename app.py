@@ -519,7 +519,6 @@ def flag_for_team(team_name):
 
 def display_team(team_name, odds=None):
     name = canonical_team_name(team_name)
-    odds = odds if odds is not None else DEFAULT_ODDS.get(name, "")
     suffix = f" ({odds})" if odds else ""
     return f"{flag_for_team(name)} {name}{suffix}"
 
@@ -712,6 +711,7 @@ def seed_matches():
             "home_score": None,
             "away_score": None,
             "status": "Scheduled",
+            "group": "GROUP_A",
         }
     ]
 
@@ -1482,7 +1482,7 @@ def render_standings(state, scores):
         coach = item["coach"]
         color = item["color"]
         coach_state = state["teams"][coach]
-        teams = ", ".join(display_team_html(team, state["odds"].get(team)) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
+        teams = ", ".join(display_team_html(team) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
         players = ", ".join(display_player_html(player) for player in coach_state.get("star_players", [])) or "No players drafted yet"
         badge = f"#{rank_by_coach[coach]}"
         if rank_by_coach[coach] == 1:
@@ -1617,6 +1617,32 @@ def match_is_completed(match):
     return match.get("home_score") is not None and match.get("away_score") is not None
 
 
+def match_group_label(match):
+    raw_group = str(match.get("group") or "").strip()
+    if raw_group:
+        cleaned = raw_group.replace("_", " ").strip()
+        match_obj = re.search(r"\bGroup\s+([A-Z0-9]+)\b", cleaned, flags=re.IGNORECASE)
+        if match_obj:
+            return match_obj.group(1).upper()
+        if len(cleaned) <= 3:
+            return cleaned.upper()
+    stage = str(match.get("stage") or "").strip()
+    match_obj = re.search(r"\bGroup\s+([A-Z0-9]+)\b", stage, flags=re.IGNORECASE)
+    return match_obj.group(1).upper() if match_obj else ""
+
+
+def team_group_label(state, team_name):
+    team_name = canonical_team_name(team_name)
+    for match in state.get("matches", []):
+        if not stage_is_group(match.get("stage")):
+            continue
+        if team_name in [canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))]:
+            group = match_group_label(match)
+            if group:
+                return group
+    return "TBD"
+
+
 def team_record_and_result_points(state, team_name):
     team_name = canonical_team_name(team_name)
     wins = draws = losses = result_points = 0
@@ -1699,6 +1725,7 @@ def team_standings_rows(state):
                 "coach": coach,
                 "coach_name": coach_data.get("team_name") or coach or "Undrafted",
                 "coach_color": coach_data.get("color") or "#777777",
+                "group": team_group_label(state, team_name),
                 "record": record,
                 "result_points": result_points,
                 "next_match": next_match_for_team(state, team_name),
@@ -1710,8 +1737,8 @@ def team_standings_rows(state):
     return sorted(
         rows,
         key=lambda item: (
-            -float(item["team_points"]),
             -int(item["result_points"]),
+            -float(item["team_points"]),
             int(item["fifa_rank"] or 999),
             item["team"],
         ),
@@ -1721,7 +1748,7 @@ def team_standings_rows(state):
 def team_standings_table_html(rows):
     html_rows = [
         "<table class='data-table'><thead><tr>"
-        "<th>Team</th><th>Coach</th><th>Record</th><th>Win/Draw Pts</th><th>Next Match</th><th>FIFA</th><th>Top Owned Players</th>"
+        "<th>Team</th><th>Coach</th><th>Group</th><th>Record</th><th>Points</th><th>Next Match</th><th>FIFA</th><th>Top Owned Players</th>"
         "</tr></thead><tbody>"
     ]
     for row in rows:
@@ -1736,6 +1763,7 @@ def team_standings_table_html(rows):
 <tr>
   <td>{display_team_html(row["team"], "", include_info=True)}</td>
   <td>{coach_html}</td>
+  <td>{html.escape(row["group"])}</td>
   <td>{html.escape(row["record"])}</td>
   <td>{int(row["result_points"])}</td>
   <td>{html.escape(row["next_match"])}</td>
@@ -1877,7 +1905,7 @@ def render_draft_board(title, sequence, picks, field, state):
             coach_color = state["teams"][item["coach"]]["color"]
             if pick:
                 choice = pick[field]
-                label = display_team_html(choice, state["odds"].get(choice), include_info=False) if field == "team" else display_player_html(choice, include_info=False)
+                label = display_team_html(choice, include_info=False) if field == "team" else display_player_html(choice, include_info=False)
             else:
                 label = "On deck" if current and item["pick"] == current["pick"] else "Open"
             rows.append(
@@ -2013,7 +2041,12 @@ def drafted_coach_for_team(state, team_name):
     return ""
 
 
-def render_match_cards(state, matches):
+def match_status_label(match):
+    status = str(match.get("status") or "").strip()
+    return "" if status.lower() == "timed" else status
+
+
+def render_match_cards(state, matches, show_group=False):
     if not matches:
         st.caption("No matches in this section yet.")
         return
@@ -2038,6 +2071,12 @@ def render_match_cards(state, matches):
         stage = str(match.get("stage") or "")
         if "friendly" in stage.lower():
             stage = "FRIENDLY"
+        elif show_group and stage_is_group(stage):
+            group = match_group_label(match)
+            if group:
+                stage = f"Group {group}"
+        detail_parts = [stage, match_status_label(match), date_text]
+        detail_text = " | ".join(html.escape(part) for part in detail_parts if part)
         cards.append(
             f"""
 <div class='match-card'>
@@ -2046,7 +2085,7 @@ def render_match_cards(state, matches):
     <span class='match-score'>{html.escape(score_text)}</span>
     <span>{display_team_html(away, '', include_info=True)}</span>
   </div>
-  <div class='subtle'>{html.escape(stage)} | {html.escape(match.get('status') or '')} | {html.escape(date_text)}</div>
+  <div class='subtle'>{detail_text}</div>
   <div>{''.join(chips) or "<span class='subtle'>No drafted teams in this match yet.</span>"}</div>
 </div>
 """
@@ -2071,6 +2110,16 @@ def match_section_name(match):
     if stage_level in ["Semifinals", "Final"]:
         return "Championship"
     return "Group Stages"
+
+
+def render_group_stage_match_groups(state, matches):
+    groups = {}
+    for match in matches:
+        group = match_group_label(match) or "TBD"
+        groups.setdefault(group, []).append(match)
+    for group in sorted(groups, key=lambda value: (value == "TBD", value)):
+        with st.expander(f"Group {group}", expanded=False):
+            render_match_cards(state, groups[group], show_group=True)
 
 
 def render_live_matches(state):
@@ -2100,7 +2149,10 @@ def render_live_matches(state):
             sections.setdefault(match_section_name(match), []).append(match)
         for title in sections:
             with st.expander(title, expanded=False):
-                render_match_cards(state, sections[title])
+                if title == "Group Stages":
+                    render_group_stage_match_groups(state, sections[title])
+                else:
+                    render_match_cards(state, sections[title])
 
 
 def format_match_date(value):
