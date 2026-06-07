@@ -8,6 +8,7 @@ import re
 import time
 from datetime import datetime
 from functools import lru_cache
+from urllib.parse import quote
 from zoneinfo import ZoneInfo
 
 import pandas as pd
@@ -50,7 +51,7 @@ input, textarea, select { color:#fff!important; }
 .top-thumbnail-wrap { width:100%; display:flex; justify-content:center; margin:.2rem 0 .75rem; }
 .top-thumbnail { width:100%; max-width:840px; max-height:245px; object-fit:contain; border-radius:8px; display:block; }
 .hero-title { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px; margin:.25rem 0 1rem; }
-.hero-title h1 { margin:0; padding:0; font-size:clamp(2rem, 8vw, 4.2rem); line-height:.95; font-weight:1000; color:#ffd54a; }
+.hero-title h1 { margin:0; padding:0; font-size:clamp(1.75rem, 6.4vw, 3.35rem); line-height:.98; font-weight:1000; color:#ffd54a; }
 .hero-kicker { color:#00e5ff; text-transform:uppercase; font-size:.82rem; letter-spacing:.12em; font-weight:1000; }
 .deadline-pill { border:2px solid #ffd54a; color:#ffd54a; border-radius:8px; padding:8px 10px; font-weight:950; background:#090909; }
 .section-title { color:#ffd54a; font-weight:1000; font-size:1.35rem; margin:1.2rem 0 .55rem; }
@@ -67,34 +68,45 @@ input, textarea, select { color:#fff!important; }
 .metric-row b { color:#fff; }
 .asset-list { color:#e8f6f8; font-size:.88rem; line-height:1.45; margin-top:9px; }
 .draft-board { overflow-x:auto; width:100%; margin:.45rem 0 1rem; }
-.draft-board table { width:100%; border-collapse:collapse; min-width:760px; font-size:.82rem; }
-.draft-board th { background:#101010; color:#ffd54a; border:1px solid #333; padding:7px; text-align:center; }
-.draft-board td { border:1px solid #242424; padding:7px; vertical-align:top; min-width:92px; background:#060606; }
-.pick-cell { border-left:4px solid var(--coach-color); min-height:66px; }
+.draft-board table { width:100%; border-collapse:collapse; min-width:820px; font-size:.82rem; table-layout:fixed; }
+.draft-board th { background:#101010; color:#ffd54a; border:1px solid #333; padding:7px 5px; text-align:center; }
+.draft-board td { border:1px solid #242424; padding:5px; vertical-align:top; background:#060606; }
+.round-head { width:64px; color:#00e5ff!important; }
+.pick-cell { border:2px solid var(--coach-color); border-left-width:5px; min-height:74px; border-radius:6px; padding:6px; background:linear-gradient(135deg, rgba(255,255,255,.035), rgba(0,0,0,.02)); box-shadow:inset 0 0 0 1px rgba(255,255,255,.04); }
 .pick-num { color:#00e5ff; font-size:.75rem; font-weight:1000; }
-.pick-coach { font-weight:1000; color:#fff; }
-.pick-choice { color:#ffd54a; font-weight:900; margin-top:3px; }
+.pick-coach { font-weight:1000; color:var(--coach-color); font-size:.78rem; }
+.pick-choice { color:#ffd54a; font-weight:900; margin-top:3px; overflow-wrap:anywhere; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
-.available-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
-.choice-card { border:1px solid #292929; border-radius:8px; background:#070707; padding:9px; min-height:96px; }
+.draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
+.draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
+.info-link { color:#00e5ff!important; text-decoration:none!important; font-size:.9em; margin-left:3px; }
+.available-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(112px, 1fr)); gap:6px; margin:.45rem 0 1rem; }
+.choice-card { border:0; border-radius:0; background:transparent; padding:0; min-height:0; }
 .choice-title { font-weight:1000; color:#fff; }
 .choice-meta { color:#9eefff; font-size:.82rem; margin:.15rem 0 .45rem; }
 .match-card { border:1px solid #292929; border-radius:8px; background:#070707; padding:10px 12px; margin-bottom:8px; }
 .match-line { display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-weight:1000; }
 .match-score { color:#ffd54a; }
+.matches-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
 .drafted-chip { display:inline-flex; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
 .payout-item { border:1px solid #2d2d2d; border-radius:8px; padding:10px; background:#070707; }
 .payout-item b { color:#ffd54a; }
 .admin-box { border:1px solid #333; background:#060606; border-radius:8px; padding:12px; margin:1rem 0; }
 @media (max-width:700px) {
-    div[data-testid="column"] { width:100%!important; flex:1 1 100%!important; }
-    div[data-testid="stButton"] > button { min-height:52px!important; font-size:.94rem!important; }
+    div[data-testid="stButton"] > button { min-height:42px!important; font-size:.84rem!important; padding:6px 7px!important; }
     .top-thumbnail { max-height:24vh; }
     .coach-card { min-height:auto; }
     .coach-face, .coach-face-placeholder { width:60px; height:60px; }
     .score-badge { width:58px; height:58px; font-size:1.2rem; }
+    .matches-grid { grid-template-columns:1fr; }
+    .available-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:5px; }
+    .draft-board table { min-width:720px; font-size:.74rem; }
+    .draft-board th { padding:5px 3px; }
+    .draft-board td { padding:3px; }
+    .pick-cell { min-height:62px; padding:4px; }
+    .pick-choice { font-size:.72rem; }
 }
 </style>
 """,
@@ -103,7 +115,6 @@ input, textarea, select { color:#fff!important; }
 
 
 COACHES = ["Benji", "Jeff", "Peter", "Chad", "Lamp", "Herb", "Jayme", "Spencer"]
-ADMIN_PASSWORD = "0102"
 STATE_FILE_PATH = "draft_state.json"
 BRANCH = "main"
 REPO_OWNER = "theleitas"
@@ -284,6 +295,57 @@ TEAM_ALIASES = {
     "congo dr": "Congo DR",
 }
 
+FIFA_TEAM_SLUGS = {
+    "Canada": "canada",
+    "Mexico": "mexico",
+    "USA": "usa",
+    "Australia": "australia",
+    "Iraq": "iraq",
+    "IR Iran": "ir-iran",
+    "Japan": "japan",
+    "Jordan": "jordan",
+    "Korea Republic": "korea-republic",
+    "Qatar": "qatar",
+    "Saudi Arabia": "saudi-arabia",
+    "Uzbekistan": "uzbekistan",
+    "Algeria": "algeria",
+    "Cabo Verde": "cabo-verde",
+    "Congo DR": "congo-dr",
+    "Côte d'Ivoire": "cote-divoire",
+    "Egypt": "egypt",
+    "Ghana": "ghana",
+    "Morocco": "morocco",
+    "Senegal": "senegal",
+    "South Africa": "south-africa",
+    "Tunisia": "tunisia",
+    "Curaçao": "curacao",
+    "Haiti": "haiti",
+    "Panama": "panama",
+    "Argentina": "argentina",
+    "Brazil": "brazil",
+    "Colombia": "colombia",
+    "Ecuador": "ecuador",
+    "Paraguay": "paraguay",
+    "Uruguay": "uruguay",
+    "New Zealand": "new-zealand",
+    "Austria": "austria",
+    "Belgium": "belgium",
+    "Bosnia and Herzegovina": "bosnia-and-herzegovina",
+    "Croatia": "croatia",
+    "Czechia": "czechia",
+    "England": "england",
+    "France": "france",
+    "Germany": "germany",
+    "Netherlands": "netherlands",
+    "Norway": "norway",
+    "Portugal": "portugal",
+    "Scotland": "scotland",
+    "Spain": "spain",
+    "Sweden": "sweden",
+    "Switzerland": "switzerland",
+    "Türkiye": "turkiye",
+}
+
 ADVANCEMENT_BONUSES = {
     "Group Stage": 0,
     "Round of 32": 5,
@@ -365,6 +427,33 @@ def display_team(team_name, odds=None):
     odds = odds if odds is not None else DEFAULT_ODDS.get(name, "")
     suffix = f" ({odds})" if odds else ""
     return f"{flag_for_team(name)} {name}{suffix}"
+
+
+def team_info_url(team_name):
+    name = canonical_team_name(team_name)
+    slug = FIFA_TEAM_SLUGS.get(name)
+    if slug:
+        return f"https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams/{slug}"
+    return "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026/teams/"
+
+
+def player_info_url(player):
+    query = f"{player_base_name(player)} footballer"
+    return f"https://en.wikipedia.org/wiki/Special:Search?search={quote(query)}"
+
+
+def info_link(url, label="info"):
+    return f"<a class='info-link' href='{html.escape(url, quote=True)}' target='_blank' rel='noopener' title='{html.escape(label)}'>ⓘ</a>"
+
+
+def display_team_html(team_name, odds=None, include_info=True):
+    text = html.escape(display_team(team_name, odds))
+    return text + (info_link(team_info_url(team_name), f"{canonical_team_name(team_name)} info") if include_info else "")
+
+
+def display_player_html(player, include_info=True):
+    text = html.escape(display_player(player))
+    return text + (info_link(player_info_url(player), f"{player_base_name(player)} info") if include_info else "")
 
 
 def player_country(player):
@@ -515,6 +604,7 @@ def default_state():
     odds = copy.deepcopy(DEFAULT_ODDS)
     return {
         "app_title": "World Cup FC",
+        "draft_enabled": True,
         "draft_active": True,
         "teams": default_coaches(),
         "team_picks": [],
@@ -537,6 +627,7 @@ def normalize_state(state):
         return base
 
     state.setdefault("app_title", base["app_title"])
+    state.setdefault("draft_enabled", base["draft_enabled"])
     state.setdefault("draft_active", True)
     state.setdefault("team_picks", [])
     state.setdefault("player_picks", [])
@@ -872,6 +963,10 @@ def player_draft_complete(state):
     return len(state.get("player_picks", [])) >= len(PLAYER_DRAFT_SEQUENCE)
 
 
+def full_draft_complete(state):
+    return team_draft_complete(state) and player_draft_complete(state)
+
+
 def drafted_teams(state):
     return {pick["team"] for pick in state.get("team_picks", [])}
 
@@ -1180,8 +1275,8 @@ def render_standings(state, scores):
         coach = item["coach"]
         color = item["color"]
         coach_state = state["teams"][coach]
-        teams = ", ".join(display_team(team, state["odds"].get(team)) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
-        players = ", ".join(display_player(player) for player in coach_state.get("star_players", [])) or "No players drafted yet"
+        teams = ", ".join(display_team_html(team, state["odds"].get(team)) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
+        players = ", ".join(display_player_html(player) for player in coach_state.get("star_players", [])) or "No players drafted yet"
         badge = f"#{rank_by_coach[coach]}"
         if rank_by_coach[coach] == 1:
             badge = "Gold"
@@ -1207,13 +1302,90 @@ def render_standings(state, scores):
   <div class='metric-row'><span>Group Stage</span><b>{int(item["group_stage_points"])}</b></div>
   <div class='metric-row'><span>Empire Builder</span><b>{int(item["empire_count"])} teams / {int(item["empire_goals"])} goals</b></div>
   <div class='metric-row'><span>Cinderella</span><b>{item["cinderella"]:+.1f}</b></div>
-  <div class='asset-list'><b>Teams:</b> {html.escape(teams)}</div>
-  <div class='asset-list'><b>Players:</b> {html.escape(players)}</div>
+  <div class='asset-list'><b>Teams:</b> {teams}</div>
+  <div class='asset-list'><b>Players:</b> {players}</div>
 </div>
 """
         )
     cards.append("</div>")
     st.markdown("".join(cards), unsafe_allow_html=True)
+
+
+def render_draft_status(stage_label, current, state):
+    if current:
+        color = state["teams"][current["coach"]]["color"]
+        st.markdown(
+            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>{html.escape(stage_label)} Pick {current['pick']}: <span>{html.escape(current['coach'])}</span> is up</div>",
+            unsafe_allow_html=True,
+        )
+    st.markdown(
+        f"<div class='draft-status-line'><b>Deadline:</b> {html.escape(KICKOFF_DEADLINE)} <b>Status:</b> {'Live' if state.get('draft_active') else 'Paused'}</div>",
+        unsafe_allow_html=True,
+    )
+
+
+def set_draft_active(active):
+    def mutator(state):
+        state = normalize_state(state)
+        state["draft_enabled"] = True
+        state["draft_active"] = bool(active)
+        return True
+    return mutate_shared_state(mutator, "Update draft status")
+
+
+def set_draft_enabled(enabled):
+    def mutator(state):
+        state = normalize_state(state)
+        state["draft_enabled"] = bool(enabled)
+        if not enabled:
+            state["draft_active"] = False
+        return True
+    return mutate_shared_state(mutator, "Update draft visibility")
+
+
+def undo_last_pick():
+    def mutator(state):
+        state = normalize_state(state)
+        if state.get("player_picks"):
+            state["player_picks"].pop()
+        elif state.get("team_picks"):
+            state["team_picks"].pop()
+        else:
+            return False
+        apply_picks_to_rosters(state)
+        return True
+    return mutate_shared_state(mutator, "Undo last draft pick")
+
+
+def reset_rosters_and_draft():
+    def mutator(state):
+        state = normalize_state(state)
+        state["team_picks"] = []
+        state["player_picks"] = []
+        for coach in COACHES:
+            state["teams"][coach]["national_teams"] = []
+            state["teams"][coach]["star_players"] = []
+        return True
+    return mutate_shared_state(mutator, "Reset rosters and draft picks")
+
+
+def render_draft_controls(state):
+    c1, c2, c3 = st.columns(3)
+    with c1:
+        if st.button("Start Draft", key="draft-start-top"):
+            ok, _ = set_draft_active(True)
+            if ok:
+                st.rerun()
+    with c2:
+        if st.button("Stop Draft", key="draft-stop-top"):
+            ok, _ = set_draft_active(False)
+            if ok:
+                st.rerun()
+    with c3:
+        if st.button("Undo Last Pick", key="draft-undo-top"):
+            ok, _ = undo_last_pick()
+            if ok:
+                st.rerun()
 
 
 def render_draft_board(title, sequence, picks, field, state):
@@ -1222,26 +1394,29 @@ def render_draft_board(title, sequence, picks, field, state):
     rounds = max(item["round"] for item in sequence)
     rows = []
     rows.append("<div class='draft-board'><table><thead><tr>")
-    for round_number in range(1, rounds + 1):
-        rows.append(f"<th>Round {round_number}</th>")
+    rows.append("<th class='round-head'>Round</th>")
+    for coach in COACHES:
+        color = state["teams"][coach]["color"]
+        rows.append(f"<th style='border-top:4px solid {html.escape(color)}'>{html.escape(coach)}</th>")
     rows.append("</tr></thead><tbody>")
-    for slot in range(1, len(COACHES) + 1):
+    current = current_pick(sequence, picks)
+    for round_number in range(1, rounds + 1):
         rows.append("<tr>")
-        for round_number in range(1, rounds + 1):
-            item = next(seq for seq in sequence if seq["round"] == round_number and seq["slot"] == slot)
+        rows.append(f"<th class='round-head'>{round_number}</th>")
+        for coach in COACHES:
+            item = next(seq for seq in sequence if seq["round"] == round_number and seq["coach"] == coach)
             pick = pick_map.get(item["pick"])
             coach_color = state["teams"][item["coach"]]["color"]
             if pick:
                 choice = pick[field]
-                label = display_team(choice, state["odds"].get(choice)) if field == "team" else display_player(choice)
+                label = display_team_html(choice, state["odds"].get(choice)) if field == "team" else display_player_html(choice)
             else:
-                label = "On deck" if item == current_pick(sequence, picks) else "Open"
+                label = "On deck" if current and item["pick"] == current["pick"] else "Open"
             rows.append(
                 f"""
 <td><div class='pick-cell' style='--coach-color:{html.escape(coach_color)}'>
   <div class='pick-num'>Pick {item["pick"]}</div>
-  <div class='pick-coach'>{html.escape(item["coach"])}</div>
-  <div class='pick-choice'>{html.escape(label)}</div>
+  <div class='pick-choice'>{label}</div>
 </div></td>
 """
             )
@@ -1253,6 +1428,8 @@ def render_draft_board(title, sequence, picks, field, state):
 def make_team_pick(team_name):
     def mutator(state):
         state = normalize_state(state)
+        if not state.get("draft_enabled") or not state.get("draft_active"):
+            return False
         pick = current_pick(TEAM_DRAFT_SEQUENCE, state["team_picks"])
         team_name_clean = canonical_team_name(team_name)
         if not pick or team_name_clean in drafted_teams(state):
@@ -1275,6 +1452,8 @@ def make_team_pick(team_name):
 def make_player_pick(player):
     def mutator(state):
         state = normalize_state(state)
+        if not state.get("draft_enabled") or not state.get("draft_active"):
+            return False
         if not team_draft_complete(state):
             return False
         pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
@@ -1298,49 +1477,52 @@ def make_player_pick(player):
 
 def render_available_teams(state):
     available = [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)]
-    st.markdown("<div class='available-grid'>", unsafe_allow_html=True)
-    for index, team in enumerate(available):
-        odds = state["odds"].get(team["name"], "")
-        with st.container():
-            st.markdown(
-                f"<div class='choice-card'><div class='choice-title'>{html.escape(display_team(team['name'], odds))}</div><div class='choice-meta'>{html.escape(team['confed'])}</div>",
-                unsafe_allow_html=True,
-            )
-            if st.button(f"Draft {team['flag']} {team['name']}", key=f"draft-team-{index}"):
-                ok, _ = make_team_pick(team["name"])
-                if ok:
-                    st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    for row_start in range(0, len(available), 4):
+        cols = st.columns(4)
+        for offset, team in enumerate(available[row_start:row_start + 4]):
+            with cols[offset]:
+                label = f"{team['flag']} {team['name']}"
+                st.markdown(info_link(team_info_url(team["name"]), f"{team['name']} info"), unsafe_allow_html=True)
+                if st.button(label, key=f"draft-team-{team['name']}", disabled=not state.get("draft_active")):
+                    ok, _ = make_team_pick(team["name"])
+                    if ok:
+                        st.rerun()
 
 
 def render_available_players(state):
     used = drafted_players(state)
     available = [player for player in state["players"] if player not in used]
-    st.markdown("<div class='available-grid'>", unsafe_allow_html=True)
-    for index, player in enumerate(available):
-        with st.container():
-            st.markdown(
-                f"<div class='choice-card'><div class='choice-title'>{html.escape(display_player(player))}</div><div class='choice-meta'>Star Player</div>",
-                unsafe_allow_html=True,
-            )
-            if st.button(f"Draft {display_player(player)}", key=f"draft-player-{index}"):
-                ok, _ = make_player_pick(player)
-                if ok:
-                    st.rerun()
-            st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
+    for row_start in range(0, len(available), 3):
+        cols = st.columns(3)
+        for offset, player in enumerate(available[row_start:row_start + 3]):
+            with cols[offset]:
+                st.markdown(info_link(player_info_url(player), f"{player_base_name(player)} info"), unsafe_allow_html=True)
+                if st.button(display_player(player), key=f"draft-player-{normalize_player_name(player)}", disabled=not state.get("draft_active")):
+                    ok, _ = make_player_pick(player)
+                    if ok:
+                        st.rerun()
 
 
 def render_drafts(state):
-    render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
+    if not state.get("draft_enabled") or full_draft_complete(state):
+        return
+
     team_pick = current_pick(TEAM_DRAFT_SEQUENCE, state["team_picks"])
+    active_sequence = TEAM_DRAFT_SEQUENCE
+    active_picks = state["team_picks"]
+    active_stage = "Team"
+    if team_pick is None and team_draft_complete(state):
+        active_sequence = PLAYER_DRAFT_SEQUENCE
+        active_picks = state["player_picks"]
+        active_stage = "Player"
+    active_pick = current_pick(active_sequence, active_picks)
+
+    st.markdown("<div class='section-title'>Draft Room</div>", unsafe_allow_html=True)
+    render_draft_status(active_stage, active_pick, state)
+    render_draft_controls(state)
+
+    render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
     if team_pick:
-        color = state["teams"][team_pick["coach"]]["color"]
-        st.markdown(
-            f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>Team Pick {team_pick['pick']}: <span>{html.escape(team_pick['coach'])}</span> is on the clock</div>",
-            unsafe_allow_html=True,
-        )
         render_available_teams(state)
     else:
         st.success("Team draft complete. Player draft is open.")
@@ -1349,14 +1531,7 @@ def render_drafts(state):
         render_draft_board("Player Draft", PLAYER_DRAFT_SEQUENCE, state["player_picks"], "player", state)
         player_pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
         if player_pick:
-            color = state["teams"][player_pick["coach"]]["color"]
-            st.markdown(
-                f"<div class='current-pick-box' style='--coach-color:{html.escape(color)}'>Player Pick {player_pick['pick']}: <span>{html.escape(player_pick['coach'])}</span> is on the clock</div>",
-                unsafe_allow_html=True,
-            )
             render_available_players(state)
-        else:
-            st.success("Player draft complete. Rosters are locked.")
 
 
 def drafted_coach_for_team(state, team_name):
@@ -1368,57 +1543,59 @@ def drafted_coach_for_team(state, team_name):
 
 
 def render_live_matches(state):
-    st.markdown("<div class='section-title'>Live Matches</div>", unsafe_allow_html=True)
-    c1, c2 = st.columns([1, 2])
-    with c1:
-        if st.button("Refresh Scores"):
-            ok, _ = refresh_api_scores()
-            if ok:
-                st.rerun()
-    with c2:
-        if state.get("last_score_refresh_at"):
-            refreshed = datetime.fromtimestamp(int(state["last_score_refresh_at"]), tz=ZoneInfo("America/New_York"))
-            st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
-        elif state.get("last_api_error"):
-            st.caption(state["last_api_error"])
-    st.caption("Data provided by football-data.org")
+    with st.expander("Live Matches", expanded=False):
+        c1, c2 = st.columns([1, 2])
+        with c1:
+            if st.button("Refresh Scores"):
+                ok, _ = refresh_api_scores()
+                if ok:
+                    st.rerun()
+        with c2:
+            if state.get("last_score_refresh_at"):
+                refreshed = datetime.fromtimestamp(int(state["last_score_refresh_at"]), tz=ZoneInfo("America/New_York"))
+                st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
+            elif state.get("last_api_error"):
+                st.caption(state["last_api_error"])
+        st.caption("Data provided by football-data.org")
 
-    matches = sorted(state.get("matches", []), key=lambda match: match.get("date") or "")
-    if not matches:
-        st.info("No matches loaded yet. Configure Football-Data token or add manual matches in Admin.")
-        return
+        matches = sorted(state.get("matches", []), key=lambda match: match.get("date") or "")
+        if not matches:
+            st.info("No matches loaded yet. Configure Football-Data token or add manual matches in Admin.")
+            return
 
-    for match in matches:
-        home = canonical_team_name(match.get("home"))
-        away = canonical_team_name(match.get("away"))
-        home_coach = drafted_coach_for_team(state, home)
-        away_coach = drafted_coach_for_team(state, away)
-        score_text = "vs"
-        if match.get("home_score") is not None and match.get("away_score") is not None:
-            score_text = f"{match['home_score']} - {match['away_score']}"
-        chips = []
-        for team_name, coach in [(home, home_coach), (away, away_coach)]:
-            if coach:
-                color = state["teams"][coach]["color"]
-                points = score_match_for_team(match, team_name)
-                chips.append(
-                    f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
-                )
-        date_text = format_match_date(match.get("date"))
-        st.markdown(
-            f"""
+        cards = ["<div class='matches-grid'>"]
+        for match in matches:
+            home = canonical_team_name(match.get("home"))
+            away = canonical_team_name(match.get("away"))
+            home_coach = drafted_coach_for_team(state, home)
+            away_coach = drafted_coach_for_team(state, away)
+            score_text = "vs"
+            if match.get("home_score") is not None and match.get("away_score") is not None:
+                score_text = f"{match['home_score']} - {match['away_score']}"
+            chips = []
+            for team_name, coach in [(home, home_coach), (away, away_coach)]:
+                if coach:
+                    color = state["teams"][coach]["color"]
+                    points = score_match_for_team(match, team_name)
+                    chips.append(
+                        f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
+                    )
+            date_text = format_match_date(match.get("date"))
+            cards.append(
+                f"""
 <div class='match-card'>
   <div class='match-line'>
-    <span>{html.escape(display_team(home, ''))}</span>
+    <span>{display_team_html(home, '', include_info=True)}</span>
     <span class='match-score'>{html.escape(score_text)}</span>
-    <span>{html.escape(display_team(away, ''))}</span>
+    <span>{display_team_html(away, '', include_info=True)}</span>
   </div>
   <div class='subtle'>{html.escape(match.get('stage') or '')} | {html.escape(match.get('status') or '')} | {html.escape(date_text)}</div>
   <div>{''.join(chips) or "<span class='subtle'>No drafted teams in this match yet.</span>"}</div>
 </div>
-""",
-            unsafe_allow_html=True,
-        )
+"""
+            )
+        cards.append("</div>")
+        st.markdown("".join(cards), unsafe_allow_html=True)
 
 
 def format_match_date(value):
@@ -1437,10 +1614,7 @@ def format_match_date(value):
 
 def render_admin(state):
     with st.expander("Admin"):
-        password = st.text_input("Admin password", type="password")
-        if password != ADMIN_PASSWORD:
-            st.caption("Password required.")
-            return
+        st.caption("Admin controls are open for this private league app.")
 
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Coach Colors")
@@ -1495,7 +1669,7 @@ def render_admin(state):
                 for team in WORLD_CUP_TEAMS
             ]
         )
-        edited_odds = st.data_editor(odds_df, hide_index=True, use_container_width=True, num_rows="fixed")
+        edited_odds = st.data_editor(odds_df, hide_index=True, width="stretch", num_rows="fixed")
         if st.button("Save Odds"):
             def mutator(fresh):
                 fresh = normalize_state(fresh)
@@ -1515,7 +1689,7 @@ def render_admin(state):
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Manual Match Results")
         matches_df = pd.DataFrame(state.get("matches", []))
-        edited_matches = st.data_editor(matches_df, hide_index=True, use_container_width=True, num_rows="dynamic")
+        edited_matches = st.data_editor(matches_df, hide_index=True, width="stretch", num_rows="dynamic")
         if st.button("Save Matches"):
             def mutator(fresh):
                 fresh = normalize_state(fresh)
@@ -1535,7 +1709,7 @@ def render_admin(state):
                 for player in state["players"]
             ]
         )
-        edited_stats = st.data_editor(stats_df, hide_index=True, use_container_width=True, num_rows="fixed")
+        edited_stats = st.data_editor(stats_df, hide_index=True, width="stretch", num_rows="fixed")
         if st.button("Save Player Stats"):
             def mutator(fresh):
                 fresh = normalize_state(fresh)
@@ -1564,7 +1738,7 @@ def render_admin(state):
         edited_advancement = st.data_editor(
             advancement_df,
             hide_index=True,
-            use_container_width=True,
+            width="stretch",
             num_rows="fixed",
             column_config={"Advancement": st.column_config.SelectboxColumn(options=ADVANCEMENT_LEVELS)},
         )
@@ -1584,14 +1758,28 @@ def render_admin(state):
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Draft Controls")
         st.caption("Draft order is fixed and intentionally not editable.")
-        if st.button("Reset Draft Picks"):
-            def mutator(fresh):
-                fresh = normalize_state(fresh)
-                fresh["team_picks"] = []
-                fresh["player_picks"] = []
-                apply_picks_to_rosters(fresh)
-                return True
-            ok, _ = mutate_shared_state(mutator, "Reset draft picks")
+        c1, c2, c3 = st.columns(3)
+        with c1:
+            if st.button("Enable Draft"):
+                ok, _ = set_draft_enabled(True)
+                if ok:
+                    st.rerun()
+        with c2:
+            if st.button("Disable Draft"):
+                ok, _ = set_draft_enabled(False)
+                if ok:
+                    st.rerun()
+        with c3:
+            if st.button("Undo Last Pick", key="admin-undo-last-pick"):
+                ok, _ = undo_last_pick()
+                if ok:
+                    st.rerun()
+
+        st.markdown("**Protected Reset**")
+        reset_confirmed = st.checkbox("I understand this clears every roster and every draft pick.", key="reset-rosters-confirm-checkbox")
+        reset_text = st.text_input("Type RESET to confirm roster reset", key="reset-rosters-confirm-text")
+        if st.button("Reset Rosters", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET")):
+            ok, _ = reset_rosters_and_draft()
             if ok:
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)

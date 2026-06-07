@@ -32,11 +32,13 @@ If no GitHub token is present, the app reads and writes local `draft_state.json`
 
 ## Admin
 
-Password: `0102`
+Admin is intentionally open for this private league app.
 
-Admin can edit coach colors, the 25-player pool, odds, expected points, match results, player stats, advancement bonuses, and reset draft picks.
+Admin can edit coach colors, the 25-player pool, odds, expected points, match results, player stats, advancement bonuses, enable/disable the public draft room, and reset rosters.
 
 Admin cannot edit draft order.
+
+Roster reset is protected by a confirmation checkbox and by typing `RESET`.
 
 ## Data Seeds
 
