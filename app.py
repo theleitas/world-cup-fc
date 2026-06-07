@@ -1593,7 +1593,7 @@ def render_standings(state, scores):
         coach = item["coach"]
         color = item["color"]
         coach_state = state["teams"][coach]
-        teams = ", ".join(display_team_html(team) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
+        teams = ", ".join(display_team_html(team, include_info=False) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
         players = ", ".join(display_player_html(player) for player in coach_state.get("star_players", [])) or "No players drafted yet"
         badge = f"#{rank_by_coach[coach]}"
         if rank_by_coach[coach] == 1:
