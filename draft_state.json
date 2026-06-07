@@ -58,7 +58,8 @@
         "Saudi Arabia",
         "Qatar",
         "Curaçao",
-        "New Zealand"
+        "New Zealand",
+        "Germany"
       ],
       "star_players": []
     },
@@ -347,6 +348,13 @@
       "coach": "Herb",
       "team": "Portugal",
       "picked_at": "2026-06-07T11:48:53.762281-04:00"
+    },
+    {
+      "pick": 36,
+      "round": 5,
+      "coach": "Lamp",
+      "team": "Germany",
+      "picked_at": "2026-06-07T11:49:12.910653-04:00"
     }
   ],
   "player_picks": [],
@@ -2701,5 +2709,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847333
+  "current_pick_started_at": 1780847352
 }
