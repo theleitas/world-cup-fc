@@ -45,7 +45,8 @@
       "national_teams": [
         "Australia",
         "France",
-        "Senegal"
+        "Senegal",
+        "Egypt"
       ],
       "star_players": []
     },
@@ -283,6 +284,13 @@
       "coach": "Peter",
       "team": "Congo DR",
       "picked_at": "2026-06-07T09:31:10.913234-04:00"
+    },
+    {
+      "pick": 28,
+      "round": 4,
+      "coach": "Chad",
+      "team": "Egypt",
+      "picked_at": "2026-06-07T09:31:16.682007-04:00"
     }
   ],
   "player_picks": [],
@@ -2637,5 +2645,5 @@
   "last_score_refresh_attempt_at": 1780839043,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780839070
+  "current_pick_started_at": 1780839076
 }
