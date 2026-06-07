@@ -1,6 +1,6 @@
 {
   "app_title": "World Cup FC",
-  "draft_active": false,
+  "draft_active": true,
   "teams": {
     "Benji": {
       "team_name": "Benji",
@@ -2412,5 +2412,5 @@
   "last_score_refresh_attempt_at": 1780846040,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780845937
+  "current_pick_started_at": 1780846044
 }
