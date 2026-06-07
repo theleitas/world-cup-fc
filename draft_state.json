@@ -22,7 +22,8 @@
         "Colombia",
         "Curaçao",
         "Cabo Verde",
-        "Uzbekistan"
+        "Uzbekistan",
+        "Netherlands"
       ],
       "star_players": []
     },
@@ -371,6 +372,13 @@
       "coach": "Peter",
       "team": "England",
       "picked_at": "2026-06-07T09:56:07.370460-04:00"
+    },
+    {
+      "pick": 39,
+      "round": 5,
+      "coach": "Jeff",
+      "team": "Netherlands",
+      "picked_at": "2026-06-07T09:58:09.324390-04:00"
     }
   ],
   "player_picks": [],
@@ -2725,5 +2733,5 @@
   "last_score_refresh_attempt_at": 1780840463,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780840567
+  "current_pick_started_at": 1780840689
 }
