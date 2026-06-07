@@ -66,7 +66,8 @@
         "Sweden"
       ],
       "star_players": [
-        "Vinicius Junior (Brazil)"
+        "Vinicius Junior (Brazil)",
+        "Raphinha (Brazil)"
       ]
     },
     "Lamp": {
@@ -549,6 +550,13 @@
       "coach": "Peter",
       "player": "Bukayo Saka (England)",
       "picked_at": "2026-06-07T13:30:31.641404-04:00"
+    },
+    {
+      "pick": 60,
+      "round": 2,
+      "coach": "Chad",
+      "player": "Raphinha (Brazil)",
+      "picked_at": "2026-06-07T13:30:36.450890-04:00"
     }
   ],
   "players": [
@@ -2902,6 +2910,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853431,
+  "current_pick_started_at": 1780853436,
   "last_friendly_api_error": ""
 }
