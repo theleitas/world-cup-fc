@@ -70,7 +70,9 @@
         "England",
         "Netherlands"
       ],
-      "star_players": []
+      "star_players": [
+        "Erling Haaland (Norway)"
+      ]
     },
     "Herb": {
       "team_name": "Herb",
@@ -480,6 +482,13 @@
       "coach": "Herb",
       "player": "Kylian Mbappe (France)",
       "picked_at": "2026-06-07T13:26:04.359462-04:00"
+    },
+    {
+      "pick": 52,
+      "round": 1,
+      "coach": "Lamp",
+      "player": "Erling Haaland (Norway)",
+      "picked_at": "2026-06-07T13:26:07.991595-04:00"
     }
   ],
   "players": [
@@ -2833,6 +2842,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853164,
+  "current_pick_started_at": 1780853167,
   "last_friendly_api_error": ""
 }
