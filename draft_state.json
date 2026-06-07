@@ -112,7 +112,9 @@
         "France",
         "Türkiye"
       ],
-      "star_players": []
+      "star_players": [
+        "Lamine Yamal (Spain)"
+      ]
     }
   },
   "team_picks": [
@@ -453,7 +455,15 @@
       "picked_at": "2026-06-07T11:53:31.705072-04:00"
     }
   ],
-  "player_picks": [],
+  "player_picks": [
+    {
+      "pick": 49,
+      "round": 1,
+      "coach": "Spencer",
+      "player": "Lamine Yamal (Spain)",
+      "picked_at": "2026-06-07T12:00:07.005916-04:00"
+    }
+  ],
   "players": [
     "Lamine Yamal (Spain)",
     "Kylian Mbappe (France)",
@@ -2805,5 +2815,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847611
+  "current_pick_started_at": 1780848007
 }
