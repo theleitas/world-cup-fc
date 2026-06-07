@@ -70,7 +70,9 @@
         "Germany",
         "Switzerland"
       ],
-      "star_players": []
+      "star_players": [
+        "Harry Kane (England)"
+      ]
     },
     "Herb": {
       "team_name": "Herb",
@@ -480,6 +482,13 @@
       "coach": "Herb",
       "player": "Michael Olise (France)",
       "picked_at": "2026-06-07T12:00:34.661539-04:00"
+    },
+    {
+      "pick": 52,
+      "round": 1,
+      "coach": "Lamp",
+      "player": "Harry Kane (England)",
+      "picked_at": "2026-06-07T12:00:36.067670-04:00"
     }
   ],
   "players": [
@@ -2833,5 +2842,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848034
+  "current_pick_started_at": 1780848036
 }
