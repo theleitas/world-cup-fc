@@ -83,7 +83,8 @@
         "Switzerland"
       ],
       "star_players": [
-        "Harry Kane (England)"
+        "Harry Kane (England)",
+        "Omar Marmoush (Egypt)"
       ]
     },
     "Herb": {
@@ -557,6 +558,13 @@
       "coach": "Chad",
       "player": "Victor Gyokeres (Sweden)",
       "picked_at": "2026-06-07T12:04:23.800280-04:00"
+    },
+    {
+      "pick": 61,
+      "round": 2,
+      "coach": "Lamp",
+      "player": "Omar Marmoush (Egypt)",
+      "picked_at": "2026-06-07T12:05:01.860846-04:00"
     }
   ],
   "players": [
@@ -2910,5 +2918,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848263
+  "current_pick_started_at": 1780848301
 }
