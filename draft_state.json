@@ -25,7 +25,8 @@
       "color": "#FF2DAA",
       "image": "Peter.png",
       "national_teams": [
-        "Japan"
+        "Japan",
+        "Korea Republic"
       ],
       "star_players": []
     },
@@ -171,6 +172,13 @@
       "coach": "Chad",
       "team": "Algeria",
       "picked_at": "2026-06-07T12:48:07.511524-04:00"
+    },
+    {
+      "pick": 14,
+      "round": 2,
+      "coach": "Peter",
+      "team": "Korea Republic",
+      "picked_at": "2026-06-07T12:48:12.046016-04:00"
     }
   ],
   "player_picks": [],
@@ -2525,6 +2533,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780850887,
+  "current_pick_started_at": 1780850892,
   "last_friendly_api_error": ""
 }
