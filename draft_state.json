@@ -42,7 +42,9 @@
       "team_name": "Lamp",
       "color": "#FF7A1A",
       "image": "Lamp.png",
-      "national_teams": [],
+      "national_teams": [
+        "IR Iran"
+      ],
       "star_players": []
     },
     "Herb": {
@@ -95,6 +97,13 @@
       "coach": "Chad",
       "team": "Australia",
       "picked_at": "2026-06-07T08:52:38.262170-04:00"
+    },
+    {
+      "pick": 5,
+      "round": 1,
+      "coach": "Lamp",
+      "team": "IR Iran",
+      "picked_at": "2026-06-07T08:52:40.845182-04:00"
     }
   ],
   "player_picks": [],
@@ -2449,5 +2458,5 @@
   "last_score_refresh_attempt_at": 1780836461,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780836758
+  "current_pick_started_at": 1780836760
 }
