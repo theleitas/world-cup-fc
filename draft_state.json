@@ -15,7 +15,8 @@
         "Uruguay"
       ],
       "star_players": [
-        "Lautaro Martinez (Argentina)"
+        "Lautaro Martinez (Argentina)",
+        "Desire Doue (France)"
       ]
     },
     "Jeff": {
@@ -525,6 +526,13 @@
       "coach": "Benji",
       "player": "Lautaro Martinez (Argentina)",
       "picked_at": "2026-06-07T13:30:21.422864-04:00"
+    },
+    {
+      "pick": 57,
+      "round": 2,
+      "coach": "Benji",
+      "player": "Desire Doue (France)",
+      "picked_at": "2026-06-07T13:30:24.628879-04:00"
     }
   ],
   "players": [
@@ -2878,6 +2886,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853421,
+  "current_pick_started_at": 1780853424,
   "last_friendly_api_error": ""
 }
