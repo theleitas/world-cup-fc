@@ -56,7 +56,9 @@
         "France",
         "Sweden"
       ],
-      "star_players": []
+      "star_players": [
+        "Vinicius Junior (Brazil)"
+      ]
     },
     "Lamp": {
       "team_name": "Lamp",
@@ -489,6 +491,13 @@
       "coach": "Lamp",
       "player": "Erling Haaland (Norway)",
       "picked_at": "2026-06-07T13:26:07.991595-04:00"
+    },
+    {
+      "pick": 53,
+      "round": 1,
+      "coach": "Chad",
+      "player": "Vinicius Junior (Brazil)",
+      "picked_at": "2026-06-07T13:26:12.979333-04:00"
     }
   ],
   "players": [
@@ -2842,6 +2851,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780853167,
+  "current_pick_started_at": 1780853172,
   "last_friendly_api_error": ""
 }
