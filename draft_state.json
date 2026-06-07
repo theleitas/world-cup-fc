@@ -81,7 +81,8 @@
         "Côte d'Ivoire",
         "South Africa",
         "Korea Republic",
-        "Portugal"
+        "Portugal",
+        "Tunisia"
       ],
       "star_players": []
     },
@@ -427,6 +428,13 @@
       "coach": "Lamp",
       "team": "Switzerland",
       "picked_at": "2026-06-07T11:52:30.919423-04:00"
+    },
+    {
+      "pick": 46,
+      "round": 6,
+      "coach": "Herb",
+      "team": "Tunisia",
+      "picked_at": "2026-06-07T11:52:52.011962-04:00"
     }
   ],
   "player_picks": [],
@@ -2781,5 +2789,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780847550
+  "current_pick_started_at": 1780847572
 }
