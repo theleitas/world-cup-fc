@@ -28,7 +28,9 @@
         "Norway",
         "Scotland"
       ],
-      "star_players": []
+      "star_players": [
+        "Nico Williams (Spain)"
+      ]
     },
     "Peter": {
       "team_name": "Peter",
@@ -507,6 +509,13 @@
       "coach": "Peter",
       "player": "Neymar Jr. (Brazil)",
       "picked_at": "2026-06-07T12:02:33.717350-04:00"
+    },
+    {
+      "pick": 55,
+      "round": 1,
+      "coach": "Jeff",
+      "player": "Nico Williams (Spain)",
+      "picked_at": "2026-06-07T12:02:34.914528-04:00"
     }
   ],
   "players": [
@@ -2860,5 +2869,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848153
+  "current_pick_started_at": 1780848154
 }
