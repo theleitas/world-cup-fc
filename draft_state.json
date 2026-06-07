@@ -100,7 +100,8 @@
         "Tunisia"
       ],
       "star_players": [
-        "Michael Olise (France)"
+        "Michael Olise (France)",
+        "Jeremy Doku (Belgium)"
       ]
     },
     "Jayme": {
@@ -565,6 +566,13 @@
       "coach": "Lamp",
       "player": "Omar Marmoush (Egypt)",
       "picked_at": "2026-06-07T12:05:01.860846-04:00"
+    },
+    {
+      "pick": 62,
+      "round": 2,
+      "coach": "Herb",
+      "player": "Jeremy Doku (Belgium)",
+      "picked_at": "2026-06-07T12:05:25.113619-04:00"
     }
   ],
   "players": [
@@ -2918,5 +2926,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780848301
+  "current_pick_started_at": 1780848325
 }
