@@ -55,7 +55,7 @@
     },
     "Chad": {
       "team_name": "Chad",
-      "color": "#40FF6A",
+      "color": "#B56CFF",
       "image": "Chad.png",
       "national_teams": [
         "Jordan",
@@ -106,7 +106,7 @@
     },
     "Jayme": {
       "team_name": "Jayme",
-      "color": "#B56CFF",
+      "color": "#40FF6A",
       "image": "Jayme.png",
       "national_teams": [
         "USA",
