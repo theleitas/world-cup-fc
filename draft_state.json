@@ -81,7 +81,8 @@
       "national_teams": [
         "Japan",
         "Cabo Verde",
-        "Panama"
+        "Panama",
+        "Czechia"
       ],
       "star_players": []
     },
@@ -307,6 +308,13 @@
       "coach": "Herb",
       "team": "Korea Republic",
       "picked_at": "2026-06-07T11:34:30.981618-04:00"
+    },
+    {
+      "pick": 31,
+      "round": 4,
+      "coach": "Jayme",
+      "team": "Czechia",
+      "picked_at": "2026-06-07T11:42:54.216678-04:00"
     }
   ],
   "player_picks": [],
@@ -2661,5 +2669,5 @@
   "last_score_refresh_attempt_at": 1780846664,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780846470
+  "current_pick_started_at": 1780846974
 }
