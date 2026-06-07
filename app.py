@@ -270,6 +270,61 @@ DEFAULT_ODDS = {
     "Curaçao": "+100000",
 }
 
+FIFA_RANKING_LOCK_DATE = "April 1, 2026"
+FIFA_RANKING_SOURCE_URL = "https://inside.fifa.com/fifa-world-ranking/USA?gender=men"
+FIFA_EXPECTED_LOW = 6.0
+FIFA_EXPECTED_HIGH = 54.0
+FIFA_RANKINGS = {
+    "France": {"rank": 1, "points": 1877.32, "code": "FRA"},
+    "Spain": {"rank": 2, "points": 1876.4, "code": "ESP"},
+    "Argentina": {"rank": 3, "points": 1874.81, "code": "ARG"},
+    "England": {"rank": 4, "points": 1825.97, "code": "ENG"},
+    "Portugal": {"rank": 5, "points": 1763.83, "code": "POR"},
+    "Brazil": {"rank": 6, "points": 1761.16, "code": "BRA"},
+    "Netherlands": {"rank": 7, "points": 1757.87, "code": "NED"},
+    "Morocco": {"rank": 8, "points": 1755.87, "code": "MAR"},
+    "Belgium": {"rank": 9, "points": 1734.71, "code": "BEL"},
+    "Germany": {"rank": 10, "points": 1730.37, "code": "GER"},
+    "Croatia": {"rank": 11, "points": 1717.07, "code": "CRO"},
+    "Colombia": {"rank": 13, "points": 1693.09, "code": "COL"},
+    "Senegal": {"rank": 14, "points": 1688.99, "code": "SEN"},
+    "Mexico": {"rank": 15, "points": 1681.03, "code": "MEX"},
+    "USA": {"rank": 16, "points": 1673.13, "code": "USA"},
+    "Uruguay": {"rank": 17, "points": 1673.07, "code": "URU"},
+    "Japan": {"rank": 18, "points": 1660.43, "code": "JPN"},
+    "Switzerland": {"rank": 19, "points": 1649.4, "code": "SUI"},
+    "IR Iran": {"rank": 21, "points": 1615.3, "code": "IRN"},
+    "Türkiye": {"rank": 22, "points": 1599.04, "code": "TUR"},
+    "Ecuador": {"rank": 23, "points": 1594.78, "code": "ECU"},
+    "Austria": {"rank": 24, "points": 1593.45, "code": "AUT"},
+    "Korea Republic": {"rank": 25, "points": 1588.66, "code": "KOR"},
+    "Australia": {"rank": 27, "points": 1580.67, "code": "AUS"},
+    "Algeria": {"rank": 28, "points": 1564.26, "code": "ALG"},
+    "Egypt": {"rank": 29, "points": 1563.24, "code": "EGY"},
+    "Canada": {"rank": 30, "points": 1556.48, "code": "CAN"},
+    "Norway": {"rank": 31, "points": 1550.94, "code": "NOR"},
+    "Panama": {"rank": 33, "points": 1540.64, "code": "PAN"},
+    "Côte d'Ivoire": {"rank": 34, "points": 1532.98, "code": "CIV"},
+    "Sweden": {"rank": 38, "points": 1514.77, "code": "SWE"},
+    "Paraguay": {"rank": 40, "points": 1503.5, "code": "PAR"},
+    "Czechia": {"rank": 41, "points": 1501.38, "code": "CZE"},
+    "Scotland": {"rank": 43, "points": 1498.35, "code": "SCO"},
+    "Tunisia": {"rank": 44, "points": 1483.05, "code": "TUN"},
+    "Congo DR": {"rank": 46, "points": 1478.35, "code": "COD"},
+    "Uzbekistan": {"rank": 50, "points": 1465.34, "code": "UZB"},
+    "Qatar": {"rank": 55, "points": 1454.96, "code": "QAT"},
+    "Iraq": {"rank": 57, "points": 1447.14, "code": "IRQ"},
+    "South Africa": {"rank": 60, "points": 1429.73, "code": "RSA"},
+    "Saudi Arabia": {"rank": 61, "points": 1421.43, "code": "KSA"},
+    "Jordan": {"rank": 63, "points": 1391.45, "code": "JOR"},
+    "Bosnia and Herzegovina": {"rank": 65, "points": 1385.84, "code": "BIH"},
+    "Cabo Verde": {"rank": 69, "points": 1366.13, "code": "CPV"},
+    "Ghana": {"rank": 74, "points": 1346.31, "code": "GHA"},
+    "Curaçao": {"rank": 82, "points": 1294.65, "code": "CUW"},
+    "Haiti": {"rank": 83, "points": 1291.71, "code": "HAI"},
+    "New Zealand": {"rank": 85, "points": 1281.57, "code": "NZL"},
+}
+
 TEAM_ALIASES = {
     "united states": "USA",
     "usa": "USA",
@@ -570,6 +625,27 @@ def odds_to_expected_points(odds):
     if value <= 40000:
         return 12.0
     return 7.0
+
+
+def fifa_expected_points(team_name):
+    name = canonical_team_name(team_name)
+    ranking = FIFA_RANKINGS.get(name)
+    if not ranking:
+        return 0.0
+    all_points = [item["points"] for item in FIFA_RANKINGS.values()]
+    min_points = min(all_points)
+    max_points = max(all_points)
+    if max_points == min_points:
+        return (FIFA_EXPECTED_LOW + FIFA_EXPECTED_HIGH) / 2
+    strength = (float(ranking["points"]) - min_points) / (max_points - min_points)
+    return FIFA_EXPECTED_LOW + strength * (FIFA_EXPECTED_HIGH - FIFA_EXPECTED_LOW)
+
+
+def fifa_rank_text(team_name):
+    ranking = FIFA_RANKINGS.get(canonical_team_name(team_name), {})
+    if not ranking:
+        return "FIFA rank n/a"
+    return f"FIFA #{ranking['rank']} / {ranking['points']:.2f} pts"
 
 
 def default_coaches():
@@ -1026,11 +1102,11 @@ def calculate_scores(state):
             total = points + bonus
             team_points += total
             group_stage_points += group_points
-            expected_total += float(state["expected_points"].get(team_name, 0))
+            expected_total += fifa_expected_points(team_name)
             if advancement in ["Round of 16", "Quarterfinals", "Semifinals", "Final", "Champion"]:
                 empire_count += 1
                 empire_goals += team_goals_in_matches(matches, team_name)
-            team_breakdown.append((team_name, total))
+            team_breakdown.append((team_name, total, fifa_expected_points(team_name)))
 
         player_points = 0
         player_group_points = 0
@@ -1055,6 +1131,7 @@ def calculate_scores(state):
             "empire_count": empire_count,
             "empire_goals": empire_goals,
             "cinderella": team_points - expected_total,
+            "fifa_expected": expected_total,
             "team_breakdown": team_breakdown,
             "player_breakdown": player_breakdown,
         }
@@ -1247,10 +1324,11 @@ def render_header(state):
         unsafe_allow_html=True,
     )
     st.markdown(
-        """
+        f"""
 <div class="rules-box">
 Eight coaches draft eight national teams and two star players. Team scoring: win 3, draw 1, goals 1 each, clean sheet 1.
 Advancement bonuses climb from Round of 32 through Champion. Players score 4 per goal and 3 per assist.
+Cinderella is actual team fantasy points minus locked FIFA-ranking expected points from {html.escape(FIFA_RANKING_LOCK_DATE)}.
 </div>
 """,
         unsafe_allow_html=True,
@@ -1301,7 +1379,7 @@ def render_standings(state, scores):
   <div class='metric-row'><span>Player Points</span><b>{int(item["player_points"])}</b></div>
   <div class='metric-row'><span>Group Stage</span><b>{int(item["group_stage_points"])}</b></div>
   <div class='metric-row'><span>Empire Builder</span><b>{int(item["empire_count"])} teams / {int(item["empire_goals"])} goals</b></div>
-  <div class='metric-row'><span>Cinderella</span><b>{item["cinderella"]:+.1f}</b></div>
+  <div class='metric-row'><span>Cinderella</span><b>{item["cinderella"]:+.1f} vs FIFA</b></div>
   <div class='asset-list'><b>Teams:</b> {teams}</div>
   <div class='asset-list'><b>Players:</b> {players}</div>
 </div>
@@ -1658,28 +1736,32 @@ def render_admin(state):
         st.markdown("</div>", unsafe_allow_html=True)
 
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-        st.subheader("Odds and Expected Points")
+        st.subheader("Odds")
+        st.caption(f"Cinderella baselines are locked to FIFA men's rankings from {FIFA_RANKING_LOCK_DATE}, not edited here.")
         odds_df = pd.DataFrame(
             [
                 {
                     "Team": team["name"],
                     "Odds": state["odds"].get(team["name"], ""),
-                    "Expected Points": state["expected_points"].get(team["name"], 0),
+                    "FIFA Rank": FIFA_RANKINGS.get(team["name"], {}).get("rank"),
+                    "FIFA Expected": round(fifa_expected_points(team["name"]), 1),
                 }
                 for team in WORLD_CUP_TEAMS
             ]
         )
-        edited_odds = st.data_editor(odds_df, hide_index=True, width="stretch", num_rows="fixed")
+        edited_odds = st.data_editor(
+            odds_df,
+            hide_index=True,
+            width="stretch",
+            num_rows="fixed",
+            disabled=["Team", "FIFA Rank", "FIFA Expected"],
+        )
         if st.button("Save Odds"):
             def mutator(fresh):
                 fresh = normalize_state(fresh)
                 for _, row in edited_odds.iterrows():
                     team_name = canonical_team_name(row["Team"])
                     fresh["odds"][team_name] = str(row["Odds"]).strip()
-                    try:
-                        fresh["expected_points"][team_name] = float(row["Expected Points"])
-                    except (TypeError, ValueError):
-                        fresh["expected_points"][team_name] = odds_to_expected_points(fresh["odds"][team_name])
                 return True
             ok, _ = mutate_shared_state(mutator, "Update World Cup odds")
             if ok:
