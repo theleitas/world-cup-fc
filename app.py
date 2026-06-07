@@ -139,6 +139,8 @@ input, textarea, select { color:#fff!important; }
 .draft-choice-button .info-link { margin-left:8px; flex:0 0 auto; }
 .draft-info-wrap { flex:0 0 32px; min-height:42px; display:flex; align-items:center; justify-content:center; border:1px solid #303030; border-radius:8px; background:#070707; }
 .info-link { color:#00e5ff!important; text-decoration:none!important; font-size:.82rem; margin-left:3px; display:inline-flex; align-items:center; justify-content:center; }
+.flag-icon { display:inline-flex; width:1.05em; height:1.05em; align-items:center; justify-content:center; vertical-align:-.13em; margin-right:.22em; }
+.flag-icon svg { width:100%; height:100%; display:block; }
 .asset-list .info-link, .match-line .info-link, .data-table .info-link { font-size:.72rem; margin-left:2px; }
 .available-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(112px, 1fr)); gap:6px; margin:.45rem 0 1rem; }
 .choice-card { border:0; border-radius:0; background:transparent; padding:0; min-height:0; }
@@ -588,6 +590,26 @@ def display_team(team_name, odds=None):
     return f"{flag_for_team(name)} {name}{suffix}"
 
 
+def team_flag_html(team_name):
+    name = canonical_team_name(team_name)
+    if name == "Bosnia and Herzegovina":
+        return """
+<span class='flag-icon' title='Bosnia and Herzegovina'>
+  <svg viewBox='0 0 64 64' aria-hidden='true' focusable='false'>
+    <path d='M13 7h38v22c0 18-12 27-19 31-7-4-19-13-19-31z' fill='#0b8bd3'/>
+    <path d='M8 7h16l33 45-7 6L13 11z' fill='#fff'/>
+    <g fill='#ffd54a'>
+      <path d='M33 13l2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3 5-1z'/>
+      <path d='M45 18l2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3 5-1z'/>
+      <path d='M36 31l2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3 5-1z'/>
+      <path d='M27 44l2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3 5-1z'/>
+    </g>
+  </svg>
+</span>
+"""
+    return f"<span class='flag-icon'>{html.escape(flag_for_team(name))}</span>"
+
+
 def team_info_url(team_name):
     name = canonical_team_name(team_name)
     slug = FIFA_TEAM_SLUGS.get(name)
@@ -606,7 +628,9 @@ def info_link(url, label="info"):
 
 
 def display_team_html(team_name, odds=None, include_info=True):
-    text = html.escape(display_team(team_name, odds))
+    name = canonical_team_name(team_name)
+    suffix = f" ({html.escape(str(odds))})" if odds else ""
+    text = f"{team_flag_html(name)}{html.escape(name)}{suffix}"
     return text + (info_link(team_info_url(team_name), f"{canonical_team_name(team_name)} info") if include_info else "")
 
 
