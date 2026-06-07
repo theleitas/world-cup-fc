@@ -7,7 +7,8 @@
       "color": "#FFD54A",
       "image": "Benji.png",
       "national_teams": [
-        "Canada"
+        "Canada",
+        "Egypt"
       ],
       "star_players": []
     },
@@ -187,6 +188,13 @@
       "coach": "Jeff",
       "team": "Qatar",
       "picked_at": "2026-06-07T13:12:32.862598-04:00"
+    },
+    {
+      "pick": 16,
+      "round": 2,
+      "coach": "Benji",
+      "team": "Egypt",
+      "picked_at": "2026-06-07T13:12:37.603711-04:00"
     }
   ],
   "player_picks": [],
@@ -2541,6 +2549,6 @@
   "last_score_refresh_attempt_at": 1780849920,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780852352,
+  "current_pick_started_at": 1780852357,
   "last_friendly_api_error": ""
 }
