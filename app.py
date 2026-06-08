@@ -118,6 +118,11 @@ input, textarea, select { color:#fff!important; }
 .st-key-public-draft-undo div[data-testid="stButton"] > button:disabled * { color:#000000!important; }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
+.draft-sync-bar { display:flex; flex-wrap:wrap; align-items:center; gap:8px; margin:.15rem 0 .7rem; color:#b9c2c9; font-size:.86rem; font-weight:900; }
+.draft-sync-indicator { border:1px solid rgba(255,213,74,.38); border-radius:8px; padding:8px 10px; background:#060606; color:#ffd54a; flex:1 1 180px; text-align:center; }
+.st-key-refresh-draft div[data-testid="stButton"] > button { background:#00e5ff!important; border-color:#87f5ff!important; color:#001316!important; min-height:38px!important; }
+.st-key-refresh-draft div[data-testid="stButton"] > button *,
+.st-key-refresh-draft div[data-testid="stButton"] > button:disabled * { color:#001316!important; }
 .coach-power-foot { border-top:1px solid rgba(255,255,255,.12); margin-top:9px; padding-top:8px; text-align:center; color:#ffd54a; font-size:.82rem; font-weight:1000; }
 .power-rating-note { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#070707; color:#eaf7fa; padding:10px 12px; margin:.75rem 0 1rem; font-size:.86rem; line-height:1.42; }
 .power-rating-note b { color:#ffd54a; }
@@ -210,6 +215,9 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .draft-power-rating { font-size:.66rem; }
     .coach-power-foot { font-size:.75rem; }
     .power-rating-note { font-size:.78rem; padding:8px 9px; }
+    .draft-sync-bar { gap:5px; margin:.1rem 0 .55rem; font-size:.76rem; }
+    .draft-sync-indicator { padding:6px 8px; flex-basis:100%; }
+    .st-key-refresh-draft div[data-testid="stButton"] > button { min-height:34px!important; font-size:.78rem!important; }
     .draft-save-note { font-size:.74rem; margin:.2rem 0 .1rem; }
     .on-deck-line { min-height:40px; padding:5px 8px; font-size:.82rem; }
     .on-deck-tight { margin:.05rem 0 .2rem; }
@@ -247,6 +255,7 @@ REPO_OWNER = "theleitas"
 REPO_NAME = "world-cup-fc"
 TITLE_THUMBNAIL_PATH = "titlethumb.png"
 AUTO_SCORE_REFRESH_SECONDS = 5 * 60
+DRAFT_AUTO_REFRESH_SECONDS = 20
 KICKOFF_DEADLINE = "Thursday, June 11 at 8:00 PM EST"
 
 TEAM_ROUND_DIRECTIONS = ["forward", "reverse", "reverse", "forward", "reverse", "forward"]
@@ -2240,6 +2249,35 @@ def button_text_color_for_background(color):
     return "#111111" if luminance >= 170 else "#F5F5F5"
 
 
+def refreshed_elapsed_label(timestamp):
+    try:
+        timestamp = int(timestamp)
+    except (TypeError, ValueError):
+        timestamp = int(time.time())
+    elapsed = max(0, int(time.time()) - timestamp)
+    hours = elapsed // 3600
+    minutes = (elapsed % 3600) // 60
+    return f"Refreshed {hours} hours and {minutes} minutes ago"
+
+
+def render_draft_sync_bar(state):
+    if not state.get("draft_active") or full_draft_complete(state):
+        return
+    last_synced_at = st.session_state.get("draft_last_synced_at") or int(time.time())
+    st.markdown("<div class='draft-sync-bar'>", unsafe_allow_html=True)
+    c1, c2 = st.columns([1, 2], gap="small")
+    with c1:
+        if st.button("Refresh Draft", key="refresh-draft", width="stretch"):
+            st.session_state["draft_last_synced_at"] = int(time.time())
+            st.rerun()
+    with c2:
+        st.markdown(
+            f"<div class='draft-sync-indicator'>{html.escape(refreshed_elapsed_label(last_synced_at))}</div>",
+            unsafe_allow_html=True,
+        )
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def render_draft_status(stage_label, current, state, compact=False, show_meta=True):
     if current:
         color = state["teams"][current["coach"]]["color"]
@@ -2534,6 +2572,7 @@ def render_drafts(state):
 
     st.markdown("<div class='section-title'>Draft Room</div>", unsafe_allow_html=True)
     render_draft_status(active_stage, active_pick, state)
+    render_draft_sync_bar(state)
 
     if not team_complete:
         render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
@@ -2956,7 +2995,12 @@ def render_admin(state):
 state, sha = load_state_from_github()
 state = normalize_state(state)
 draft_in_progress = state.get("draft_active") and not full_draft_complete(state)
-if not draft_in_progress:
+if draft_in_progress:
+    draft_refresh_count = st_autorefresh(interval=DRAFT_AUTO_REFRESH_SECONDS * 1000, key="world_cup_fc_draft_refresh")
+    if "draft_last_synced_at" not in st.session_state or st.session_state.get("draft_refresh_count") != draft_refresh_count:
+        st.session_state["draft_refresh_count"] = draft_refresh_count
+        st.session_state["draft_last_synced_at"] = int(time.time())
+else:
     st_autorefresh(interval=5 * 60 * 1000, key="world_cup_fc_refresh")
 if FOOTBALL_DATA_TOKEN and (not draft_in_progress) and int(time.time()) - int(state.get("last_score_refresh_attempt_at") or 0) >= AUTO_SCORE_REFRESH_SECONDS:
     _, refreshed_state = refresh_api_scores()
