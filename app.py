@@ -2393,10 +2393,6 @@ def render_drafts(state):
 
     st.markdown("<div class='section-title'>Draft Room</div>", unsafe_allow_html=True)
     render_draft_status(active_stage, active_pick, state)
-    st.markdown(
-        "<div class='draft-help'>Tap a draft button once. The app will show \"Updating roster\" while it saves the pick and refreshes the board.</div>",
-        unsafe_allow_html=True,
-    )
     render_draft_controls(state, key_prefix=f"{active_stage.lower()}-draft-top")
 
     if not team_complete:
