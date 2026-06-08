@@ -103,7 +103,7 @@ input, textarea, select { color:#fff!important; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
-.on-deck-line { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:.1rem 0 .65rem; text-shadow:0 0 10px var(--coach-color); clear:both; }
+.on-deck-line { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:.45rem 0 .75rem; text-shadow:0 0 10px var(--coach-color); clear:both; }
 .on-deck-line .coach-mini-face,
 .on-deck-line .coach-mini-placeholder { width:36px; height:36px; font-size:.9rem; }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
@@ -1986,20 +1986,19 @@ body {{ padding:4px 0 4px; }}
   border:3px solid {html.escape(payload["color"])};
   box-shadow:0 0 18px {html.escape(payload["color"])};
   border-radius:8px;
-  padding:10px;
+  padding:12px;
   margin:0;
-  text-align:center;
-  font-size:clamp(1.05rem, 4vw, 1.65rem);
+  text-align:left;
+  font-size:clamp(1rem, 4vw, 1.55rem);
   line-height:1.2;
   font-weight:1000;
 }}
 .accent {{ color:{html.escape(payload["color"])}; }}
 .pick-line {{
-  display:flex;
+  display:grid;
+  grid-template-columns:64px minmax(0, 1fr);
   align-items:center;
-  justify-content:center;
-  gap:8px;
-  flex-wrap:wrap;
+  gap:12px;
 }}
 .coach-timer-face,
 .coach-timer-placeholder {{
@@ -2015,7 +2014,20 @@ body {{ padding:4px 0 4px; }}
   color:{html.escape(payload["color"])};
   font-size:1.3rem;
   font-weight:1000;
-  flex:0 0 auto;
+}}
+.pick-copy {{
+  min-width:0;
+}}
+.pick-main,
+.pick-clock {{
+  display:block;
+}}
+.pick-main {{
+  overflow-wrap:anywhere;
+}}
+.pick-clock {{
+  margin-top:4px;
+  font-size:clamp(1.08rem, 5vw, 1.7rem);
 }}
 </style>
 </head>
@@ -2023,8 +2035,10 @@ body {{ padding:4px 0 4px; }}
 <div class="current-pick-box">
   <div class="pick-line">
     {coach_icon}
-    <span>{html.escape(payload["stage"])} Pick {payload["pick"]} of {payload["total"]}: <span class="accent">{html.escape(payload["coach"])}</span> is On The Clock</span>
-    <span class="accent">🕒 <span id="timer">00:00:00</span></span>
+    <div class="pick-copy">
+      <span class="pick-main">{html.escape(payload["stage"])} Pick {payload["pick"]} of {payload["total"]}: <span class="accent">{html.escape(payload["coach"])}</span> is On The Clock</span>
+      <span class="pick-clock accent">🕒 <span id="timer">00:00:00</span></span>
+    </div>
   </div>
 </div>
 <script>
@@ -2046,7 +2060,7 @@ setInterval(tick, 1000);
 </body>
 </html>
 """,
-        height=116,
+        height=150,
     )
 
 
