@@ -43,7 +43,8 @@
       "color": "#FF3D3D",
       "image": "Lamp.png",
       "national_teams": [
-        "Brazil"
+        "Brazil",
+        "Belgium"
       ],
       "star_players": []
     },
@@ -155,6 +156,13 @@
       "coach": "Herb",
       "team": "Colombia",
       "picked_at": "2026-06-08T08:45:42.184175-04:00"
+    },
+    {
+      "pick": 12,
+      "round": 2,
+      "coach": "Lamp",
+      "team": "Belgium",
+      "picked_at": "2026-06-08T10:31:19.855415-04:00"
     }
   ],
   "player_picks": [],
@@ -2509,6 +2517,6 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780922742,
+  "current_pick_started_at": 1780929079,
   "last_friendly_api_error": ""
 }
