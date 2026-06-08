@@ -767,6 +767,31 @@ def odds_to_expected_points(odds):
     return 7.0
 
 
+def american_odds_implied_probability(odds):
+    text = str(odds or "").strip().lower()
+    if not text:
+        return 0.0
+    if text in {"even", "evens"}:
+        return 0.5
+    number = re.sub(r"[^0-9+-]", "", text)
+    try:
+        value = int(number)
+    except ValueError:
+        return 0.0
+    if value == 0:
+        return 0.0
+    if value > 0:
+        return 100 / (value + 100)
+    absolute = abs(value)
+    return absolute / (absolute + 100)
+
+
+def team_draft_sort_key(team, state):
+    name = canonical_team_name(team.get("name", ""))
+    probability = american_odds_implied_probability(state.get("odds", {}).get(name))
+    return (-probability, clean_key(name))
+
+
 def fifa_expected_points(team_name):
     name = canonical_team_name(team_name)
     ranking = FIFA_RANKINGS.get(name)
@@ -2293,7 +2318,10 @@ def make_player_pick(player):
 
 
 def render_available_teams(state):
-    available = [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)]
+    available = sorted(
+        [team for team in WORLD_CUP_TEAMS if team["name"] not in drafted_teams(state)],
+        key=lambda team: team_draft_sort_key(team, state),
+    )
     saving = st.session_state.get("draft_saving", False)
     current = current_pick(TEAM_DRAFT_SEQUENCE, state["team_picks"])
     coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
