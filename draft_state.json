@@ -42,7 +42,9 @@
       "team_name": "Lamp",
       "color": "#FF3D3D",
       "image": "Lamp.png",
-      "national_teams": [],
+      "national_teams": [
+        "Brazil"
+      ],
       "star_players": []
     },
     "Herb": {
@@ -95,6 +97,13 @@
       "coach": "Chad",
       "team": "Portugal",
       "picked_at": "2026-06-07T21:53:57.802874-04:00"
+    },
+    {
+      "pick": 5,
+      "round": 1,
+      "coach": "Lamp",
+      "team": "Brazil",
+      "picked_at": "2026-06-07T22:38:50.737505-04:00"
     }
   ],
   "player_picks": [],
@@ -2449,6 +2458,6 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780883637,
+  "current_pick_started_at": 1780886330,
   "last_friendly_api_error": ""
 }
