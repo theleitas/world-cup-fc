@@ -15,7 +15,9 @@
       "team_name": "Jeff",
       "color": "#FF7A1A",
       "image": "Jeff.png",
-      "national_teams": [],
+      "national_teams": [
+        "France"
+      ],
       "star_players": []
     },
     "Peter": {
@@ -68,6 +70,13 @@
       "coach": "Benji",
       "team": "Spain",
       "picked_at": "2026-06-07T20:02:02.730432-04:00"
+    },
+    {
+      "pick": 2,
+      "round": 1,
+      "coach": "Jeff",
+      "team": "France",
+      "picked_at": "2026-06-07T20:17:21.152519-04:00"
     }
   ],
   "player_picks": [],
@@ -2422,6 +2431,6 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780876922,
+  "current_pick_started_at": 1780877841,
   "last_friendly_api_error": ""
 }
