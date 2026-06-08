@@ -48,7 +48,8 @@
       "image": "Lamp.png",
       "national_teams": [
         "Brazil",
-        "Belgium"
+        "Belgium",
+        "Uruguay"
       ],
       "star_players": []
     },
@@ -219,6 +220,13 @@
       "coach": "Herb",
       "team": "Croatia",
       "picked_at": "2026-06-08T16:41:32.369290-04:00"
+    },
+    {
+      "pick": 20,
+      "round": 3,
+      "coach": "Lamp",
+      "team": "Uruguay",
+      "picked_at": "2026-06-08T17:56:50.948986-04:00"
     }
   ],
   "player_picks": [],
@@ -2573,6 +2581,6 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780951292,
+  "current_pick_started_at": 1780955810,
   "last_friendly_api_error": ""
 }
