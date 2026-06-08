@@ -2969,13 +2969,9 @@ draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
     render_standings(state, scores)
-    show_draft_extras = st.toggle("Show Match Tracker and Tables During Draft", value=False, key="show-draft-extras")
-    if not show_draft_extras:
-        st.caption("Draft focus mode is on to keep picks faster on mobile. Turn on the tracker and tables when you need them.")
+    render_live_matches(state)
 else:
     render_standings(state, scores)
-    show_draft_extras = True
-if show_draft_extras:
     render_live_matches(state)
     render_team_standings(state)
     render_drafted_player_stats(state)
