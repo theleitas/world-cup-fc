@@ -199,6 +199,29 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .pick-choice { font-size:.72rem; }
     .draft-control-row { margin:.15rem 0 .35rem; }
     .draft-control-row div[data-testid="stButton"] > button { min-height:38px!important; font-size:.75rem!important; padding:4px 6px!important; }
+    .st-key-team-draft-top-controls div[data-testid="stHorizontalBlock"],
+    .st-key-player-draft-top-controls div[data-testid="stHorizontalBlock"],
+    .st-key-player-draft-bottom-controls div[data-testid="stHorizontalBlock"] {
+        display:flex!important;
+        flex-direction:row!important;
+        flex-wrap:nowrap!important;
+        gap:4px!important;
+    }
+    .st-key-team-draft-top-controls div[data-testid="column"],
+    .st-key-player-draft-top-controls div[data-testid="column"],
+    .st-key-player-draft-bottom-controls div[data-testid="column"] {
+        flex:1 1 0!important;
+        min-width:0!important;
+        width:33.333%!important;
+    }
+    .st-key-team-draft-top-controls div[data-testid="stButton"] > button,
+    .st-key-player-draft-top-controls div[data-testid="stButton"] > button,
+    .st-key-player-draft-bottom-controls div[data-testid="stButton"] > button {
+        min-height:34px!important;
+        font-size:.66rem!important;
+        padding:3px 3px!important;
+        line-height:1.05!important;
+    }
     .draft-save-note { font-size:.74rem; margin:.2rem 0 .1rem; }
     .draft-choice-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; }
     .draft-choice-link, .draft-choice-disabled { min-height:38px; font-size:.74rem; padding:5px 6px; }
@@ -2171,30 +2194,31 @@ def save_draft_pick(action, value, label, status_placeholder=None):
 def render_draft_controls(state, key_prefix="draft-controls"):
     draft_live = bool(state.get("draft_active"))
     has_any_picks = bool(state.get("team_picks") or state.get("player_picks"))
-    st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
-    c1, c2, c3 = st.columns([1, 1, 1], gap="small")
-    with c1:
-        st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
-        if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch", disabled=draft_live):
-            ok, _ = set_draft_active(True)
-            if ok:
-                rerun_draft_scope()
+    with st.container(key=f"{key_prefix}-controls"):
+        st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
+        c1, c2, c3 = st.columns([1, 1, 1], gap="small")
+        with c1:
+            st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
+            if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch", disabled=draft_live):
+                ok, _ = set_draft_active(True)
+                if ok:
+                    rerun_draft_scope()
+            st.markdown("</div>", unsafe_allow_html=True)
+        with c2:
+            st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
+            if st.button("Stop Draft", key=f"{key_prefix}-stop", width="stretch", disabled=not draft_live):
+                ok, _ = set_draft_active(False)
+                if ok:
+                    rerun_draft_scope()
+            st.markdown("</div>", unsafe_allow_html=True)
+        with c3:
+            st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
+            if st.button("Undo Last Pick", key=f"{key_prefix}-undo", width="stretch", disabled=not has_any_picks):
+                ok, _ = undo_last_pick()
+                if ok:
+                    rerun_draft_scope()
+            st.markdown("</div>", unsafe_allow_html=True)
         st.markdown("</div>", unsafe_allow_html=True)
-    with c2:
-        st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
-        if st.button("Stop Draft", key=f"{key_prefix}-stop", width="stretch", disabled=not draft_live):
-            ok, _ = set_draft_active(False)
-            if ok:
-                rerun_draft_scope()
-        st.markdown("</div>", unsafe_allow_html=True)
-    with c3:
-        st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
-        if st.button("Undo Last Pick", key=f"{key_prefix}-undo", width="stretch", disabled=not has_any_picks):
-            ok, _ = undo_last_pick()
-            if ok:
-                rerun_draft_scope()
-        st.markdown("</div>", unsafe_allow_html=True)
-    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_draft_board(title, sequence, picks, field, state):
