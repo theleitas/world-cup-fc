@@ -100,6 +100,7 @@ input, textarea, select { color:#fff!important; }
 .pick-num { color:#00e5ff; font-size:.75rem; font-weight:1000; }
 .pick-coach { font-weight:1000; color:var(--coach-color); font-size:.78rem; }
 .pick-choice { color:#ffd54a; font-weight:900; margin-top:3px; overflow-wrap:anywhere; }
+.pick-odds { color:#b9c2c9; font-size:.76rem; font-weight:900; margin-top:2px; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
@@ -2244,7 +2245,9 @@ def render_draft_board(title, sequence, picks, field, state):
             if pick:
                 choice = pick[field]
                 if field == "team":
-                    label = display_team_html(choice, state["odds"].get(choice, ""), include_info=False)
+                    odds = state["odds"].get(choice, "")
+                    odds_html = f"<div class='pick-odds'>({html.escape(str(odds))})</div>" if odds else ""
+                    label = f"{display_team_html(choice, include_info=False)}{odds_html}"
                 else:
                     label = display_player_html(choice, include_info=False)
             else:
