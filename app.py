@@ -2689,8 +2689,7 @@ def render_group_stage_match_groups(state, matches):
 
 def render_live_matches(state):
     st.markdown("<div class='match-section-spacer'></div>", unsafe_allow_html=True)
-    st.markdown("<div class='section-title'>World Cup Tracker</div>", unsafe_allow_html=True)
-    with st.expander("Past, Present, and Live Matches", expanded=False):
+    with st.expander("World Cup Tracker", expanded=False):
         c1, c2 = st.columns([1, 2])
         with c1:
             if st.button("Refresh Scores"):
