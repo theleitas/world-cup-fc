@@ -103,7 +103,7 @@ input, textarea, select { color:#fff!important; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
-.on-deck-line { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:6px; text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:-.85rem 0 .55rem; text-shadow:0 0 10px var(--coach-color); }
+.on-deck-line { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:.1rem 0 .65rem; text-shadow:0 0 10px var(--coach-color); clear:both; }
 .on-deck-line .coach-mini-face,
 .on-deck-line .coach-mini-placeholder { width:36px; height:36px; font-size:.9rem; }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
@@ -1979,14 +1979,14 @@ html, body {{
   color:#fff;
   font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }}
-body {{ padding:10px 0 8px; }}
+body {{ padding:4px 0 4px; }}
 .current-pick-box {{
   box-sizing:border-box;
   width:100%;
   border:3px solid {html.escape(payload["color"])};
   box-shadow:0 0 18px {html.escape(payload["color"])};
   border-radius:8px;
-  padding:12px;
+  padding:10px;
   margin:0;
   text-align:center;
   font-size:clamp(1.05rem, 4vw, 1.65rem);
@@ -2046,7 +2046,7 @@ setInterval(tick, 1000);
 </body>
 </html>
 """,
-        height=128,
+        height=116,
     )
 
 
