@@ -2243,7 +2243,10 @@ def render_draft_board(title, sequence, picks, field, state):
             cell_color = state["teams"][item["coach"]]["color"]
             if pick:
                 choice = pick[field]
-                label = display_team_html(choice, include_info=False) if field == "team" else display_player_html(choice, include_info=False)
+                if field == "team":
+                    label = display_team_html(choice, state["odds"].get(choice, ""), include_info=False)
+                else:
+                    label = display_player_html(choice, include_info=False)
             else:
                 label = "Open"
             rows.append(
