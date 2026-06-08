@@ -112,12 +112,12 @@ input, textarea, select { color:#fff!important; }
 .draft-pick-prompt .coach-mini-face,
 .draft-pick-prompt .coach-mini-placeholder { width:38px; height:38px; font-size:.9rem; }
 .public-undo-wrap { max-width:360px; margin:.15rem auto .55rem; }
-.st-key-public-draft-undo div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; min-height:40px!important; }
+.st-key-public-draft-undo div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#000000!important; min-height:40px!important; }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
 .st-key-admin-start-draft div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
 .st-key-admin-stop-draft div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
-.st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; }
+.st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#000000!important; }
 .st-key-team-pick-buttons div[data-testid="stButton"] > button,
 .st-key-player-pick-buttons div[data-testid="stButton"] > button {
     background:var(--draft-button-bg, #121212)!important;
