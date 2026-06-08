@@ -25,7 +25,8 @@
       "color": "#FF2DAA",
       "image": "Peter.png",
       "national_teams": [
-        "England"
+        "England",
+        "Morocco"
       ],
       "star_players": []
     },
@@ -171,6 +172,13 @@
       "coach": "Chad",
       "team": "USA",
       "picked_at": "2026-06-08T10:38:32.440244-04:00"
+    },
+    {
+      "pick": 14,
+      "round": 2,
+      "coach": "Peter",
+      "team": "Morocco",
+      "picked_at": "2026-06-08T12:43:14.006027-04:00"
     }
   ],
   "player_picks": [],
@@ -2525,6 +2533,6 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780929512,
+  "current_pick_started_at": 1780936994,
   "last_friendly_api_error": ""
 }
