@@ -104,8 +104,8 @@ input, textarea, select { color:#fff!important; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
-.on-deck-line { box-sizing:border-box; width:100%; color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; text-align:center; font-size:clamp(.86rem, 3vw, 1.08rem); line-height:1.1; font-weight:1000; margin:-.15rem 0 .55rem; padding:7px 10px; min-height:46px; border:2px solid var(--coach-color); border-radius:8px; background:color-mix(in srgb, var(--coach-color) 14%, #050505); box-shadow:0 0 12px color-mix(in srgb, var(--coach-color) 65%, transparent); text-shadow:0 0 8px var(--coach-color); clear:both; }
-.on-deck-tight { margin:-.35rem 0 .28rem; }
+.on-deck-line { box-sizing:border-box; width:100%; color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; text-align:center; font-size:clamp(.86rem, 3vw, 1.08rem); line-height:1.1; font-weight:1000; margin:.05rem 0 .55rem; padding:7px 10px; min-height:46px; border:2px solid var(--coach-color); border-radius:8px; background:color-mix(in srgb, var(--coach-color) 14%, #050505); box-shadow:0 0 12px color-mix(in srgb, var(--coach-color) 65%, transparent); text-shadow:0 0 8px var(--coach-color); clear:both; }
+.on-deck-tight { margin:.05rem 0 .28rem; }
 .on-deck-line .coach-mini-face,
 .on-deck-line .coach-mini-placeholder { width:30px; height:30px; font-size:.75rem; }
 .draft-pick-prompt { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; margin:.28rem 0 .55rem; font-size:clamp(1rem, 3.8vw, 1.35rem); font-weight:1000; text-align:center; text-shadow:0 0 10px var(--coach-color); }
@@ -205,7 +205,7 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .pick-choice { font-size:.72rem; }
     .draft-save-note { font-size:.74rem; margin:.2rem 0 .1rem; }
     .on-deck-line { min-height:40px; padding:5px 8px; font-size:.82rem; }
-    .on-deck-tight { margin:-.45rem 0 .2rem; }
+    .on-deck-tight { margin:.05rem 0 .2rem; }
     .draft-pick-prompt { justify-content:flex-start; text-align:left; font-size:.95rem; line-height:1.15; margin:.2rem 0 .45rem; }
     .public-undo-wrap { max-width:none; margin:.1rem 0 .45rem; }
     .st-key-public-draft-undo div[data-testid="stButton"] > button { min-height:36px!important; font-size:.78rem!important; }
@@ -2099,7 +2099,7 @@ setInterval(tick, 1000);
 </body>
 </html>
 """,
-        height=108 if compact else 112,
+        height=132 if compact else 150,
     )
 
 
