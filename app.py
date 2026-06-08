@@ -72,6 +72,7 @@ input, textarea, select { color:#fff!important; }
 .hero-kicker { color:#00e5ff; text-transform:uppercase; font-size:.82rem; letter-spacing:.12em; font-weight:1000; }
 .deadline-pill { border:2px solid #ffd54a; color:#ffd54a; border-radius:8px; padding:8px 10px; font-weight:950; background:#090909; }
 .section-title { color:#ffd54a; font-weight:1000; font-size:1.35rem; margin:1.2rem 0 .55rem; }
+.admin-title { color:#ff1744; text-shadow:0 0 10px #ff1744; }
 .subtle { color:#b9c2c9; font-size:.9rem; }
 .rules-box { border-left:5px solid #00e5ff; border-radius:8px; background:#070707; padding:12px 14px; margin:.8rem 0 1rem; color:#dceff5; }
 .standings-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; }
@@ -126,6 +127,18 @@ input, textarea, select { color:#fff!important; }
 .coach-power-foot { border-top:1px solid rgba(255,255,255,.12); margin-top:9px; padding-top:8px; text-align:center; color:#ffd54a; font-size:.82rem; font-weight:1000; }
 .power-rating-note { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#070707; color:#eaf7fa; padding:10px 12px; margin:.75rem 0 1rem; font-size:.86rem; line-height:1.42; }
 .power-rating-note b { color:#ffd54a; }
+.st-key-admin-only-section div[data-testid="stExpander"] details > summary,
+.st-key-admin-only-section div[data-testid="stExpander"] details[open] > summary,
+.st-key-admin-only-section div[data-testid="stExpander"] summary:hover,
+.st-key-admin-only-section div[data-testid="stExpander"] summary:focus,
+.st-key-admin-only-section div[data-testid="stExpander"] summary:active {
+    color:#ff1744!important; border-color:#ff1744!important; box-shadow:0 0 12px rgba(255,23,68,.35)!important;
+}
+.st-key-admin-only-section div[data-testid="stExpander"] summary p,
+.st-key-admin-only-section div[data-testid="stExpander"] summary span,
+.st-key-admin-only-section div[data-testid="stExpander"] summary svg {
+    color:#ff1744!important; fill:#ff1744!important; stroke:#ff1744!important; text-shadow:0 0 10px #ff1744!important;
+}
 .st-key-admin-start-draft div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
 .st-key-admin-stop-draft div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
 .st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button { background:#ffff00!important; border-color:#ffff99!important; color:#000000!important; }
@@ -1741,7 +1754,8 @@ def render_header(state):
 
 
 def render_payout_descriptions():
-    with st.expander("Payout Descriptions", expanded=False):
+    with st.expander("Important Information", expanded=False):
+        render_power_rating_explanation()
         st.markdown(
             f"""
 <div class='payout-desc'><b>Gold - $300</b><br>
@@ -1814,7 +1828,6 @@ def render_standings(state, scores):
         )
     cards.append("</div>")
     st.markdown("".join(cards), unsafe_allow_html=True)
-    render_power_rating_explanation()
 
 
 def render_power_rating_explanation():
@@ -2774,22 +2787,24 @@ def draft_status_summary(state):
 
 
 def render_admin(state):
-    st.markdown("<div class='section-title'>Admin</div>", unsafe_allow_html=True)
+    st.markdown("<div class='section-title admin-title'>Admin Only</div>", unsafe_allow_html=True)
     if st.session_state.pop("clear_admin_password", False):
         st.session_state["admin-password-entry"] = ""
     if not st.session_state.get("admin_unlocked", False):
-        with st.expander("Admin", expanded=False):
-            password = st.text_input("Admin Password", type="password", key="admin-password-entry")
-            if st.button("Unlock Admin", key="admin-unlock-button", width="stretch"):
-                if password == "0102":
-                    st.session_state["admin_unlocked"] = True
-                    st.session_state["admin_open"] = True
-                    st.rerun()
-                else:
-                    st.warning("Incorrect admin password.")
+        with st.container(key="admin-only-section"):
+            with st.expander("Admin Only", expanded=False):
+                password = st.text_input("Admin Password", type="password", key="admin-password-entry")
+                if st.button("Unlock Admin", key="admin-unlock-button", width="stretch"):
+                    if password == "0102":
+                        st.session_state["admin_unlocked"] = True
+                        st.session_state["admin_open"] = True
+                        st.rerun()
+                    else:
+                        st.warning("Incorrect admin password.")
         return
 
-    with st.expander("Admin", expanded=True):
+    with st.container(key="admin-only-section"):
+      with st.expander("Admin Only", expanded=True):
         if st.button("Lock / Close Admin", key="admin-lock-button", width="stretch"):
             st.session_state["admin_unlocked"] = False
             st.session_state["admin_open"] = False
