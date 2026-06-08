@@ -58,7 +58,8 @@
       "image": "Herb.png",
       "national_teams": [
         "Germany",
-        "Colombia"
+        "Colombia",
+        "Croatia"
       ],
       "star_players": []
     },
@@ -211,6 +212,13 @@
       "coach": "Jayme",
       "team": "Japan",
       "picked_at": "2026-06-08T14:19:09.546066-04:00"
+    },
+    {
+      "pick": 19,
+      "round": 3,
+      "coach": "Herb",
+      "team": "Croatia",
+      "picked_at": "2026-06-08T16:41:32.369290-04:00"
     }
   ],
   "player_picks": [],
@@ -2565,6 +2573,6 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780942749,
+  "current_pick_started_at": 1780951292,
   "last_friendly_api_error": ""
 }
