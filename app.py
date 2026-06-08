@@ -203,29 +203,26 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .st-key-player-draft-top-controls div[data-testid="stHorizontalBlock"],
     .st-key-player-draft-bottom-controls div[data-testid="stHorizontalBlock"] {
         display:flex!important;
-        flex-direction:row!important;
-        flex-wrap:nowrap!important;
-        gap:4px!important;
+        flex-direction:column!important;
+        gap:3px!important;
     }
     .st-key-team-draft-top-controls div[data-testid="column"],
     .st-key-player-draft-top-controls div[data-testid="column"],
     .st-key-player-draft-bottom-controls div[data-testid="column"] {
-        flex:1 1 0!important;
+        flex:0 0 auto!important;
         min-width:0!important;
-        width:33.333%!important;
+        width:100%!important;
     }
     .st-key-team-draft-top-controls div[data-testid="stButton"] > button,
     .st-key-player-draft-top-controls div[data-testid="stButton"] > button,
     .st-key-player-draft-bottom-controls div[data-testid="stButton"] > button {
-        width:38px!important;
-        height:38px!important;
-        min-height:38px!important;
-        max-width:38px!important;
-        margin:0 auto!important;
-        font-size:1rem!important;
-        padding:0!important;
-        line-height:1.05!important;
-        border-radius:8px!important;
+        width:100%!important;
+        max-width:100%!important;
+        min-height:32px!important;
+        font-size:.72rem!important;
+        padding:3px 6px!important;
+        line-height:1.1!important;
+        border-radius:6px!important;
     }
     .draft-save-note { font-size:.74rem; margin:.2rem 0 .1rem; }
     .draft-choice-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; }
@@ -2204,21 +2201,21 @@ def render_draft_controls(state, key_prefix="draft-controls"):
         c1, c2, c3 = st.columns([1, 1, 1], gap="small")
         with c1:
             st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
-            if st.button("▶", key=f"{key_prefix}-start", width="stretch", disabled=draft_live, help="Start Draft"):
+            if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch", disabled=draft_live):
                 ok, _ = set_draft_active(True)
                 if ok:
                     rerun_draft_scope()
             st.markdown("</div>", unsafe_allow_html=True)
         with c2:
             st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
-            if st.button("■", key=f"{key_prefix}-stop", width="stretch", disabled=not draft_live, help="Stop Draft"):
+            if st.button("Stop Draft", key=f"{key_prefix}-stop", width="stretch", disabled=not draft_live):
                 ok, _ = set_draft_active(False)
                 if ok:
                     rerun_draft_scope()
             st.markdown("</div>", unsafe_allow_html=True)
         with c3:
             st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
-            if st.button("↶", key=f"{key_prefix}-undo", width="stretch", disabled=not has_any_picks, help="Undo Last Pick"):
+            if st.button("Undo Last Pick", key=f"{key_prefix}-undo", width="stretch", disabled=not has_any_picks):
                 ok, _ = undo_last_pick()
                 if ok:
                     rerun_draft_scope()
