@@ -105,15 +105,16 @@ input, textarea, select { color:#fff!important; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
 .on-deck-line { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; text-align:center; font-size:clamp(1rem, 3.6vw, 1.35rem); font-weight:1000; margin:-.15rem 0 .55rem; text-shadow:0 0 10px var(--coach-color); clear:both; }
+.on-deck-tight { margin:-.55rem 0 .28rem; }
 .on-deck-line .coach-mini-face,
 .on-deck-line .coach-mini-placeholder { width:36px; height:36px; font-size:.9rem; }
+.draft-pick-prompt { color:var(--coach-color); display:flex; align-items:center; justify-content:center; gap:8px; margin:.28rem 0 .55rem; font-size:clamp(1rem, 3.8vw, 1.35rem); font-weight:1000; text-align:center; text-shadow:0 0 10px var(--coach-color); }
+.draft-pick-prompt .coach-mini-face,
+.draft-pick-prompt .coach-mini-placeholder { width:38px; height:38px; font-size:.9rem; }
+.public-undo-wrap { max-width:360px; margin:.15rem auto .55rem; }
+.st-key-public-draft-undo div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; min-height:40px!important; }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
-.draft-control-row { margin:.2rem 0 .5rem; }
-.draft-control-row div[data-testid="stButton"] > button { width:100%!important; min-height:50px!important; }
-.draft-start-control div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
-.draft-stop-control div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
-.draft-undo-control div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; }
 .st-key-admin-start-draft div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
 .st-key-admin-stop-draft div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
 .st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button { background:#ffd54a!important; border-color:#fff1a8!important; color:#151000!important; }
@@ -198,34 +199,11 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .draft-board td { padding:3px; }
     .pick-cell { min-height:62px; padding:4px; }
     .pick-choice { font-size:.72rem; }
-    .draft-control-row { margin:.15rem 0 .35rem; }
-    .draft-control-row div[data-testid="stButton"] > button { min-height:38px!important; font-size:.75rem!important; padding:4px 6px!important; }
-    .st-key-team-draft-top-controls div[data-testid="stHorizontalBlock"],
-    .st-key-player-draft-top-controls div[data-testid="stHorizontalBlock"],
-    .st-key-player-draft-bottom-controls div[data-testid="stHorizontalBlock"] {
-        display:flex!important;
-        flex-direction:column!important;
-        gap:3px!important;
-    }
-    .st-key-team-draft-top-controls div[data-testid="column"],
-    .st-key-player-draft-top-controls div[data-testid="column"],
-    .st-key-player-draft-bottom-controls div[data-testid="column"] {
-        flex:0 0 auto!important;
-        min-width:0!important;
-        width:100%!important;
-    }
-    .st-key-team-draft-top-controls div[data-testid="stButton"] > button,
-    .st-key-player-draft-top-controls div[data-testid="stButton"] > button,
-    .st-key-player-draft-bottom-controls div[data-testid="stButton"] > button {
-        width:100%!important;
-        max-width:100%!important;
-        min-height:32px!important;
-        font-size:.72rem!important;
-        padding:3px 6px!important;
-        line-height:1.1!important;
-        border-radius:6px!important;
-    }
     .draft-save-note { font-size:.74rem; margin:.2rem 0 .1rem; }
+    .on-deck-tight { margin:-.7rem 0 .2rem; }
+    .draft-pick-prompt { justify-content:flex-start; text-align:left; font-size:.95rem; line-height:1.15; margin:.2rem 0 .45rem; }
+    .public-undo-wrap { max-width:none; margin:.1rem 0 .45rem; }
+    .st-key-public-draft-undo div[data-testid="stButton"] > button { min-height:36px!important; font-size:.78rem!important; }
     .draft-choice-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); gap:5px; }
     .draft-choice-link, .draft-choice-disabled { min-height:38px; font-size:.74rem; padding:5px 6px; }
     .draft-info-wrap { flex-basis:26px; min-height:38px; }
@@ -1976,7 +1954,7 @@ def next_pick_after_current(stage_label, state):
     return sequence[next_index]
 
 
-def render_pick_timer(stage_label, current, color, started_at):
+def render_pick_timer(stage_label, current, color, started_at, compact=False):
     total_picks = draft_total_for_stage(stage_label)
     image_data_uri = image_to_data_uri(coach_photo_filename(current["coach"]), max_width=44, max_height=44, quality=70)
     if image_data_uri:
@@ -2091,7 +2069,7 @@ setInterval(tick, 1000);
 </body>
 </html>
 """,
-        height=150,
+        height=132 if compact else 150,
     )
 
 
@@ -2106,25 +2084,27 @@ def button_text_color_for_background(color):
     return "#111111" if luminance >= 170 else "#F5F5F5"
 
 
-def render_draft_status(stage_label, current, state):
+def render_draft_status(stage_label, current, state, compact=False, show_meta=True):
     if current:
         color = state["teams"][current["coach"]]["color"]
         try:
             started_at = int(state.get("current_pick_started_at") or time.time())
         except (TypeError, ValueError):
             started_at = int(time.time())
-        render_pick_timer(stage_label, current, color, started_at)
+        render_pick_timer(stage_label, current, color, started_at, compact=compact)
         on_deck = next_pick_after_current(stage_label, state)
         if on_deck:
             on_deck_color = state["teams"][on_deck["coach"]]["color"]
+            line_class = "on-deck-line on-deck-tight" if compact else "on-deck-line"
             st.markdown(
-                f"<div class='on-deck-line' style='--coach-color:{html.escape(on_deck_color)}'>{coach_mini_html(on_deck['coach'], on_deck_color)}<span>{html.escape(on_deck['coach'])} is ON-DECK</span></div>",
+                f"<div class='{line_class}' style='--coach-color:{html.escape(on_deck_color)}'>{coach_mini_html(on_deck['coach'], on_deck_color)}<span>{html.escape(on_deck['coach'])} is ON-DECK</span></div>",
                 unsafe_allow_html=True,
             )
-    st.markdown(
-        f"<div class='draft-status-line'><b>Deadline:</b> {html.escape(KICKOFF_DEADLINE)} <b>Status:</b> {'Live' if state.get('draft_active') else 'Paused'}</div>",
-        unsafe_allow_html=True,
-    )
+    if show_meta:
+        st.markdown(
+            f"<div class='draft-status-line'><b>Deadline:</b> {html.escape(KICKOFF_DEADLINE)} <b>Status:</b> {'Live' if state.get('draft_active') else 'Paused'}</div>",
+            unsafe_allow_html=True,
+        )
 
 
 def set_draft_active(active):
@@ -2194,34 +2174,25 @@ def save_draft_pick(action, value, label, status_placeholder=None):
     st.warning(f"Could not save {label}. It may already be drafted, or the draft may be paused.")
 
 
-def render_draft_controls(state, key_prefix="draft-controls"):
-    draft_live = bool(state.get("draft_active"))
+def render_public_undo_last_pick(state):
     has_any_picks = bool(state.get("team_picks") or state.get("player_picks"))
-    with st.container(key=f"{key_prefix}-controls"):
-        st.markdown("<div class='draft-control-row'>", unsafe_allow_html=True)
-        c1, c2, c3 = st.columns([1, 1, 1], gap="small")
-        with c1:
-            st.markdown("<div class='draft-start-control'>", unsafe_allow_html=True)
-            if st.button("Start Draft", key=f"{key_prefix}-start", width="stretch", disabled=draft_live):
-                ok, _ = set_draft_active(True)
-                if ok:
-                    rerun_draft_scope()
-            st.markdown("</div>", unsafe_allow_html=True)
-        with c2:
-            st.markdown("<div class='draft-stop-control'>", unsafe_allow_html=True)
-            if st.button("Stop Draft", key=f"{key_prefix}-stop", width="stretch", disabled=not draft_live):
-                ok, _ = set_draft_active(False)
-                if ok:
-                    rerun_draft_scope()
-            st.markdown("</div>", unsafe_allow_html=True)
-        with c3:
-            st.markdown("<div class='draft-undo-control'>", unsafe_allow_html=True)
-            if st.button("Undo Last Pick", key=f"{key_prefix}-undo", width="stretch", disabled=not has_any_picks):
-                ok, _ = undo_last_pick()
-                if ok:
-                    rerun_draft_scope()
-            st.markdown("</div>", unsafe_allow_html=True)
-        st.markdown("</div>", unsafe_allow_html=True)
+    st.markdown("<div class='public-undo-wrap'>", unsafe_allow_html=True)
+    if st.button("Undo Last Pick", key="public-draft-undo", width="stretch", disabled=not has_any_picks):
+        ok, _ = undo_last_pick()
+        if ok:
+            rerun_draft_scope()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_make_pick_prompt(stage_label, current, state):
+    if not current:
+        return
+    coach = current["coach"]
+    coach_color = state["teams"][coach]["color"]
+    st.markdown(
+        f"<div class='draft-pick-prompt' style='--coach-color:{html.escape(coach_color)}'>{coach_mini_html(coach, coach_color)}<span>{html.escape(coach)}, make your {html.escape(stage_label.lower())} pick below.</span></div>",
+        unsafe_allow_html=True,
+    )
 
 
 def render_draft_board(title, sequence, picks, field, state):
@@ -2401,11 +2372,12 @@ def render_drafts(state):
 
     st.markdown("<div class='section-title'>Draft Room</div>", unsafe_allow_html=True)
     render_draft_status(active_stage, active_pick, state)
-    render_draft_controls(state, key_prefix=f"{active_stage.lower()}-draft-top")
 
     if not team_complete:
         render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state)
-        render_draft_status(active_stage, active_pick, state)
+        render_draft_status(active_stage, active_pick, state, compact=True, show_meta=False)
+        render_public_undo_last_pick(state)
+        render_make_pick_prompt(active_stage, active_pick, state)
         render_available_teams(state)
         return
 
@@ -2415,10 +2387,11 @@ def render_drafts(state):
         st.success("Team draft complete. Player draft is open.")
 
     render_draft_board("Player Draft", PLAYER_DRAFT_SEQUENCE, state["player_picks"], "player", state)
-    render_draft_status(active_stage, active_pick, state)
+    render_draft_status(active_stage, active_pick, state, compact=True, show_meta=False)
     player_pick = current_pick(PLAYER_DRAFT_SEQUENCE, state["player_picks"])
     if player_pick:
-        render_draft_controls(state, key_prefix="player-draft-bottom")
+        render_public_undo_last_pick(state)
+        render_make_pick_prompt(active_stage, active_pick, state)
         render_available_players(state)
 
 
