@@ -2099,7 +2099,7 @@ setInterval(tick, 1000);
 </body>
 </html>
 """,
-        height=132 if compact else 150,
+        height=132,
     )
 
 
