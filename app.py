@@ -2019,11 +2019,15 @@ body {{ padding:4px 0 4px; }}
   min-width:0;
 }}
 .pick-main,
+.pick-coach-line,
 .pick-clock {{
   display:block;
 }}
 .pick-main {{
   overflow-wrap:anywhere;
+}}
+.pick-coach-line {{
+  margin-top:3px;
 }}
 .pick-clock {{
   margin-top:4px;
@@ -2036,7 +2040,8 @@ body {{ padding:4px 0 4px; }}
   <div class="pick-line">
     {coach_icon}
     <div class="pick-copy">
-      <span class="pick-main">{html.escape(payload["stage"])} Pick {payload["pick"]} of {payload["total"]}: <span class="accent">{html.escape(payload["coach"])}</span> is On The Clock</span>
+      <span class="pick-main">{html.escape(payload["stage"])} Pick {payload["pick"]} of {payload["total"]}</span>
+      <span class="pick-coach-line"><span class="accent">{html.escape(payload["coach"])}</span> is On The Clock</span>
       <span class="pick-clock accent">🕒 <span id="timer">00:00:00</span></span>
     </div>
   </div>
