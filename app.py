@@ -101,6 +101,7 @@ input, textarea, select { color:#fff!important; }
 .pick-coach { font-weight:1000; color:var(--coach-color); font-size:.78rem; }
 .pick-choice { color:#ffd54a; font-weight:900; margin-top:3px; overflow-wrap:anywhere; }
 .pick-odds { color:#b9c2c9; font-size:.76rem; font-weight:900; margin-top:2px; }
+.draft-power-rating { color:#b9c2c9; font-size:.72rem; font-weight:900; margin-top:3px; }
 .current-pick-box { border:3px solid var(--coach-color); box-shadow:0 0 18px var(--coach-color); border-radius:8px; padding:12px; margin:.75rem 0 1rem; text-align:center; font-size:clamp(1.05rem, 4vw, 1.65rem); font-weight:1000; }
 .current-pick-box span { color:var(--coach-color); }
 .current-pick-accent { color:var(--coach-color); }
@@ -117,6 +118,9 @@ input, textarea, select { color:#fff!important; }
 .st-key-public-draft-undo div[data-testid="stButton"] > button:disabled * { color:#000000!important; }
 .draft-actions { display:grid; grid-template-columns:repeat(auto-fit, minmax(120px, 1fr)); gap:8px; margin:.3rem 0 .8rem; }
 .draft-status-line { display:flex; flex-wrap:wrap; gap:8px; align-items:center; color:#b9c2c9; font-size:.9rem; margin:-.35rem 0 .6rem; }
+.coach-power-foot { border-top:1px solid rgba(255,255,255,.12); margin-top:9px; padding-top:8px; text-align:center; color:#ffd54a; font-size:.82rem; font-weight:1000; }
+.power-rating-note { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#070707; color:#eaf7fa; padding:10px 12px; margin:.75rem 0 1rem; font-size:.86rem; line-height:1.42; }
+.power-rating-note b { color:#ffd54a; }
 .st-key-admin-start-draft div[data-testid="stButton"] > button { background:#24b84a!important; border-color:#6dff91!important; color:#001706!important; }
 .st-key-admin-stop-draft div[data-testid="stButton"] > button { background:#ff1f1f!important; border-color:#ff8c8c!important; color:#fff!important; }
 .st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button { background:#ffff00!important; border-color:#ffff99!important; color:#000000!important; }
@@ -203,6 +207,9 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .draft-board td { padding:3px; }
     .pick-cell { min-height:62px; padding:4px; }
     .pick-choice { font-size:.72rem; }
+    .draft-power-rating { font-size:.66rem; }
+    .coach-power-foot { font-size:.75rem; }
+    .power-rating-note { font-size:.78rem; padding:8px 9px; }
     .draft-save-note { font-size:.74rem; margin:.2rem 0 .1rem; }
     .on-deck-line { min-height:40px; padding:5px 8px; font-size:.82rem; }
     .on-deck-tight { margin:.05rem 0 .2rem; }
@@ -287,6 +294,35 @@ DEFAULT_PLAYERS = [
     "Victor Gyokeres (Sweden)",
     "Arda Guler (Türkiye)",
 ]
+
+PLAYER_POWER_RATINGS = {
+    "Kylian Mbappe (France)": 91,
+    "Erling Haaland (Norway)": 91,
+    "Vinicius Junior (Brazil)": 90,
+    "Harry Kane (England)": 90,
+    "Mohamed Salah (Egypt)": 89,
+    "Lautaro Martinez (Argentina)": 89,
+    "Lamine Yamal (Spain)": 88,
+    "Ousmane Dembele (France)": 88,
+    "Raphinha (Brazil)": 88,
+    "Bukayo Saka (England)": 87,
+    "Lionel Messi (Argentina)": 87,
+    "Luis Diaz (Colombia)": 86,
+    "Julian Alvarez (Argentina)": 86,
+    "Cristiano Ronaldo (Portugal)": 86,
+    "Victor Gyokeres (Sweden)": 86,
+    "Neymar Jr. (Brazil)": 85,
+    "Nico Williams (Spain)": 85,
+    "Michael Olise (France)": 84,
+    "Sadio Mane (Senegal)": 84,
+    "Omar Marmoush (Egypt)": 84,
+    "Antoine Semenyo (Ghana)": 82,
+    "Desire Doue (France)": 82,
+    "Jeremy Doku (Belgium)": 82,
+    "Patrick Schick (Czechia)": 82,
+    "Arda Guler (Türkiye)": 82,
+}
+POWER_RATING_WEIGHTS = {"odds": 45, "fifa": 35, "player": 20}
 
 WORLD_CUP_TEAMS = [
     {"name": "Canada", "flag": "🇨🇦", "confed": "Concacaf"},
@@ -791,6 +827,81 @@ def team_draft_sort_key(team, state):
     name = canonical_team_name(team.get("name", ""))
     probability = american_odds_implied_probability(state.get("odds", {}).get(name))
     return (-probability, clean_key(name))
+
+
+def normalize_to_100(value, low, high):
+    if high <= low:
+        return 50.0
+    return max(0.0, min(100.0, ((value - low) / (high - low)) * 100))
+
+
+def original_odds_for_team(team_name):
+    name = canonical_team_name(team_name)
+    return DEFAULT_ODDS.get(name, "")
+
+
+def team_odds_power(team_name):
+    probabilities = [
+        american_odds_implied_probability(DEFAULT_ODDS.get(team["name"]))
+        for team in WORLD_CUP_TEAMS
+    ]
+    probability = american_odds_implied_probability(original_odds_for_team(team_name))
+    return normalize_to_100(probability, min(probabilities), max(probabilities))
+
+
+def team_fifa_power(team_name):
+    ranking = FIFA_RANKINGS.get(canonical_team_name(team_name), {})
+    points = ranking.get("points")
+    all_points = [item["points"] for item in FIFA_RANKINGS.values()]
+    if points is None or not all_points:
+        return None
+    return normalize_to_100(float(points), min(all_points), max(all_points))
+
+
+def player_rating_power(player):
+    rating = PLAYER_POWER_RATINGS.get(str(player or "").strip())
+    if rating is None:
+        return None
+    ratings = list(PLAYER_POWER_RATINGS.values())
+    return normalize_to_100(float(rating), min(ratings), max(ratings))
+
+
+def average_or_none(values):
+    clean_values = [float(value) for value in values if value is not None]
+    if not clean_values:
+        return None
+    return sum(clean_values) / len(clean_values)
+
+
+def coach_power_rating_breakdown(state, coach):
+    data = state.get("teams", {}).get(coach, {})
+    teams = [canonical_team_name(team) for team in data.get("national_teams", []) if canonical_team_name(team)]
+    players = [str(player).strip() for player in data.get("star_players", []) if str(player).strip()]
+    odds_score = average_or_none(team_odds_power(team) for team in teams)
+    fifa_score = average_or_none(team_fifa_power(team) for team in teams)
+    player_score = average_or_none(player_rating_power(player) for player in players)
+    weighted_parts = []
+    if odds_score is not None:
+        weighted_parts.append((odds_score, POWER_RATING_WEIGHTS["odds"]))
+    if fifa_score is not None:
+        weighted_parts.append((fifa_score, POWER_RATING_WEIGHTS["fifa"]))
+    if player_score is not None:
+        weighted_parts.append((player_score, POWER_RATING_WEIGHTS["player"]))
+    if not weighted_parts:
+        return {"rating": None, "odds": None, "fifa": None, "player": None}
+    total_weight = sum(weight for _, weight in weighted_parts)
+    rating = sum(score * weight for score, weight in weighted_parts) / total_weight
+    return {
+        "rating": rating,
+        "odds": odds_score,
+        "fifa": fifa_score,
+        "player": player_score,
+    }
+
+
+def format_power_rating(state, coach):
+    rating = coach_power_rating_breakdown(state, coach).get("rating")
+    return "--" if rating is None else f"{rating:.1f}"
 
 
 def fifa_expected_points(team_name):
@@ -1657,6 +1768,7 @@ def render_standings(state, scores):
         coach_state = state["teams"][coach]
         teams = ", ".join(display_team_html(team, include_info=False) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
         players = ", ".join(display_player_html(player, include_info=False) for player in coach_state.get("star_players", [])) or "No players drafted yet"
+        power_rating = format_power_rating(state, coach)
         badge = f"#{rank_by_coach[coach]}"
         if rank_by_coach[coach] == 1:
             badge = "Gold"
@@ -1687,11 +1799,25 @@ def render_standings(state, scores):
   <div class='metric-row'><span>Best Cinderella</span><b>{html.escape(item["cinderella_team"] or "None")} {item["cinderella"]:+.1f}</b></div>
   <div class='asset-list'><b>Teams:</b> {teams}</div>
   <div class='asset-list'><b>Players:</b> {players}</div>
+  <div class='coach-power-foot'>Power Rating: {html.escape(power_rating)}</div>
 </div>
 """
         )
     cards.append("</div>")
     st.markdown("".join(cards), unsafe_allow_html=True)
+    render_power_rating_explanation()
+
+
+def render_power_rating_explanation():
+    st.markdown(
+        f"""
+<div class='power-rating-note'>
+  <b>Power Rating</b><br>
+  This is an informational preseason strength rating for each coach's drafted roster. It does not add fantasy points and does not decide payouts. The app uses original team betting odds, locked FIFA team ranking points from {html.escape(FIFA_RANKING_LOCK_DATE)}, and fixed FIFA-style player ratings for drafted star players. Odds count 45%, FIFA team strength counts 35%, and player rating counts 20%. Before a coach has drafted players, the app re-weights the available team inputs so early draft ratings still make sense. Higher means the drafted roster was stronger on paper before tournament results started changing the real standings.
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
 
 def coach_mini_html(coach, color):
@@ -2234,7 +2360,10 @@ def render_draft_board(title, sequence, picks, field, state):
     rows.append("<th class='round-head'>Round</th>")
     for coach in COACHES:
         color = state["teams"][coach]["color"]
-        rows.append(f"<th style='border-top:4px solid {html.escape(color)}'>{html.escape(coach)}</th>")
+        power_rating = format_power_rating(state, coach)
+        rows.append(
+            f"<th style='border-top:4px solid {html.escape(color)}'><div>{html.escape(coach)}</div><div class='draft-power-rating'>PR {html.escape(power_rating)}</div></th>"
+        )
     rows.append("</tr></thead><tbody>")
     for round_number in range(1, rounds + 1):
         rows.append("<tr>")
