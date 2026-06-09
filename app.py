@@ -181,6 +181,9 @@ input, textarea, select { color:#fff!important; }
 .match-card { border:1px solid #292929; border-radius:8px; background:#070707; padding:10px 12px; margin-bottom:8px; }
 .match-line { display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-weight:1000; }
 .match-score { color:#ffd54a; }
+.match-player-line { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:5px; }
+.match-player-chip { display:inline-flex; align-items:center; gap:5px; border:1px solid rgba(255,255,255,.14); border-radius:6px; background:#0d0d0d; color:#eaf7fa; padding:2px 6px; font-size:.76rem; font-weight:900; }
+.match-player-dot { width:.55rem; height:.55rem; border-radius:50%; background:var(--coach-color); box-shadow:0 0 7px var(--coach-color); flex:0 0 auto; }
 .matches-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
 .match-section-spacer { height:14px; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
@@ -2746,6 +2749,53 @@ def upcoming_matches(matches, days=3):
     return sorted(upcoming, key=lambda match: match_datetime(match.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC")))
 
 
+def drafted_coach_for_player(state, player):
+    player = str(player or "").strip()
+    for coach, data in state["teams"].items():
+        if player in data.get("star_players", []):
+            return coach
+    return ""
+
+
+def match_player_points_by_coach(state, match):
+    points_by_coach = {}
+    for goal in match.get("goals", []):
+        scorer = match_player_to_pool(goal.get("scorer"), state.get("players", []))
+        if scorer:
+            coach = drafted_coach_for_player(state, scorer)
+            if coach:
+                points_by_coach[coach] = points_by_coach.get(coach, 0) + 4
+        assist = match_player_to_pool(goal.get("assist"), state.get("players", []))
+        if assist:
+            coach = drafted_coach_for_player(state, assist)
+            if coach:
+                points_by_coach[coach] = points_by_coach.get(coach, 0) + 3
+    return points_by_coach
+
+
+def owned_players_in_match(state, match):
+    teams_in_match = {canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))}
+    rows = []
+    for coach, data in state["teams"].items():
+        color = data.get("color") or "#FFD54A"
+        for player in data.get("star_players", []):
+            if player_country(player) in teams_in_match:
+                rows.append((coach, color, player))
+    return sorted(rows, key=lambda item: (COACHES.index(item[0]) if item[0] in COACHES else 999, clean_key(player_base_name(item[2]))))
+
+
+def match_player_line_html(state, match):
+    rows = owned_players_in_match(state, match)
+    if not rows:
+        return "<span class='subtle'>No drafted players in this match.</span>"
+    chips = []
+    for coach, color, player in rows:
+        chips.append(
+            f"<span class='match-player-chip'><span class='match-player-dot' style='--coach-color:{html.escape(color)}'></span>{html.escape(player_base_name(player))} <span class='subtle'>({html.escape(coach)})</span></span>"
+        )
+    return "".join(chips)
+
+
 def render_match_cards(state, matches, show_group=False):
     matches = [match for match in matches if "friendly" not in str(match.get("stage") or "").lower()]
     if not matches:
@@ -2761,13 +2811,17 @@ def render_match_cards(state, matches, show_group=False):
         if match.get("home_score") is not None and match.get("away_score") is not None:
             score_text = f"{match['home_score']} - {match['away_score']}"
         chips = []
+        points_by_coach = match_player_points_by_coach(state, match)
+        for coach, _, _ in owned_players_in_match(state, match):
+            points_by_coach.setdefault(coach, 0)
         for team_name, coach in [(home, home_coach), (away, away_coach)]:
             if coach:
-                color = state["teams"][coach]["color"]
-                points = score_match_for_team(match, team_name)
-                chips.append(
-                    f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
-                )
+                points_by_coach[coach] = points_by_coach.get(coach, 0) + score_match_for_team(match, team_name)
+        for coach, points in sorted(points_by_coach.items(), key=lambda item: (COACHES.index(item[0]) if item[0] in COACHES else 999, item[0])):
+            color = state["teams"][coach]["color"]
+            chips.append(
+                f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
+            )
         date_text = format_match_date(match.get("date"))
         stage = str(match.get("stage") or "")
         if show_group and stage_is_group(stage):
@@ -2785,7 +2839,8 @@ def render_match_cards(state, matches, show_group=False):
     <span>{display_team_html(away, '', include_info=True)}</span>
   </div>
   <div class='subtle'>{detail_text}</div>
-  <div>{''.join(chips) or "<span class='subtle'>No drafted teams in this match yet.</span>"}</div>
+  <div>{''.join(chips) or "<span class='subtle'>No coach points in this match yet.</span>"}</div>
+  <div class='match-player-line'>{match_player_line_html(state, match)}</div>
 </div>
 """
         )
