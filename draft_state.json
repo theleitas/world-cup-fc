@@ -93,7 +93,8 @@
       "national_teams": [
         "Argentina",
         "Netherlands",
-        "Switzerland"
+        "Switzerland",
+        "Australia"
       ],
       "star_players": []
     }
@@ -315,6 +316,13 @@
       "coach": "Jayme",
       "team": "Scotland",
       "picked_at": "2026-06-09T05:38:55.535274-04:00"
+    },
+    {
+      "pick": 32,
+      "round": 4,
+      "coach": "Spencer",
+      "team": "Australia",
+      "picked_at": "2026-06-09T18:01:20.036750-04:00"
     }
   ],
   "player_picks": [],
@@ -457,6 +465,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -485,6 +496,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -513,6 +527,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -541,6 +558,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -569,6 +589,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -597,6 +620,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -625,6 +651,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -653,6 +682,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -681,6 +713,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -709,6 +744,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -737,6 +775,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -765,6 +806,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -793,6 +837,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -821,6 +868,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -849,6 +899,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -877,6 +930,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -905,6 +961,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -933,6 +992,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -961,6 +1023,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -989,6 +1054,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1017,6 +1085,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1045,6 +1116,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1073,6 +1147,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1101,6 +1178,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1129,6 +1209,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1157,6 +1240,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1185,6 +1271,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1213,6 +1302,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1241,6 +1333,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1269,6 +1364,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1297,6 +1395,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1325,6 +1426,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1353,6 +1457,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1381,6 +1488,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1409,6 +1519,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1437,6 +1550,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1465,6 +1581,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1493,6 +1612,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1521,6 +1643,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1549,6 +1674,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1577,6 +1705,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1605,6 +1736,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1633,6 +1767,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1661,6 +1798,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1689,6 +1829,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1717,6 +1860,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1745,6 +1891,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1773,6 +1922,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1801,6 +1953,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1829,6 +1984,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1857,6 +2015,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1885,6 +2046,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1913,6 +2077,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1941,6 +2108,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1969,6 +2139,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -1997,6 +2170,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2025,6 +2201,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2053,6 +2232,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2081,6 +2263,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2109,6 +2294,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2137,6 +2325,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2165,6 +2356,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2193,6 +2387,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2221,6 +2418,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2249,6 +2449,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2277,6 +2480,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2305,6 +2511,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2333,6 +2542,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2361,6 +2573,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2389,6 +2604,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2417,6 +2635,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2445,6 +2666,9 @@
       "home_score": null,
       "away_score": null,
       "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
       "score_node": {
         "winner": null,
         "full_time": {
@@ -2669,7 +2893,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780997935,
+  "current_pick_started_at": 1781042480,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -2739,7 +2963,8 @@
       "national_teams": [
         "Argentina",
         "Netherlands",
-        "Switzerland"
+        "Switzerland",
+        "Australia"
       ],
       "star_players": []
     }
