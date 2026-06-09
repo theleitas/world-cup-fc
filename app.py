@@ -101,11 +101,11 @@ input, textarea, select { color:#fff!important; }
 .roster-grid { display:grid; gap:5px; width:100%; border-radius:8px; background:rgba(185,194,201,.08); border:1px solid rgba(185,194,201,.16); padding:5px; margin-top:8px; }
 .team-roster-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
 .player-roster-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
-.roster-cell { min-height:58px; border:1px solid rgba(255,255,255,.12); border-radius:7px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-align:center; padding:6px 4px; overflow:hidden; }
+.roster-cell { min-height:66px; border:1px solid rgba(255,255,255,.12); border-radius:7px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; text-align:center; padding:7px 4px; overflow:hidden; }
 .roster-cell-empty { background:rgba(255,255,255,.025); border-color:color-mix(in srgb, var(--coach-color) 42%, rgba(255,255,255,.12)); box-shadow:inset 0 0 10px color-mix(in srgb, var(--coach-color) 20%, transparent); }
-.roster-flag { display:flex; align-items:center; justify-content:center; min-height:20px; font-size:1.05rem; line-height:1; }
-.roster-flag .flag-icon { margin:0; width:1.28em; height:1.28em; vertical-align:0; }
-.roster-name { color:#fff; font-size:.68rem; line-height:1.06; font-weight:950; overflow-wrap:anywhere; max-width:100%; }
+.roster-flag { display:flex; align-items:center; justify-content:center; min-height:24px; font-size:1.26rem; line-height:1; }
+.roster-flag .flag-icon { margin:0; width:1.54em; height:1.54em; vertical-align:0; }
+.roster-name { color:#fff; font-size:.82rem; line-height:1.06; font-weight:950; overflow-wrap:anywhere; max-width:100%; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
 .draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
