@@ -895,8 +895,8 @@ def average_or_none(values):
     return sum(clean_values) / len(clean_values)
 
 
-def coach_power_rating_breakdown(state, coach):
-    data = state.get("teams", {}).get(coach, {})
+def coach_power_rating_breakdown(state, coach, rosters=None):
+    data = (rosters or state.get("teams", {})).get(coach, {})
     teams = [canonical_team_name(team) for team in data.get("national_teams", []) if canonical_team_name(team)]
     players = [str(player).strip() for player in data.get("star_players", []) if str(player).strip()]
     odds_score = average_or_none(team_odds_power(team) for team in teams)
@@ -921,8 +921,8 @@ def coach_power_rating_breakdown(state, coach):
     }
 
 
-def format_power_rating(state, coach):
-    rating = coach_power_rating_breakdown(state, coach).get("rating")
+def format_power_rating(state, coach, rosters=None):
+    rating = coach_power_rating_breakdown(state, coach, rosters=rosters).get("rating")
     return "--" if rating is None else f"{rating:.1f}"
 
 
@@ -960,6 +960,16 @@ def default_coaches():
     }
 
 
+def empty_official_rosters():
+    return {
+        coach: {
+            "national_teams": [],
+            "star_players": [],
+        }
+        for coach in COACHES
+    }
+
+
 def seed_matches():
     return [
         {
@@ -983,6 +993,7 @@ def default_state():
         "draft_enabled": True,
         "draft_active": True,
         "teams": default_coaches(),
+        "official_rosters": empty_official_rosters(),
         "team_picks": [],
         "player_picks": [],
         "players": list(DEFAULT_PLAYERS),
@@ -1007,6 +1018,7 @@ def normalize_state(state):
     state.setdefault("app_title", base["app_title"])
     state.setdefault("draft_enabled", base["draft_enabled"])
     state.setdefault("draft_active", True)
+    has_official_rosters = isinstance(state.get("official_rosters"), dict)
     state.setdefault("team_picks", [])
     state.setdefault("player_picks", [])
     state.setdefault("players", list(DEFAULT_PLAYERS))
@@ -1068,7 +1080,11 @@ def normalize_state(state):
 
     state["team_picks"] = normalize_pick_list(state.get("team_picks"), TEAM_DRAFT_SEQUENCE, "team")
     state["player_picks"] = normalize_pick_list(state.get("player_picks"), PLAYER_DRAFT_SEQUENCE, "player")
-    apply_picks_to_rosters(state)
+    state["official_rosters"] = normalize_official_rosters(
+        state.get("official_rosters") if has_official_rosters else None,
+        fallback=build_rosters_from_picks(state),
+    )
+    apply_official_rosters_to_teams(state)
 
     state["matches"] = [normalize_match(match, index) for index, match in enumerate(state.get("matches") or [])]
     state["player_stats"] = normalize_player_stats(state.get("player_stats"), state["players"])
@@ -1106,20 +1122,85 @@ def normalize_pick_list(raw_picks, sequence, field):
     return sorted(picks, key=lambda item: item["pick"])
 
 
-def apply_picks_to_rosters(state):
-    for coach in COACHES:
-        state["teams"][coach]["national_teams"] = []
-        state["teams"][coach]["star_players"] = []
+def build_rosters_from_picks(state):
+    rosters = empty_official_rosters()
     for pick in state.get("team_picks", []):
         coach = pick.get("coach")
         team = canonical_team_name(pick.get("team"))
-        if coach in state["teams"] and team not in state["teams"][coach]["national_teams"]:
-            state["teams"][coach]["national_teams"].append(team)
+        if coach in rosters and team and team not in rosters[coach]["national_teams"]:
+            rosters[coach]["national_teams"].append(team)
     for pick in state.get("player_picks", []):
         coach = pick.get("coach")
         player = str(pick.get("player") or "").strip()
-        if coach in state["teams"] and player not in state["teams"][coach]["star_players"]:
-            state["teams"][coach]["star_players"].append(player)
+        if coach in rosters and player and player not in rosters[coach]["star_players"]:
+            rosters[coach]["star_players"].append(player)
+    return rosters
+
+
+def normalize_official_rosters(raw_rosters, fallback=None):
+    fallback = fallback or empty_official_rosters()
+    source = raw_rosters if isinstance(raw_rosters, dict) else fallback
+    rosters = empty_official_rosters()
+    used_teams = set()
+    used_players = set()
+    for coach in COACHES:
+        prior = source.get(coach) if isinstance(source.get(coach), dict) else fallback.get(coach, {})
+        for item in prior.get("national_teams", []):
+            team = canonical_team_name(item)
+            if team and team not in used_teams:
+                rosters[coach]["national_teams"].append(team)
+                used_teams.add(team)
+        for item in prior.get("star_players", []):
+            player = str(item or "").strip()
+            if player and player not in used_players:
+                rosters[coach]["star_players"].append(player)
+                used_players.add(player)
+    for coach in COACHES:
+        fallback_roster = fallback.get(coach, {})
+        for item in fallback_roster.get("national_teams", []):
+            team = canonical_team_name(item)
+            if team and team not in used_teams:
+                rosters[coach]["national_teams"].append(team)
+                used_teams.add(team)
+        for item in fallback_roster.get("star_players", []):
+            player = str(item or "").strip()
+            if player and player not in used_players:
+                rosters[coach]["star_players"].append(player)
+                used_players.add(player)
+    return rosters
+
+
+def apply_official_rosters_to_teams(state):
+    rosters = normalize_official_rosters(state.get("official_rosters"), fallback=empty_official_rosters())
+    state["official_rosters"] = rosters
+    for coach in COACHES:
+        state["teams"][coach]["national_teams"] = list(rosters[coach]["national_teams"])
+        state["teams"][coach]["star_players"] = list(rosters[coach]["star_players"])
+
+
+def apply_picks_to_rosters(state):
+    state["official_rosters"] = build_rosters_from_picks(state)
+    apply_official_rosters_to_teams(state)
+
+
+def remove_official_asset(state, field, asset):
+    asset = canonical_team_name(asset) if field == "national_teams" else str(asset or "").strip()
+    if not asset:
+        return
+    rosters = state.setdefault("official_rosters", empty_official_rosters())
+    for coach in COACHES:
+        coach_roster = rosters.setdefault(coach, {"national_teams": [], "star_players": []})
+        coach_roster[field] = [item for item in coach_roster.get(field, []) if item != asset]
+
+
+def add_official_asset(state, coach, field, asset):
+    asset = canonical_team_name(asset) if field == "national_teams" else str(asset or "").strip()
+    if coach not in COACHES or not asset:
+        return
+    state.setdefault("official_rosters", empty_official_rosters())
+    remove_official_asset(state, field, asset)
+    state["official_rosters"][coach][field].append(asset)
+    apply_official_rosters_to_teams(state)
 
 
 def normalize_match(match, index):
@@ -2339,12 +2420,14 @@ def undo_last_pick():
     def mutator(state):
         state = normalize_state(state)
         if state.get("player_picks"):
-            state["player_picks"].pop()
+            pick = state["player_picks"].pop()
+            remove_official_asset(state, "star_players", pick.get("player"))
         elif state.get("team_picks"):
-            state["team_picks"].pop()
+            pick = state["team_picks"].pop()
+            remove_official_asset(state, "national_teams", pick.get("team"))
         else:
             return False
-        apply_picks_to_rosters(state)
+        apply_official_rosters_to_teams(state)
         state["current_pick_started_at"] = int(time.time())
         return True
     return mutate_shared_state(mutator, "Undo last draft pick")
@@ -2355,6 +2438,7 @@ def reset_rosters_and_draft():
         state = normalize_state(state)
         state["team_picks"] = []
         state["player_picks"] = []
+        state["official_rosters"] = empty_official_rosters()
         for coach in COACHES:
             state["teams"][coach]["national_teams"] = []
             state["teams"][coach]["star_players"] = []
@@ -2402,7 +2486,7 @@ def render_make_pick_prompt(stage_label, current, state):
     )
 
 
-def render_draft_board(title, sequence, picks, field, state):
+def render_draft_board(title, sequence, picks, field, state, power_rosters=None):
     st.markdown(f"<div class='section-title'>{html.escape(title)}</div>", unsafe_allow_html=True)
     pick_map = pick_by_number(picks)
     rounds = max(item["round"] for item in sequence)
@@ -2411,7 +2495,7 @@ def render_draft_board(title, sequence, picks, field, state):
     rows.append("<th class='round-head'>Round</th>")
     for coach in COACHES:
         color = state["teams"][coach]["color"]
-        power_rating = format_power_rating(state, coach)
+        power_rating = format_power_rating(state, coach, rosters=power_rosters)
         rows.append(
             f"<th style='border-top:4px solid {html.escape(color)}'><div>{html.escape(coach)}</div><div class='draft-power-rating'>PR {html.escape(power_rating)}</div></th>"
         )
@@ -2464,7 +2548,7 @@ def make_team_pick(team_name):
                 "picked_at": datetime.now(ZoneInfo("America/New_York")).isoformat(),
             }
         )
-        apply_picks_to_rosters(state)
+        add_official_asset(state, pick["coach"], "national_teams", team_name_clean)
         state["current_pick_started_at"] = int(time.time())
         return True
 
@@ -2491,7 +2575,7 @@ def make_player_pick(player):
                 "picked_at": datetime.now(ZoneInfo("America/New_York")).isoformat(),
             }
         )
-        apply_picks_to_rosters(state)
+        add_official_asset(state, pick["coach"], "star_players", player_clean)
         state["current_pick_started_at"] = int(time.time())
         return True
 
@@ -2786,6 +2870,103 @@ def draft_status_summary(state):
     )
 
 
+def official_owner_for_asset(state, field, asset):
+    asset = canonical_team_name(asset) if field == "national_teams" else str(asset or "").strip()
+    for coach, roster in state.get("official_rosters", {}).items():
+        if asset in roster.get(field, []):
+            return coach
+    return COACHES[0]
+
+
+def draft_pick_meta_by_asset(picks, field):
+    meta = {}
+    for pick in picks:
+        asset = canonical_team_name(pick.get(field)) if field == "team" else str(pick.get(field) or "").strip()
+        if asset:
+            meta[asset] = {
+                "draft_pick": int(pick.get("pick") or 0),
+                "drafted_by": pick.get("coach") or "",
+            }
+    return meta
+
+
+def official_roster_rows(state, field):
+    pick_field = "team" if field == "national_teams" else "player"
+    picks = state.get("team_picks", []) if field == "national_teams" else state.get("player_picks", [])
+    meta_by_asset = draft_pick_meta_by_asset(picks, pick_field)
+    assets = set(meta_by_asset)
+    for roster in state.get("official_rosters", {}).values():
+        assets.update(roster.get(field, []))
+    rows = []
+    for asset in sorted(assets, key=lambda item: (meta_by_asset.get(item, {}).get("draft_pick") or 9999, clean_key(item))):
+        meta = meta_by_asset.get(asset, {})
+        rows.append(
+            {
+                "Asset": asset,
+                "Draft Pick": meta.get("draft_pick") or "",
+                "Drafted By": meta.get("drafted_by") or "",
+                "Current Owner": official_owner_for_asset(state, field, asset),
+            }
+        )
+    return rows
+
+
+def render_official_roster_editor(state):
+    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+    st.subheader("Official Roster Editor")
+    st.caption("Move teams or players here after trades. Scoring uses Current Owner. The draft table remains the original pick record.")
+
+    team_rows = official_roster_rows(state, "national_teams")
+    player_rows = official_roster_rows(state, "star_players")
+    edited_teams = st.data_editor(
+        pd.DataFrame(team_rows, columns=["Asset", "Draft Pick", "Drafted By", "Current Owner"]),
+        hide_index=True,
+        width="stretch",
+        num_rows="fixed",
+        disabled=["Asset", "Draft Pick", "Drafted By"],
+        column_config={"Current Owner": st.column_config.SelectboxColumn(options=COACHES)},
+        key="official-team-roster-editor",
+    )
+    edited_players = st.data_editor(
+        pd.DataFrame(player_rows, columns=["Asset", "Draft Pick", "Drafted By", "Current Owner"]),
+        hide_index=True,
+        width="stretch",
+        num_rows="fixed",
+        disabled=["Asset", "Draft Pick", "Drafted By"],
+        column_config={"Current Owner": st.column_config.SelectboxColumn(options=COACHES)},
+        key="official-player-roster-editor",
+    )
+    if st.button("Save Official Rosters", key="save-official-rosters", width="stretch"):
+        def mutator(fresh):
+            fresh = normalize_state(fresh)
+            fresh["official_rosters"] = empty_official_rosters()
+            for _, row in edited_teams.iterrows():
+                team = canonical_team_name(row.get("Asset"))
+                owner = str(row.get("Current Owner") or "").strip()
+                if team and owner in COACHES:
+                    add_official_asset(fresh, owner, "national_teams", team)
+            for _, row in edited_players.iterrows():
+                player = str(row.get("Asset") or "").strip()
+                owner = str(row.get("Current Owner") or "").strip()
+                if player and owner in COACHES:
+                    add_official_asset(fresh, owner, "star_players", player)
+            apply_official_rosters_to_teams(fresh)
+            return True
+        ok, _ = mutate_shared_state(mutator, "Update official rosters")
+        if ok:
+            st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
+def render_completed_draft_table(state):
+    if not full_draft_complete(state):
+        return
+    draft_rosters = build_rosters_from_picks(state)
+    with st.expander("Draft Table", expanded=False):
+        render_draft_board("Team Draft", TEAM_DRAFT_SEQUENCE, state["team_picks"], "team", state, power_rosters=draft_rosters)
+        render_draft_board("Player Draft", PLAYER_DRAFT_SEQUENCE, state["player_picks"], "player", state, power_rosters=draft_rosters)
+
+
 def render_admin(state):
     st.markdown("<div class='section-title admin-title'>Admin Only</div>", unsafe_allow_html=True)
     if st.session_state.pop("clear_admin_password", False):
@@ -2819,7 +3000,8 @@ def render_admin(state):
         st.caption(status_text)
         st.caption("Draft order is fixed and intentionally not editable.")
         draft_live = bool(state.get("draft_active"))
-        has_any_picks = bool(state.get("team_picks") or state.get("player_picks"))
+        draft_complete = full_draft_complete(state)
+        has_any_picks = bool(state.get("team_picks") or state.get("player_picks")) and not draft_complete
         c1, c2, c3, c4 = st.columns(4, gap="small")
         with c1:
             if st.button("Enable Draft", key="admin-enable-draft"):
@@ -2857,6 +3039,8 @@ def render_admin(state):
                 st.session_state["clear_admin_password"] = True
                 st.rerun()
         st.markdown("</div>", unsafe_allow_html=True)
+
+        render_official_roster_editor(state)
 
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Coach Colors")
@@ -3035,4 +3219,5 @@ else:
     render_drafted_player_stats(state)
     render_cinderella_standings(state)
 render_payout_descriptions()
+render_completed_draft_table(state)
 render_admin(state)
