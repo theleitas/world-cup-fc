@@ -2349,9 +2349,8 @@ def refreshed_elapsed_label(timestamp):
     except (TypeError, ValueError):
         timestamp = int(time.time())
     elapsed = max(0, int(time.time()) - timestamp)
-    hours = elapsed // 3600
-    minutes = (elapsed % 3600) // 60
-    return f"Refreshed {hours} hours and {minutes} minutes ago"
+    unit = "second" if elapsed == 1 else "seconds"
+    return f"Refreshed {elapsed} {unit} ago"
 
 
 def render_draft_sync_bar(state):
