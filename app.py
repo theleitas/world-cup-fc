@@ -86,6 +86,17 @@ input, textarea, select { color:#fff!important; }
 .award-line { color:var(--coach-color); font-size:.84rem; line-height:1.18; font-weight:950; text-shadow:0 0 7px var(--coach-color); }
 .metric-row { display:flex; justify-content:space-between; gap:10px; border-bottom:1px solid rgba(255,255,255,.11); padding:7px 0; font-size:.92rem; }
 .metric-row b { color:#fff; }
+.side-bet-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; margin:7px 0; }
+.side-bet-pill { border:1px solid rgba(255,255,255,.12); border-radius:8px; background:#050505; padding:6px 5px; min-width:0; text-align:center; }
+.side-bet-pill span { display:block; color:#b9c2c9; font-size:.65rem; font-weight:900; text-transform:uppercase; line-height:1.05; }
+.side-bet-pill b { display:block; color:#fff; font-size:.78rem; line-height:1.12; overflow-wrap:anywhere; margin-top:2px; }
+.coach-live-impact { border-top:1px solid rgba(255,255,255,.12); margin-top:8px; padding-top:8px; }
+.live-impact-title { display:flex; align-items:center; justify-content:center; gap:6px; color:#ffd54a; font-size:.78rem; font-weight:1000; text-transform:uppercase; }
+.live-dot { width:.55rem; height:.55rem; border-radius:50%; background:#ff1744; box-shadow:0 0 9px #ff1744; display:inline-block; }
+.coach-live-match { border:1px solid rgba(255,23,68,.35); border-radius:8px; background:#090606; padding:6px 7px; margin-top:6px; }
+.coach-live-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:5px; font-size:.76rem; font-weight:1000; text-align:center; }
+.coach-live-meta { color:#b9c2c9; text-align:center; font-size:.68rem; font-weight:900; margin-top:3px; }
+.coach-live-players { color:#eaf7fa; text-align:center; font-size:.68rem; line-height:1.2; font-weight:850; margin-top:4px; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
 .draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
@@ -221,6 +232,10 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .coach-card { min-height:auto; }
     .coach-face, .coach-face-placeholder { width:60px; height:60px; }
     .score-badge { width:58px; height:58px; font-size:1.2rem; }
+    .side-bet-grid { gap:4px; }
+    .side-bet-pill { padding:5px 3px; }
+    .side-bet-pill span { font-size:.58rem; }
+    .side-bet-pill b { font-size:.68rem; }
     .matches-grid { grid-template-columns:1fr; }
     .available-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:5px; }
     .draft-board table { min-width:720px; font-size:.74rem; }
@@ -1221,6 +1236,9 @@ def normalize_match(match, index):
         "home_score": none_or_int(match.get("home_score")),
         "away_score": none_or_int(match.get("away_score")),
         "status": str(match.get("status") or "Scheduled"),
+        "minute": none_or_int(match.get("minute")),
+        "elapsed": none_or_int(match.get("elapsed")),
+        "clock": str(match.get("clock") or ""),
         "score_node": score_node,
         "goals": [normalize_goal_event(goal) for goal in goals],
     }
@@ -1304,6 +1322,9 @@ def parse_match_payload_item(item, index):
             "goals": goals,
             "group": item.get("group"),
             "matchday": item.get("matchday"),
+            "minute": item.get("minute"),
+            "elapsed": item.get("elapsed"),
+            "clock": item.get("clock"),
         },
         index,
     )
@@ -1876,6 +1897,10 @@ def render_standings(state, scores):
         teams = ", ".join(display_team_html(team, include_info=False) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
         players = ", ".join(display_player_html(player, include_info=False) for player in coach_state.get("star_players", [])) or "No players drafted yet"
         power_rating = format_power_rating(state, coach)
+        cinderella_text = "None"
+        if item["cinderella_team"]:
+            cinderella_text = f'{item["cinderella_team"]} {item["cinderella"]:+.1f}'
+        live_html = coach_live_matches_html(state, coach)
         badge = f"#{rank_by_coach[coach]}"
         if rank_by_coach[coach] == 1:
             badge = "Gold"
@@ -1901,11 +1926,14 @@ def render_standings(state, scores):
   </div>
   <div class='metric-row'><span>Overall</span><b>{html.escape(badge)}</b></div>
   <div class='metric-row points-pair'><span>Team Points <b>{int(item["team_points"])}</b></span><span>Player Points <b>{int(item["player_points"])}</b></span></div>
-  <div class='metric-row'><span>Group Stage</span><b>{int(item["group_stage_points"])}</b></div>
-  <div class='metric-row'><span>Empire Builder</span><b>{int(item["empire_count"])} teams / {int(item["empire_goals"])} goals</b></div>
-  <div class='metric-row'><span>Best Cinderella</span><b>{html.escape(item["cinderella_team"] or "None")} {item["cinderella"]:+.1f}</b></div>
+  <div class='side-bet-grid'>
+    <div class='side-bet-pill'><span>Group</span><b>{int(item["group_stage_points"])} pts</b></div>
+    <div class='side-bet-pill'><span>Empire</span><b>{int(item["empire_count"])} teams / {int(item["empire_goals"])}g</b></div>
+    <div class='side-bet-pill'><span>Cinderella</span><b>{html.escape(cinderella_text)}</b></div>
+  </div>
   <div class='asset-list'><b>Teams:</b> {teams}</div>
   <div class='asset-list'><b>Players:</b> {players}</div>
+  {live_html}
   <div class='coach-power-foot'>Power Rating: {html.escape(power_rating)}</div>
 </div>
 """
@@ -2796,6 +2824,117 @@ def match_player_line_html(state, match):
     return "".join(chips)
 
 
+def match_score_text(match):
+    if match.get("home_score") is None or match.get("away_score") is None:
+        return "vs"
+    return f"{match['home_score']} - {match['away_score']}"
+
+
+def match_clock_text(match):
+    status = match_status_label(match)
+    status_key = match_status_key(match)
+    if status_key in {"halftime", "half_time"}:
+        return "Halftime"
+    if status_key == "penalty_shootout":
+        return "Penalties"
+
+    for key in ("minute", "elapsed", "match_minute", "clock"):
+        raw = match.get(key)
+        if raw is None or raw == "":
+            continue
+        text = str(raw)
+        found = re.search(r"\d+", text)
+        if not found:
+            return text
+        minute = int(found.group(0))
+        if minute <= 90:
+            return f"about {max(0, 90 - minute)} min left"
+        return "Extra time"
+    return status or "Live"
+
+
+def match_points_by_coach(state, match):
+    points_by_coach = match_player_points_by_coach(state, match)
+    for coach, _, _ in owned_players_in_match(state, match):
+        points_by_coach.setdefault(coach, 0)
+
+    home = canonical_team_name(match.get("home"))
+    away = canonical_team_name(match.get("away"))
+    for team_name in (home, away):
+        coach = drafted_coach_for_team(state, team_name)
+        if coach:
+            points_by_coach[coach] = points_by_coach.get(coach, 0) + score_match_for_team(match, team_name)
+    return points_by_coach
+
+
+def match_point_chips_html(state, match, only_coach=None):
+    points_by_coach = match_points_by_coach(state, match)
+    if only_coach:
+        if only_coach not in points_by_coach:
+            return ""
+        points_by_coach = {only_coach: points_by_coach[only_coach]}
+
+    chips = []
+    for coach, points in sorted(points_by_coach.items(), key=lambda item: (COACHES.index(item[0]) if item[0] in COACHES else 999, item[0])):
+        color = state["teams"][coach]["color"]
+        chips.append(
+            f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
+        )
+    return "".join(chips)
+
+
+def coach_has_live_asset(state, coach, match):
+    coach_state = state["teams"].get(coach, {})
+    teams_in_match = {canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))}
+    if any(canonical_team_name(team) in teams_in_match for team in coach_state.get("national_teams", [])):
+        return True
+    return any(player_country(player) in teams_in_match for player in coach_state.get("star_players", []))
+
+
+def coach_live_players_html(state, coach, match):
+    teams_in_match = {canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))}
+    players = [
+        player_base_name(player)
+        for player in state["teams"].get(coach, {}).get("star_players", [])
+        if player_country(player) in teams_in_match
+    ]
+    if not players:
+        return ""
+    return "<div class='coach-live-players'>Players: " + html.escape(", ".join(players)) + "</div>"
+
+
+def coach_live_matches_html(state, coach):
+    live_matches = [
+        match
+        for match in state.get("matches", [])
+        if match_is_live(match)
+        and "friendly" not in str(match.get("stage") or "").lower()
+        and coach_has_live_asset(state, coach, match)
+    ]
+    if not live_matches:
+        return ""
+
+    match_blocks = []
+    for match in live_matches[:2]:
+        home = display_team_html(canonical_team_name(match.get("home")), include_info=False)
+        away = display_team_html(canonical_team_name(match.get("away")), include_info=False)
+        chips = match_point_chips_html(state, match, only_coach=coach) or "<span class='subtle'>No points yet.</span>"
+        match_blocks.append(
+            f"""
+    <div class='coach-live-match'>
+      <div class='coach-live-line'><span>{home}</span><span class='match-score'>{html.escape(match_score_text(match))}</span><span>{away}</span></div>
+      <div class='coach-live-meta'>LIVE | {html.escape(match_clock_text(match))}</div>
+      <div>{chips}</div>
+      {coach_live_players_html(state, coach, match)}
+    </div>
+"""
+        )
+    return """
+  <div class='coach-live-impact'>
+    <div class='live-impact-title'><span class='live-dot'></span>Live Impact</div>
+""" + "".join(match_blocks) + "  </div>\n"
+
+
 def render_match_cards(state, matches, show_group=False):
     matches = [match for match in matches if "friendly" not in str(match.get("stage") or "").lower()]
     if not matches:
@@ -2805,23 +2944,6 @@ def render_match_cards(state, matches, show_group=False):
     for match in matches:
         home = canonical_team_name(match.get("home"))
         away = canonical_team_name(match.get("away"))
-        home_coach = drafted_coach_for_team(state, home)
-        away_coach = drafted_coach_for_team(state, away)
-        score_text = "vs"
-        if match.get("home_score") is not None and match.get("away_score") is not None:
-            score_text = f"{match['home_score']} - {match['away_score']}"
-        chips = []
-        points_by_coach = match_player_points_by_coach(state, match)
-        for coach, _, _ in owned_players_in_match(state, match):
-            points_by_coach.setdefault(coach, 0)
-        for team_name, coach in [(home, home_coach), (away, away_coach)]:
-            if coach:
-                points_by_coach[coach] = points_by_coach.get(coach, 0) + score_match_for_team(match, team_name)
-        for coach, points in sorted(points_by_coach.items(), key=lambda item: (COACHES.index(item[0]) if item[0] in COACHES else 999, item[0])):
-            color = state["teams"][coach]["color"]
-            chips.append(
-                f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
-            )
         date_text = format_match_date(match.get("date"))
         stage = str(match.get("stage") or "")
         if show_group and stage_is_group(stage):
@@ -2835,11 +2957,11 @@ def render_match_cards(state, matches, show_group=False):
 <div class='match-card'>
   <div class='match-line'>
     <span>{display_team_html(home, '', include_info=True)}</span>
-    <span class='match-score'>{html.escape(score_text)}</span>
+    <span class='match-score'>{html.escape(match_score_text(match))}</span>
     <span>{display_team_html(away, '', include_info=True)}</span>
   </div>
   <div class='subtle'>{detail_text}</div>
-  <div>{''.join(chips) or "<span class='subtle'>No coach points in this match yet.</span>"}</div>
+  <div>{match_point_chips_html(state, match) or "<span class='subtle'>No coach points in this match yet.</span>"}</div>
   <div class='match-player-line'>{match_player_line_html(state, match)}</div>
 </div>
 """
