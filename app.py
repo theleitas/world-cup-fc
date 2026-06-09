@@ -88,8 +88,8 @@ input, textarea, select { color:#fff!important; }
 .metric-row b { color:#fff; }
 .side-bet-grid { display:grid; grid-template-columns:repeat(3, minmax(0, 1fr)); gap:6px; margin:7px 0; }
 .side-bet-pill { border:1px solid rgba(255,255,255,.12); border-radius:8px; background:#050505; padding:6px 5px; min-width:0; text-align:center; }
-.side-bet-pill span { display:block; color:#b9c2c9; font-size:.65rem; font-weight:900; text-transform:uppercase; line-height:1.05; }
-.side-bet-pill b { display:block; color:#fff; font-size:.78rem; line-height:1.12; overflow-wrap:anywhere; margin-top:2px; }
+.side-bet-pill span { display:block; color:#b9c2c9; font-size:.78rem; font-weight:900; text-transform:uppercase; line-height:1.05; }
+.side-bet-pill b { display:block; color:#fff; font-size:.94rem; line-height:1.12; overflow-wrap:anywhere; margin-top:2px; }
 .coach-live-impact { border-top:1px solid rgba(185,194,201,.28); margin-top:8px; padding-top:8px; }
 .live-impact-title { display:flex; align-items:center; justify-content:center; gap:6px; color:#ffd54a; font-size:.78rem; font-weight:1000; text-transform:uppercase; }
 .live-dot { width:.55rem; height:.55rem; border-radius:50%; background:#ff1744; box-shadow:0 0 9px #ff1744; display:inline-block; }
@@ -103,8 +103,8 @@ input, textarea, select { color:#fff!important; }
 .player-roster-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
 .roster-cell { min-height:66px; border:1px solid rgba(255,255,255,.12); border-radius:7px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:5px; text-align:center; padding:7px 4px; overflow:hidden; }
 .roster-cell-empty { background:rgba(255,255,255,.025); border-color:color-mix(in srgb, var(--coach-color) 42%, rgba(255,255,255,.12)); box-shadow:inset 0 0 10px color-mix(in srgb, var(--coach-color) 20%, transparent); }
-.roster-flag { display:flex; align-items:center; justify-content:center; min-height:24px; font-size:1.26rem; line-height:1; }
-.roster-flag .flag-icon { margin:0; width:1.54em; height:1.54em; vertical-align:0; }
+.roster-flag { display:flex; align-items:center; justify-content:center; min-height:29px; font-size:1.51rem; line-height:1; }
+.roster-flag .flag-icon { margin:0; width:1.85em; height:1.85em; vertical-align:0; }
 .roster-name { color:#fff; font-size:.82rem; line-height:1.06; font-weight:950; overflow-wrap:anywhere; max-width:100%; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
@@ -244,8 +244,8 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .score-badge { width:58px; height:58px; font-size:1.2rem; }
     .side-bet-grid { gap:4px; }
     .side-bet-pill { padding:5px 3px; }
-    .side-bet-pill span { font-size:.58rem; }
-    .side-bet-pill b { font-size:.68rem; }
+    .side-bet-pill span { font-size:.7rem; }
+    .side-bet-pill b { font-size:.82rem; }
     .matches-grid { grid-template-columns:1fr; }
     .available-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); gap:5px; }
     .draft-board table { min-width:720px; font-size:.74rem; }
