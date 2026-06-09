@@ -6,7 +6,7 @@ import mimetypes
 import os
 import re
 import time
-from datetime import datetime
+from datetime import datetime, timedelta
 from functools import lru_cache
 from io import BytesIO
 from urllib.parse import quote
@@ -2705,6 +2705,47 @@ def match_status_label(match):
     return "" if status.lower() == "timed" else status
 
 
+def match_datetime(value):
+    text = str(value or "").strip()
+    if not text:
+        return None
+    try:
+        parsed = datetime.fromisoformat(text.replace("Z", "+00:00"))
+        if parsed.tzinfo is None:
+            parsed = parsed.replace(tzinfo=ZoneInfo("UTC"))
+        return parsed.astimezone(ZoneInfo("UTC"))
+    except Exception:
+        return None
+
+
+def match_status_key(match):
+    return re.sub(r"[^a-z]+", "_", str(match.get("status") or "").strip().lower()).strip("_")
+
+
+def match_is_live(match):
+    return match_status_key(match) in {
+        "live",
+        "in_play",
+        "in_progress",
+        "paused",
+        "halftime",
+        "half_time",
+        "extra_time",
+        "penalty_shootout",
+    }
+
+
+def upcoming_matches(matches, days=3):
+    now = datetime.now(ZoneInfo("UTC"))
+    window_end = now + timedelta(days=days)
+    upcoming = []
+    for match in matches:
+        kickoff = match_datetime(match.get("date"))
+        if kickoff and now <= kickoff <= window_end and not match_is_live(match):
+            upcoming.append(match)
+    return sorted(upcoming, key=lambda match: match_datetime(match.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC")))
+
+
 def render_match_cards(state, matches, show_group=False):
     matches = [match for match in matches if "friendly" not in str(match.get("stage") or "").lower()]
     if not matches:
@@ -2808,17 +2849,28 @@ def render_live_matches(state):
             st.info("No World Cup matches loaded yet. Configure Football-Data token or refresh scores.")
             return
 
+        st.markdown("<div class='match-stage-title'>Live Matches</div>", unsafe_allow_html=True)
+        live_matches = [match for match in matches if match_is_live(match)]
+        if live_matches:
+            render_match_cards(state, live_matches, show_group=True)
+        else:
+            st.caption("No live matches right now - see next section for future matches.")
+
+        st.markdown("<div class='match-stage-title'>Upcoming Matches</div>", unsafe_allow_html=True)
+        render_match_cards(state, upcoming_matches(matches, days=3), show_group=True)
+
         sections = {name: [] for name in ["Group Stages", "Round of 32", "Round of 16", "Quarterfinals", "Championship"]}
         for match in matches:
             section_name = match_section_name(match)
             if section_name in sections:
                 sections[section_name].append(match)
-        section_options = [name for name in sections if sections[name]]
-        selected_section = st.selectbox("Match section", section_options or list(sections), key="match-tracker-section")
-        if selected_section == "Group Stages":
-            render_group_stage_match_groups(state, sections[selected_section])
-        else:
-            render_match_cards(state, sections[selected_section])
+        with st.expander("Browse Matches by Stage and Group", expanded=False):
+            section_options = [name for name in sections if sections[name]]
+            selected_section = st.selectbox("Match section", section_options or list(sections), key="match-tracker-section")
+            if selected_section == "Group Stages":
+                render_group_stage_match_groups(state, sections[selected_section])
+            else:
+                render_match_cards(state, sections[selected_section])
 
 
 def format_match_date(value):
