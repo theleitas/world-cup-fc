@@ -90,7 +90,7 @@ input, textarea, select { color:#fff!important; }
 .side-bet-pill { border:1px solid rgba(255,255,255,.12); border-radius:8px; background:#050505; padding:6px 5px; min-width:0; text-align:center; }
 .side-bet-pill span { display:block; color:#b9c2c9; font-size:.65rem; font-weight:900; text-transform:uppercase; line-height:1.05; }
 .side-bet-pill b { display:block; color:#fff; font-size:.78rem; line-height:1.12; overflow-wrap:anywhere; margin-top:2px; }
-.coach-live-impact { border-top:1px solid rgba(255,255,255,.12); margin-top:8px; padding-top:8px; }
+.coach-live-impact { border-top:1px solid rgba(185,194,201,.28); margin-top:8px; padding-top:8px; }
 .live-impact-title { display:flex; align-items:center; justify-content:center; gap:6px; color:#ffd54a; font-size:.78rem; font-weight:1000; text-transform:uppercase; }
 .live-dot { width:.55rem; height:.55rem; border-radius:50%; background:#ff1744; box-shadow:0 0 9px #ff1744; display:inline-block; }
 .coach-live-match { border:1px solid rgba(255,23,68,.35); border-radius:8px; background:#090606; padding:6px 7px; margin-top:6px; }
@@ -98,6 +98,14 @@ input, textarea, select { color:#fff!important; }
 .coach-live-meta { color:#b9c2c9; text-align:center; font-size:.68rem; font-weight:900; margin-top:3px; }
 .coach-live-players { color:#eaf7fa; text-align:center; font-size:.68rem; line-height:1.2; font-weight:850; margin-top:4px; }
 .coach-live-empty { border-top:1px solid rgba(185,194,201,.28); border-bottom:1px solid rgba(185,194,201,.28); color:#9aa3aa; text-align:center; font-size:.72rem; font-style:italic; font-weight:800; margin:8px 0 0; padding:5px 0; }
+.roster-grid { display:grid; gap:5px; width:100%; border-radius:8px; background:rgba(185,194,201,.08); border:1px solid rgba(185,194,201,.16); padding:5px; margin-top:8px; }
+.team-roster-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
+.player-roster-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+.roster-cell { min-height:58px; border:1px solid rgba(255,255,255,.12); border-radius:7px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; text-align:center; padding:6px 4px; overflow:hidden; }
+.roster-cell-empty { background:rgba(255,255,255,.025); border-color:color-mix(in srgb, var(--coach-color) 42%, rgba(255,255,255,.12)); box-shadow:inset 0 0 10px color-mix(in srgb, var(--coach-color) 20%, transparent); }
+.roster-flag { display:flex; align-items:center; justify-content:center; min-height:20px; font-size:1.05rem; line-height:1; }
+.roster-flag .flag-icon { margin:0; width:1.28em; height:1.28em; vertical-align:0; }
+.roster-name { color:#fff; font-size:.68rem; line-height:1.06; font-weight:950; overflow-wrap:anywhere; max-width:100%; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
 .draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
@@ -136,7 +144,7 @@ input, textarea, select { color:#fff!important; }
 .st-key-refresh-draft div[data-testid="stButton"] > button { background:#00e5ff!important; border-color:#87f5ff!important; color:#001316!important; min-height:38px!important; }
 .st-key-refresh-draft div[data-testid="stButton"] > button *,
 .st-key-refresh-draft div[data-testid="stButton"] > button:disabled * { color:#001316!important; }
-.coach-power-foot { border-top:1px solid rgba(255,255,255,.12); margin-top:9px; padding-top:8px; text-align:center; color:#ffd54a; font-size:.82rem; font-weight:1000; }
+.coach-power-foot { margin-top:9px; padding-top:0; text-align:center; color:#ffd54a; font-size:.82rem; font-weight:1000; }
 .power-rating-note { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#070707; color:#eaf7fa; padding:10px 12px; margin:.75rem 0 1rem; font-size:.86rem; line-height:1.42; }
 .power-rating-note b { color:#ffd54a; }
 .st-key-admin-only-section div[data-testid="stExpander"] details > summary,
@@ -743,6 +751,40 @@ def player_country(player):
 
 def player_base_name(player):
     return re.sub(r"\s*\([^)]*\)\s*$", "", str(player or "")).strip()
+
+
+def player_last_name(player):
+    base = player_base_name(player)
+    parts = [part for part in re.split(r"\s+", base) if part]
+    return parts[-1] if parts else base
+
+
+def roster_grid_cell_html(flag_html="", label=""):
+    if not label:
+        return "<div class='roster-cell roster-cell-empty'></div>"
+    return f"""
+<div class='roster-cell'>
+  <div class='roster-flag'>{flag_html}</div>
+  <div class='roster-name'>{html.escape(label)}</div>
+</div>
+"""
+
+
+def standings_roster_grid_html(items, kind):
+    target_count = 6 if kind == "team" else 2
+    cells = []
+    for item in list(items or [])[:target_count]:
+        if kind == "team":
+            team = canonical_team_name(item)
+            cells.append(roster_grid_cell_html(team_flag_html(team), team))
+        else:
+            country = player_country(item)
+            cells.append(roster_grid_cell_html(team_flag_html(country) if country else "", player_last_name(item)))
+    while len(cells) < target_count:
+        cells.append(roster_grid_cell_html())
+
+    grid_class = "team-roster-grid" if kind == "team" else "player-roster-grid"
+    return f"<div class='roster-grid {grid_class}'>" + "".join(cells) + "</div>"
 
 
 def normalize_player_name(value):
@@ -1905,8 +1947,8 @@ def render_standings(state, scores):
         coach = item["coach"]
         color = item["color"]
         coach_state = state["teams"][coach]
-        teams = ", ".join(display_team_html(team, include_info=False) for team in coach_state.get("national_teams", [])) or "No teams drafted yet"
-        players = ", ".join(display_player_html(player, include_info=False) for player in coach_state.get("star_players", [])) or "No players drafted yet"
+        teams = standings_roster_grid_html(coach_state.get("national_teams", []), "team")
+        players = standings_roster_grid_html(coach_state.get("star_players", []), "player")
         power_rating = format_power_rating(state, coach)
         cinderella_text = "None"
         if item["cinderella_team"]:
@@ -1942,8 +1984,8 @@ def render_standings(state, scores):
     <div class='side-bet-pill'><span>Empire</span><b>{int(item["empire_count"])} teams<br>{int(item["empire_goals"])} goals</b></div>
     <div class='side-bet-pill'><span>Cinderella</span><b>{html.escape(cinderella_text)}</b></div>
   </div>
-  <div class='asset-list'><b>Teams:</b> {teams}</div>
-  <div class='asset-list'><b>Players:</b> {players}</div>
+  {teams}
+  {players}
   {live_html}
   <div class='coach-power-foot'>Power Rating: {html.escape(power_rating)}</div>
 </div>
