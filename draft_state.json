@@ -21,7 +21,8 @@
       "national_teams": [
         "France",
         "Türkiye",
-        "Canada"
+        "Canada",
+        "Austria"
       ],
       "star_players": []
     },
@@ -267,6 +268,13 @@
       "coach": "Benji",
       "team": "Egypt",
       "picked_at": "2026-06-08T21:01:47.391526-04:00"
+    },
+    {
+      "pick": 26,
+      "round": 4,
+      "coach": "Jeff",
+      "team": "Austria",
+      "picked_at": "2026-06-08T21:32:59.840840-04:00"
     }
   ],
   "player_picks": [],
@@ -2621,7 +2629,7 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780966907,
+  "current_pick_started_at": 1780968779,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -2637,7 +2645,8 @@
       "national_teams": [
         "France",
         "Türkiye",
-        "Canada"
+        "Canada",
+        "Austria"
       ],
       "star_players": []
     },
