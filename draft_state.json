@@ -9,7 +9,8 @@
       "national_teams": [
         "Spain",
         "Ecuador",
-        "Côte d'Ivoire"
+        "Côte d'Ivoire",
+        "Egypt"
       ],
       "star_players": []
     },
@@ -259,6 +260,13 @@
       "coach": "Benji",
       "team": "Côte d'Ivoire",
       "picked_at": "2026-06-08T20:56:00.524962-04:00"
+    },
+    {
+      "pick": 25,
+      "round": 4,
+      "coach": "Benji",
+      "team": "Egypt",
+      "picked_at": "2026-06-08T21:01:47.391526-04:00"
     }
   ],
   "player_picks": [],
@@ -2613,14 +2621,15 @@
   "last_score_refresh_attempt_at": 1780876101,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1780966560,
+  "current_pick_started_at": 1780966907,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
       "national_teams": [
         "Spain",
         "Ecuador",
-        "Côte d'Ivoire"
+        "Côte d'Ivoire",
+        "Egypt"
       ],
       "star_players": []
     },
