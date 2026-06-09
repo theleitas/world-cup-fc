@@ -70,7 +70,8 @@
         "Germany",
         "Colombia",
         "Croatia",
-        "Czechia"
+        "Czechia",
+        "South Africa"
       ],
       "star_players": []
     },
@@ -339,6 +340,13 @@
       "coach": "Jayme",
       "team": "Saudi Arabia",
       "picked_at": "2026-06-09T18:19:14.175888-04:00"
+    },
+    {
+      "pick": 35,
+      "round": 5,
+      "coach": "Herb",
+      "team": "South Africa",
+      "picked_at": "2026-06-09T18:49:36.532272-04:00"
     }
   ],
   "player_picks": [],
@@ -2909,7 +2917,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781043554,
+  "current_pick_started_at": 1781045376,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -2962,7 +2970,8 @@
         "Germany",
         "Colombia",
         "Croatia",
-        "Czechia"
+        "Czechia",
+        "South Africa"
       ],
       "star_players": []
     },
