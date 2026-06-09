@@ -75,7 +75,7 @@ input, textarea, select { color:#fff!important; }
 .admin-title { color:#ff1744; text-shadow:0 0 10px #ff1744; }
 .subtle { color:#b9c2c9; font-size:.9rem; }
 .rules-box { border-left:5px solid #00e5ff; border-radius:8px; background:#070707; padding:12px 14px; margin:.8rem 0 1rem; color:#dceff5; }
-.standings-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:12px; }
+.standings-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:12px; }
 .coach-card { border:3px solid var(--coach-color); border-radius:8px; padding:12px; background:#070707; box-shadow:0 0 18px var(--coach-color), inset 0 0 22px rgba(255,255,255,.055), inset 0 0 30px color-mix(in srgb, var(--coach-color) 18%, transparent); min-height:280px; }
 .coach-head { display:flex; align-items:center; gap:12px; min-width:0; }
 .coach-face { width:74px; height:74px; border-radius:50%; object-fit:cover; border:4px solid var(--coach-color); box-shadow:0 0 14px var(--coach-color); flex:0 0 auto; }
@@ -97,6 +97,7 @@ input, textarea, select { color:#fff!important; }
 .coach-live-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:5px; font-size:.76rem; font-weight:1000; text-align:center; }
 .coach-live-meta { color:#b9c2c9; text-align:center; font-size:.68rem; font-weight:900; margin-top:3px; }
 .coach-live-players { color:#eaf7fa; text-align:center; font-size:.68rem; line-height:1.2; font-weight:850; margin-top:4px; }
+.coach-live-empty { border-top:1px solid rgba(185,194,201,.28); border-bottom:1px solid rgba(185,194,201,.28); color:#9aa3aa; text-align:center; font-size:.72rem; font-style:italic; font-weight:800; margin:8px 0 0; padding:5px 0; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
 .draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
@@ -229,6 +230,7 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     div[data-testid="stButton"] > button { min-height:42px!important; font-size:.84rem!important; padding:6px 7px!important; }
     .top-thumbnail-wrap { width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
     .top-thumbnail { width:100vw; max-width:none; max-height:34vh; object-fit:cover; border-radius:0; }
+    .standings-grid { grid-template-columns:1fr; }
     .coach-card { min-height:auto; }
     .coach-face, .coach-face-placeholder { width:60px; height:60px; }
     .score-badge { width:58px; height:58px; font-size:1.2rem; }
@@ -272,6 +274,12 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .team-detail-grid { grid-template-columns:1fr; gap:3px; font-size:.7rem; }
     .team-standings-table .coach-mini-face,
     .team-standings-table .coach-mini-placeholder { width:18px; height:18px; margin-right:3px; }
+}
+@media (min-width:701px) and (max-width:900px) {
+    .standings-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
+}
+@media (min-width:901px) and (max-width:1180px) {
+    .standings-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
 }
 </style>
 """,
@@ -1866,6 +1874,9 @@ def render_payout_descriptions():
 <div class='payout-desc'><b>Gold - $300</b><br>
 Awarded to the coach who finishes first overall in total fantasy points. Total fantasy points are the sum of every drafted national team's match points and advancement bonuses plus every drafted star player's goal and assist points. National teams earn 3 points for a win, 1 for a draw, 1 for each goal scored, and 1 for a clean sheet. Players earn 4 points per goal and 3 per assist.</div>
 
+<div class='payout-desc'><b>Standings Card Abbreviations</b><br>
+Group means Group Stage Winner points only. Empire means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. Cinderella means the coach's best single-team overperformance against the locked FIFA ranking baseline. Live Impact appears only for matches currently live and shows the active match score plus the coach's live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
+
 <div class='payout-desc'><b>Silver - $150</b><br>
 Awarded to the coach who finishes second overall by total fantasy points, using the same full-tournament scoring calculation as Gold.</div>
 
@@ -1928,7 +1939,7 @@ def render_standings(state, scores):
   <div class='metric-row points-pair'><span>Team Points <b>{int(item["team_points"])}</b></span><span>Player Points <b>{int(item["player_points"])}</b></span></div>
   <div class='side-bet-grid'>
     <div class='side-bet-pill'><span>Group</span><b>{int(item["group_stage_points"])} pts</b></div>
-    <div class='side-bet-pill'><span>Empire</span><b>{int(item["empire_count"])} teams / {int(item["empire_goals"])}g</b></div>
+    <div class='side-bet-pill'><span>Empire</span><b>{int(item["empire_count"])} teams<br>{int(item["empire_goals"])} goals</b></div>
     <div class='side-bet-pill'><span>Cinderella</span><b>{html.escape(cinderella_text)}</b></div>
   </div>
   <div class='asset-list'><b>Teams:</b> {teams}</div>
@@ -2904,11 +2915,21 @@ def coach_live_players_html(state, coach, match):
 
 
 def coach_live_matches_html(state, coach):
-    live_matches = [
+    all_live_matches = [
         match
         for match in state.get("matches", [])
         if match_is_live(match)
         and "friendly" not in str(match.get("stage") or "").lower()
+    ]
+    if not all_live_matches:
+        return """
+  <div class='coach-live-empty'>No live matches</div>
+"""
+
+    live_matches = [
+        match
+        for match in all_live_matches
+        if match_is_live(match)
         and coach_has_live_asset(state, coach, match)
     ]
     if not live_matches:
