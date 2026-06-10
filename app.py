@@ -1971,11 +1971,11 @@ Awarded to the coach who owns the single drafted national team with the largest 
 
 def placement_strip(rank):
     placements = {
-        1: ("Gold", "#FFD700", "#050505"),
-        2: ("Silver", "#C0C0C0", "#050505"),
-        3: ("Bronze", "#CD7F32", "#050505"),
+        1: ("Gold", "#FFD700", "#FFE88A"),
+        2: ("Silver", "#C0C0C0", "#E4E8EC"),
+        3: ("Bronze", "#CD7F32", "#E7A66D"),
     }
-    label, color, text_color = placements.get(rank, (f"{rank}th Place", "#FFFFFF", "#050505"))
+    label, color, text_color = placements.get(rank, (f"{rank}th Place", "#FFFFFF", "#FFFFFF"))
     return label, color, text_color
 
 
