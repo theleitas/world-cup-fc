@@ -107,6 +107,13 @@ input, textarea, select { color:#fff!important; }
 .roster-flag { display:flex; align-items:center; justify-content:center; min-height:29px; font-size:1.51rem; line-height:1; }
 .roster-flag .flag-icon { margin:0; width:1.85em; height:1.85em; vertical-align:0; }
 .roster-name { color:#fff; font-size:.92rem; line-height:1; font-weight:500; overflow-wrap:anywhere; max-width:100%; }
+.player-roster-cell { min-height:58px; flex-direction:row; justify-content:flex-start; align-items:center; gap:7px; text-align:left; padding:5px 6px; }
+.player-thumb { width:42px; height:42px; border-radius:50%; object-fit:cover; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 42px; background:#111; }
+.player-thumb-placeholder { width:42px; height:42px; border-radius:50%; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:900; box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 42px; background:#111; }
+.player-roster-text { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.02; }
+.player-roster-name { color:#fff; font-size:.92rem; font-weight:700; overflow-wrap:anywhere; }
+.player-roster-team { color:#b9c2c9; font-size:.72rem; font-weight:700; overflow-wrap:anywhere; }
+.player-roster-flag { font-size:1.02rem; line-height:1; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
 .draft-help { border:1px solid rgba(255,213,74,.45); border-radius:8px; background:#090909; color:#fff7cf; padding:9px 10px; font-weight:850; margin:.25rem 0 .75rem; }
@@ -779,10 +786,24 @@ def player_base_name(player):
     return re.sub(r"\s*\([^)]*\)\s*$", "", str(player or "")).strip()
 
 
+def player_asset_slug(player):
+    base = player_base_name(player)
+    slug = clean_key(base).replace("'", "")
+    return re.sub(r"[^a-z0-9]+", "-", slug).strip("-")
+
+
 def player_last_name(player):
     base = player_base_name(player)
     parts = [part for part in re.split(r"\s+", base) if part]
     return parts[-1] if parts else base
+
+
+def player_thumb_html(player):
+    data_uri = image_to_data_uri(os.path.join("assets", "players", "standings", f"{player_asset_slug(player)}.jpg"))
+    if data_uri:
+        return f"<img class='player-thumb' src='{html.escape(data_uri, quote=True)}' alt=''>"
+    initials = "".join(part[:1] for part in player_base_name(player).split()[:2]).upper() or "?"
+    return f"<div class='player-thumb-placeholder'>{html.escape(initials)}</div>"
 
 
 def roster_grid_cell_html(flag_html="", label=""):
@@ -796,6 +817,22 @@ def roster_grid_cell_html(flag_html="", label=""):
 """
 
 
+def player_roster_grid_cell_html(player, country):
+    if not player:
+        return "<div class='roster-cell roster-cell-empty'></div>"
+    team = canonical_team_name(country)
+    return f"""
+<div class='roster-cell player-roster-cell'>
+  {player_thumb_html(player)}
+  <div class='player-roster-text'>
+    <div class='player-roster-name'>{html.escape(player_last_name(player))}</div>
+    <div class='player-roster-team'>{html.escape(team)}</div>
+    <div class='player-roster-flag'>{html.escape(flag_for_team(team))}</div>
+  </div>
+</div>
+"""
+
+
 def standings_roster_grid_html(items, kind):
     target_count = 6 if kind == "team" else 2
     cells = []
@@ -805,7 +842,7 @@ def standings_roster_grid_html(items, kind):
             cells.append(roster_grid_cell_html(team_flag_html(team), team))
         else:
             country = player_country(item)
-            cells.append(roster_grid_cell_html(team_flag_html(country) if country else "", player_last_name(item)))
+            cells.append(player_roster_grid_cell_html(item, country))
     while len(cells) < target_count:
         cells.append(roster_grid_cell_html())
 
