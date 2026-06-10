@@ -81,7 +81,7 @@ input, textarea, select { color:#fff!important; }
 .coach-face { width:68px; height:68px; border-radius:50%; object-fit:cover; border:3px solid var(--coach-color); box-shadow:0 0 13px var(--coach-color); flex:0 0 auto; }
 .coach-face-placeholder { width:68px; height:68px; border-radius:50%; border:3px solid var(--coach-color); color:var(--coach-color); display:flex; align-items:center; justify-content:center; text-align:center; font-weight:1000; font-size:.82rem; line-height:1; flex:0 0 auto; }
 .coach-name { font-size:1.38rem; line-height:1; font-weight:1000; overflow-wrap:anywhere; }
-.score-badge { margin-left:auto; width:62px; height:62px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--coach-color); color:#000; font-size:1.5rem; font-weight:1000; box-shadow:0 0 13px var(--coach-color); flex:0 0 auto; }
+.score-badge { margin-left:auto; width:56px; height:56px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--coach-color); color:#000; font-size:1.35rem; font-weight:1000; box-shadow:0 0 13px var(--coach-color); flex:0 0 auto; }
 .award-lines { margin-top:2px; }
 .award-line { color:var(--coach-color); font-size:.84rem; line-height:1.18; font-weight:950; text-shadow:0 0 7px var(--coach-color); }
 .metric-row { display:flex; justify-content:space-between; gap:8px; border-bottom:1px solid rgba(255,255,255,.11); padding:5px 0; font-size:1rem; }
@@ -236,7 +236,7 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
     .standings-grid { grid-template-columns:1fr; }
     .coach-card { min-height:auto; }
     .coach-face, .coach-face-placeholder { width:60px; height:60px; }
-    .score-badge { width:58px; height:58px; font-size:1.2rem; }
+    .score-badge { width:52px; height:52px; font-size:1.08rem; }
     .side-bet-grid { gap:4px; }
     .side-bet-pill { padding:5px 3px; }
     .side-bet-pill span { font-size:.7rem; }
@@ -552,6 +552,13 @@ TEAM_ALIASES = {
     "curaçao": "Curaçao",
     "dr congo": "Congo DR",
     "congo dr": "Congo DR",
+    "bosnia and herzegovina": "Bosnia and Herzegovina",
+    "bosnia herzegovina": "Bosnia and Herzegovina",
+    "bosnia-herzegovina": "Bosnia and Herzegovina",
+    "bosnia & herzegovina": "Bosnia and Herzegovina",
+    "bosnia and hercegovina": "Bosnia and Herzegovina",
+    "bosnia-herzogovina": "Bosnia and Herzegovina",
+    "bosnia and herzogovina": "Bosnia and Herzegovina",
 }
 
 FIFA_TEAM_SLUGS = {
@@ -670,7 +677,11 @@ def canonical_team_name(value):
     team_names = {team["name"] for team in WORLD_CUP_TEAMS}
     if text in team_names:
         return text
-    return TEAM_ALIASES.get(clean_key(text), text)
+    key = clean_key(text)
+    if key in TEAM_ALIASES:
+        return TEAM_ALIASES[key]
+    team_by_key = {clean_key(team["name"]): team["name"] for team in WORLD_CUP_TEAMS}
+    return team_by_key.get(key, text)
 
 
 def team_lookup():
@@ -920,6 +931,11 @@ def normalize_to_100(value, low, high):
 def original_odds_for_team(team_name):
     name = canonical_team_name(team_name)
     return DEFAULT_ODDS.get(name, "")
+
+
+def team_code(team_name):
+    name = canonical_team_name(team_name)
+    return FIFA_RANKINGS.get(name, {}).get("code") or name[:3].upper()
 
 
 def team_odds_power(team_name):
@@ -2846,6 +2862,15 @@ def match_score_text(match):
     return f"{match['home_score']} - {match['away_score']}"
 
 
+def match_owned_teams_by_coach(state, match):
+    owned = {}
+    for team_name in (canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))):
+        coach = drafted_coach_for_team(state, team_name)
+        if coach:
+            owned.setdefault(coach, []).append(team_name)
+    return owned
+
+
 def match_clock_text(match):
     status = match_status_label(match)
     status_key = match_status_key(match)
@@ -2874,27 +2899,28 @@ def match_points_by_coach(state, match):
     for coach, _, _ in owned_players_in_match(state, match):
         points_by_coach.setdefault(coach, 0)
 
-    home = canonical_team_name(match.get("home"))
-    away = canonical_team_name(match.get("away"))
-    for team_name in (home, away):
-        coach = drafted_coach_for_team(state, team_name)
-        if coach:
+    for coach, team_names in match_owned_teams_by_coach(state, match).items():
+        for team_name in team_names:
             points_by_coach[coach] = points_by_coach.get(coach, 0) + score_match_for_team(match, team_name)
     return points_by_coach
 
 
-def match_point_chips_html(state, match, only_coach=None):
+def match_point_chips_html(state, match, only_coach=None, include_teams=False):
     points_by_coach = match_points_by_coach(state, match)
     if only_coach:
         if only_coach not in points_by_coach:
             return ""
         points_by_coach = {only_coach: points_by_coach[only_coach]}
 
+    owned_teams = match_owned_teams_by_coach(state, match) if include_teams else {}
     chips = []
     for coach, points in sorted(points_by_coach.items(), key=lambda item: (COACHES.index(item[0]) if item[0] in COACHES else 999, item[0])):
         color = state["teams"][coach]["color"]
+        team_suffix = ""
+        if include_teams and owned_teams.get(coach):
+            team_suffix = " · " + ", ".join(team_code(team_name) for team_name in owned_teams[coach])
         chips.append(
-            f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}</span>"
+            f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}{html.escape(team_suffix)}</span>"
         )
     return "".join(chips)
 
@@ -2987,7 +3013,7 @@ def render_match_cards(state, matches, show_group=False):
     <span>{display_team_html(away, '', include_info=True)}</span>
   </div>
   <div class='subtle'>{detail_text}</div>
-  <div>{match_point_chips_html(state, match) or "<span class='subtle'>No coach points in this match yet.</span>"}</div>
+  <div>{match_point_chips_html(state, match, include_teams=True) or "<span class='subtle'>No coach points in this match yet.</span>"}</div>
   <div class='match-player-line'>{match_player_line_html(state, match)}</div>
 </div>
 """
