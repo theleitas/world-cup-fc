@@ -204,7 +204,7 @@ input, textarea, select { color:#fff!important; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
 div[data-testid="stExpander"] summary p { font-size:1.03rem; }
 .drafted-chip { display:inline-flex; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; }
-.drafted-chip-dot { display:inline-flex; width:.55rem; height:.55rem; border-radius:50%; background:var(--coach-color); box-shadow:0 0 7px var(--coach-color); margin:0 3px; align-self:center; }
+.drafted-chip-bullet { color:var(--coach-color); margin:0 3px; font-size:.78em; line-height:1; }
 .match-browser-note { color:#b9c2c9; font-size:.82rem; font-weight:850; margin:0 0 .35rem; }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
 .payout-item { border:1px solid #2d2d2d; border-radius:8px; padding:10px; background:#070707; }
@@ -2787,6 +2787,20 @@ def match_status_key(match):
     return re.sub(r"[^a-z]+", "_", str(match.get("status") or "").strip().lower()).strip("_")
 
 
+def match_is_completed(match):
+    return match_status_key(match) in {
+        "finished",
+        "final",
+        "full_time",
+        "ft",
+        "post",
+        "complete",
+        "completed",
+        "after_extra_time",
+        "penalties",
+    }
+
+
 def match_is_live(match):
     return match_status_key(match) in {
         "live",
@@ -2798,17 +2812,6 @@ def match_is_live(match):
         "extra_time",
         "penalty_shootout",
     }
-
-
-def upcoming_matches(matches, days=3):
-    now = datetime.now(ZoneInfo("UTC"))
-    window_end = now + timedelta(days=days)
-    upcoming = []
-    for match in matches:
-        kickoff = match_datetime(match.get("date"))
-        if kickoff and now <= kickoff <= window_end and not match_is_live(match):
-            upcoming.append(match)
-    return sorted(upcoming, key=lambda match: match_datetime(match.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC")))
 
 
 def drafted_coach_for_player(state, player):
@@ -2969,7 +2972,7 @@ def match_team_ordered_chips_html(state, match):
             if coach == team_owner:
                 points += score_match_for_team(match, team_name)
             chips.append(
-                f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(team_code(team_name))}<span class='drafted-chip-dot'></span>{html.escape(coach)} +{points}</span>"
+                f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(team_code(team_name))}<span class='drafted-chip-bullet'>•</span>{html.escape(coach)} +{points}</span>"
             )
     return "".join(chips)
 
@@ -3071,25 +3074,9 @@ def render_match_cards(state, matches, show_group=False):
     st.markdown("".join(cards), unsafe_allow_html=True)
 
 
-def match_section_name(match):
-    stage = str(match.get("stage") or "")
-    if "friendly" in stage.lower():
-        return ""
-    stage_level = stage_to_advancement(stage)
-    if not stage_level and stage_is_group(stage):
-        return "Group Stages"
-    if stage_level == "Round of 32":
-        return "Round of 32"
-    if stage_level == "Round of 16":
-        return "Round of 16"
-    if stage_level == "Quarterfinals":
-        return "Quarterfinals"
-    if stage_level in ["Semifinals", "Final"]:
-        return "Championship"
-    return "Group Stages"
-
-
-def toggle_button(label, state_key, button_key):
+def toggle_button(label, state_key, button_key, default_open=False):
+    if state_key not in st.session_state:
+        st.session_state[state_key] = default_open
     is_open = bool(st.session_state.get(state_key))
     prefix = "▼" if is_open else "▶"
     if st.button(f"{prefix} {label}", key=button_key, width="stretch"):
@@ -3098,32 +3085,101 @@ def toggle_button(label, state_key, button_key):
     return bool(st.session_state.get(state_key))
 
 
-def render_match_stage_browser(state, sections):
-    has_open_section = any(st.session_state.get(f"match-browser-stage-{clean_key(name)}") for name in sections)
-    has_open_group = any(key.startswith("match-browser-group-") and value for key, value in st.session_state.items())
-    with st.expander("Browse Matches by Stage and Group", expanded=has_open_section or has_open_group):
-        st.markdown(
-            "<div class='match-browser-note'>Open a stage, then a group, to load just those match cards.</div>",
-            unsafe_allow_html=True,
-        )
-        for section_name, section_matches in sections.items():
-            if not section_matches:
-                continue
-            section_key = f"match-browser-stage-{clean_key(section_name)}"
-            if not toggle_button(section_name, section_key, f"btn-{section_key}"):
-                continue
+def local_match_datetime(match):
+    kickoff = match_datetime(match.get("date"))
+    return kickoff.astimezone(ZoneInfo("America/New_York")) if kickoff else None
 
-            if section_name == "Group Stages":
-                groups = {}
-                for match in section_matches:
-                    group = match_group_label(match) or "TBD"
-                    groups.setdefault(group, []).append(match)
-                for group_name in sorted(groups, key=lambda value: (value == "TBD", value)):
-                    group_key = f"match-browser-group-{clean_key(group_name)}"
-                    if toggle_button(f"Group {group_name}", group_key, f"btn-{section_key}-{group_key}"):
-                        render_match_cards(state, groups[group_name], show_group=True)
-            else:
-                render_match_cards(state, section_matches, show_group=True)
+
+def compact_date_label(value):
+    return value.strftime("%b %-d") if os.name != "nt" else value.strftime("%b %#d")
+
+
+def match_week_groups(matches):
+    future = sorted(
+        [match for match in matches if local_match_datetime(match)],
+        key=lambda match: local_match_datetime(match),
+    )
+    if not future:
+        return []
+
+    groups = []
+    week_start = local_match_datetime(future[0]).date()
+    week_end = week_start + timedelta(days=6)
+    bucket = []
+    for match in future:
+        match_date = local_match_datetime(match).date()
+        while match_date > week_end:
+            groups.append((week_start, week_end, bucket))
+            week_start = week_end + timedelta(days=1)
+            week_end = week_start + timedelta(days=6)
+            bucket = []
+        bucket.append(match)
+    groups.append((week_start, week_end, bucket))
+    return [(start, end, group_matches) for start, end, group_matches in groups if group_matches]
+
+
+def render_lazy_match_section(state, label, matches, key, default_open=False, empty_text="No matches in this section yet."):
+    if not toggle_button(label, f"match-timeline-{key}", f"btn-match-timeline-{key}", default_open=default_open):
+        return
+    if matches:
+        render_match_cards(state, matches, show_group=True)
+    else:
+        st.caption(empty_text)
+
+
+def render_match_timeline(state, matches):
+    now = datetime.now(ZoneInfo("UTC"))
+    completed_matches = sorted(
+        [match for match in matches if match_is_completed(match)],
+        key=lambda match: match_datetime(match.get("date")) or datetime.min.replace(tzinfo=ZoneInfo("UTC")),
+        reverse=True,
+    )
+    live_matches = sorted(
+        [match for match in matches if match_is_live(match)],
+        key=lambda match: match_datetime(match.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC")),
+    )
+    future_matches = sorted(
+        [
+            match
+            for match in matches
+            if not match_is_completed(match)
+            and not match_is_live(match)
+            and (match_datetime(match.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC"))) >= now
+        ],
+        key=lambda match: match_datetime(match.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC")),
+    )
+
+    st.markdown(
+        "<div class='match-browser-note'>Open a section to load its match cards. Completed matches show where points came from; future weeks show what is next.</div>",
+        unsafe_allow_html=True,
+    )
+    render_lazy_match_section(
+        state,
+        "Completed Matches",
+        completed_matches,
+        "completed",
+        default_open=False,
+        empty_text="No completed matches yet.",
+    )
+    render_lazy_match_section(
+        state,
+        "Live Matches",
+        live_matches,
+        "live",
+        default_open=True,
+        empty_text="No live matches right now.",
+    )
+
+    for index, (start, end, week_matches) in enumerate(match_week_groups(future_matches)):
+        date_label = f"{compact_date_label(start)} - {compact_date_label(end)}"
+        label = f"Upcoming Matches ({date_label})" if index == 0 else f"Week {index + 1}: {date_label}"
+        render_lazy_match_section(
+            state,
+            label,
+            week_matches,
+            f"week-{index + 1}",
+            default_open=index == 0,
+        )
 
 
 def render_live_matches(state):
@@ -3151,22 +3207,7 @@ def render_live_matches(state):
             st.info("No World Cup matches loaded yet. Configure Football-Data token or refresh scores.")
             return
 
-        st.markdown("<div class='match-stage-title'>Live Matches</div>", unsafe_allow_html=True)
-        live_matches = [match for match in matches if match_is_live(match)]
-        if live_matches:
-            render_match_cards(state, live_matches, show_group=True)
-        else:
-            st.caption("No live matches right now - see next section for future matches.")
-
-        st.markdown("<div class='match-stage-title'>Upcoming Matches</div>", unsafe_allow_html=True)
-        render_match_cards(state, upcoming_matches(matches, days=3), show_group=True)
-
-        sections = {name: [] for name in ["Group Stages", "Round of 32", "Round of 16", "Quarterfinals", "Championship"]}
-        for match in matches:
-            section_name = match_section_name(match)
-            if section_name in sections:
-                sections[section_name].append(match)
-        render_match_stage_browser(state, sections)
+        render_match_timeline(state, matches)
 
 
 def format_match_date(value):
