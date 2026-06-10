@@ -99,14 +99,13 @@ input, textarea, select { color:#fff!important; }
 .coach-live-meta { color:#b9c2c9; text-align:center; font-size:.68rem; font-weight:900; margin-top:3px; }
 .coach-live-players { color:#eaf7fa; text-align:center; font-size:.68rem; line-height:1.2; font-weight:850; margin-top:4px; }
 .coach-live-empty { border-top:1px solid rgba(185,194,201,.28); border-bottom:1px solid rgba(185,194,201,.28); color:#9aa3aa; text-align:center; font-size:.72rem; font-style:italic; font-weight:800; margin:8px 0 0; padding:5px 0; }
-.roster-grid { display:grid; gap:2px; width:100%; border-radius:6px; background:rgba(185,194,201,.08); border:1px solid rgba(185,194,201,.16); padding:3px; margin-top:4px; }
+.roster-grid { display:grid; gap:3px; width:100%; border-radius:6px; background:rgba(185,194,201,.08); border:1px solid rgba(185,194,201,.16); padding:4px; margin-top:5px; }
 .team-roster-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
 .player-roster-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
-.roster-cell { min-height:56px; border:1px solid color-mix(in srgb, var(--coach-color) 62%, rgba(255,255,255,.18)); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px; text-align:center; padding:3px 3px; overflow:hidden; box-shadow:inset 0 0 9px rgba(255,255,255,.035), 0 0 9px color-mix(in srgb, var(--coach-color) 24%, transparent); }
+.roster-cell { min-height:60px; border:1px solid color-mix(in srgb, var(--coach-color) 62%, rgba(255,255,255,.18)); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; text-align:center; padding:4px 3px; overflow:hidden; box-shadow:inset 0 0 9px rgba(255,255,255,.035), 0 0 9px color-mix(in srgb, var(--coach-color) 24%, transparent); }
 .roster-cell-empty { background:rgba(255,255,255,.025); border-color:color-mix(in srgb, var(--coach-color) 42%, rgba(255,255,255,.12)); box-shadow:inset 0 0 10px color-mix(in srgb, var(--coach-color) 20%, transparent); }
-.roster-flag { display:flex; align-items:center; justify-content:center; min-height:30px; font-size:1.51rem; line-height:1; }
+.roster-flag { display:flex; align-items:center; justify-content:center; min-height:29px; font-size:1.51rem; line-height:1; }
 .roster-flag .flag-icon { margin:0; width:1.85em; height:1.85em; vertical-align:0; }
-.standings-flag-img { display:block; width:42px; height:30px; object-fit:cover; border-radius:2px; box-shadow:0 0 5px rgba(255,255,255,.2); }
 .roster-name { color:#fff; font-size:.92rem; line-height:1; font-weight:950; overflow-wrap:anywhere; max-width:100%; }
 .points-pair span { flex:1 1 0; display:flex; justify-content:space-between; gap:8px; }
 .points-pair span + span { border-left:1px solid rgba(255,255,255,.28); padding-left:12px; }
@@ -686,7 +685,7 @@ def clean_key(value):
     replacements = {
         "é": "e", "è": "e", "ê": "e", "ë": "e",
         "á": "a", "à": "a", "ä": "a", "ã": "a",
-        "í": "i", "ï": "i", "ó": "o", "ò": "o", "ô": "o", "ö": "o",
+        "í": "i", "ï": "i", "ó": "o", "ö": "o",
         "ú": "u", "ü": "u", "ç": "c", "ı": "i",
     }
     for old, new in replacements.items():
@@ -740,24 +739,6 @@ def team_flag_html(team_name):
 </span>
 """
     return f"<span class='flag-icon'>{html.escape(flag_for_team(name))}</span>"
-
-
-def standings_flag_asset_path(team_name):
-    name = canonical_team_name(team_name)
-    slug = clean_key(name).replace("'", "")
-    slug = re.sub(r"[^a-z0-9]+", "-", slug).strip("-")
-    return os.path.join("assets", "flags", "standings", f"{slug}.jpg")
-
-
-def standings_flag_html(team_name):
-    name = canonical_team_name(team_name)
-    data_uri = image_to_data_uri(standings_flag_asset_path(name), max_width=96, max_height=72, quality=82)
-    if not data_uri:
-        return team_flag_html(name)
-    return (
-        f"<img class='standings-flag-img' src='{html.escape(data_uri, quote=True)}' "
-        f"alt='{html.escape(name, quote=True)} flag' loading='lazy'>"
-    )
 
 
 def team_info_url(team_name):
@@ -821,10 +802,10 @@ def standings_roster_grid_html(items, kind):
     for item in list(items or [])[:target_count]:
         if kind == "team":
             team = canonical_team_name(item)
-            cells.append(roster_grid_cell_html(standings_flag_html(team), team))
+            cells.append(roster_grid_cell_html(team_flag_html(team), team))
         else:
             country = player_country(item)
-            cells.append(roster_grid_cell_html(standings_flag_html(country) if country else "", player_last_name(item)))
+            cells.append(roster_grid_cell_html(team_flag_html(country) if country else "", player_last_name(item)))
     while len(cells) < target_count:
         cells.append(roster_grid_cell_html())
 
