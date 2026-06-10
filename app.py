@@ -76,7 +76,8 @@ input, textarea, select { color:#fff!important; }
 .subtle { color:#b9c2c9; font-size:.9rem; }
 .rules-box { border-left:5px solid #00e5ff; border-radius:8px; background:#070707; padding:12px 14px; margin:.8rem 0 1rem; color:#dceff5; }
 .standings-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:10px; align-items:start; }
-.coach-card { border:2px solid var(--coach-color); border-radius:8px; padding:9px; background:#070707; box-shadow:0 0 16px var(--coach-color), inset 0 0 18px rgba(255,255,255,.055), inset 0 0 28px color-mix(in srgb, var(--coach-color) 18%, transparent); min-height:0; }
+.coach-card { border:2px solid var(--coach-color); border-radius:8px; padding:7px 9px 9px; background:#070707; box-shadow:0 0 16px var(--coach-color), inset 0 0 18px rgba(255,255,255,.055), inset 0 0 28px color-mix(in srgb, var(--coach-color) 18%, transparent); min-height:0; }
+.place-strip { margin:-1px -3px 7px; border:1px solid var(--place-color); border-radius:5px; background:color-mix(in srgb, var(--place-color) 22%, #050505); color:var(--place-text); box-shadow:0 0 12px var(--place-color), inset 0 0 9px color-mix(in srgb, var(--place-color) 18%, transparent); text-align:center; font-size:.78rem; line-height:1; font-weight:1000; text-transform:uppercase; padding:5px 6px; }
 .coach-head { display:flex; align-items:center; gap:9px; min-width:0; }
 .coach-face { width:68px; height:68px; border-radius:50%; object-fit:cover; border:3px solid var(--coach-color); box-shadow:0 0 13px var(--coach-color); flex:0 0 auto; }
 .coach-face-placeholder { width:68px; height:68px; border-radius:50%; border:3px solid var(--coach-color); color:var(--coach-color); display:flex; align-items:center; justify-content:center; text-align:center; font-weight:1000; font-size:.82rem; line-height:1; flex:0 0 auto; }
@@ -101,7 +102,7 @@ input, textarea, select { color:#fff!important; }
 .roster-grid { display:grid; gap:3px; width:100%; border-radius:6px; background:rgba(185,194,201,.08); border:1px solid rgba(185,194,201,.16); padding:4px; margin-top:5px; }
 .team-roster-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
 .player-roster-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
-.roster-cell { min-height:60px; border:1px solid rgba(255,255,255,.16); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; text-align:center; padding:4px 3px; overflow:hidden; box-shadow:inset 0 0 9px rgba(255,255,255,.035), 0 0 7px color-mix(in srgb, var(--coach-color) 15%, transparent); }
+.roster-cell { min-height:60px; border:1px solid color-mix(in srgb, var(--coach-color) 62%, rgba(255,255,255,.18)); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; text-align:center; padding:4px 3px; overflow:hidden; box-shadow:inset 0 0 9px rgba(255,255,255,.035), 0 0 9px color-mix(in srgb, var(--coach-color) 24%, transparent); }
 .roster-cell-empty { background:rgba(255,255,255,.025); border-color:color-mix(in srgb, var(--coach-color) 42%, rgba(255,255,255,.12)); box-shadow:inset 0 0 10px color-mix(in srgb, var(--coach-color) 20%, transparent); }
 .roster-flag { display:flex; align-items:center; justify-content:center; min-height:29px; font-size:1.51rem; line-height:1; }
 .roster-flag .flag-icon { margin:0; width:1.85em; height:1.85em; vertical-align:0; }
@@ -1965,6 +1966,16 @@ Awarded to the coach who owns the single drafted national team with the largest 
         render_power_rating_explanation()
 
 
+def placement_strip(rank):
+    placements = {
+        1: ("Gold", "#FFD700", "#050505"),
+        2: ("Silver", "#C0C0C0", "#050505"),
+        3: ("Bronze", "#CD7F32", "#050505"),
+    }
+    label, color, text_color = placements.get(rank, (f"{rank}th Place", "#FFFFFF", "#050505"))
+    return label, color, text_color
+
+
 def render_standings(state, scores):
     st.markdown("<div class='section-title'>Standings</div>", unsafe_allow_html=True)
     leaders = award_leaders(scores)
@@ -1981,9 +1992,7 @@ def render_standings(state, scores):
         if item["cinderella_team"]:
             cinderella_text = f'{item["cinderella_team"]} {item["cinderella"]:+.1f}'
         live_html = coach_live_matches_html(state, coach)
-        badge = f"#{rank_by_coach[coach]}"
-        if rank_by_coach[coach] == 1:
-            badge = "Gold"
+        place_label, place_color, place_text_color = placement_strip(rank_by_coach[coach])
         awards = []
         for award_name, leader in leaders.items():
             if leader and leader["coach"] == coach:
@@ -1996,6 +2005,7 @@ def render_standings(state, scores):
         cards.append(
             f"""
 <div class='coach-card' style='--coach-color:{html.escape(color)}'>
+  <div class='place-strip' style='--place-color:{html.escape(place_color)}; --place-text:{html.escape(place_text_color)}'>{html.escape(place_label)}</div>
   <div class='coach-head'>
     {coach_image_html(coach, color)}
     <div>
@@ -2004,7 +2014,6 @@ def render_standings(state, scores):
     </div>
     <div class='score-badge'>{int(item["total_points"])}</div>
   </div>
-  <div class='metric-row'><span>Overall</span><b>{html.escape(badge)}</b></div>
   <div class='metric-row points-pair'><span>Team Points <b>{int(item["team_points"])}</b></span><span>Player Points <b>{int(item["player_points"])}</b></span></div>
   <div class='side-bet-grid'>
     <div class='side-bet-pill'><span>Group</span><b>{int(item["group_stage_points"])} pts</b></div>
