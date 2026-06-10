@@ -53,7 +53,8 @@
         "USA",
         "Senegal",
         "Paraguay",
-        "Bosnia and Herzegovina"
+        "Bosnia and Herzegovina",
+        "Cabo Verde"
       ],
       "star_players": []
     },
@@ -411,6 +412,13 @@
       "coach": "Peter",
       "team": "New Zealand",
       "picked_at": "2026-06-10T06:35:24.527678-04:00"
+    },
+    {
+      "pick": 44,
+      "round": 6,
+      "coach": "Chad",
+      "team": "Cabo Verde",
+      "picked_at": "2026-06-10T06:47:10.970420-04:00"
     }
   ],
   "player_picks": [],
@@ -2981,7 +2989,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781087724,
+  "current_pick_started_at": 1781088430,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3023,7 +3031,8 @@
         "USA",
         "Senegal",
         "Paraguay",
-        "Bosnia and Herzegovina"
+        "Bosnia and Herzegovina",
+        "Cabo Verde"
       ],
       "star_players": []
     },
