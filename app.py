@@ -204,6 +204,8 @@ input, textarea, select { color:#fff!important; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
 div[data-testid="stExpander"] summary p { font-size:1.03rem; }
 .drafted-chip { display:inline-flex; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; }
+.drafted-chip-dot { display:inline-flex; width:.55rem; height:.55rem; border-radius:50%; background:var(--coach-color); box-shadow:0 0 7px var(--coach-color); margin:0 3px; align-self:center; }
+.match-browser-note { color:#b9c2c9; font-size:.82rem; font-weight:850; margin:0 0 .35rem; }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
 .payout-item { border:1px solid #2d2d2d; border-radius:8px; padding:10px; background:#070707; }
 .payout-item b { color:#ffd54a; }
@@ -2871,6 +2873,26 @@ def match_owned_teams_by_coach(state, match):
     return owned
 
 
+def match_player_points_by_team_and_coach(state, match):
+    teams_in_match = {canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))}
+    points_by_team = {}
+    for goal in match.get("goals", []):
+        for field, value in [("scorer", 4), ("assist", 3)]:
+            player = match_player_to_pool(goal.get(field), state.get("players", []))
+            if not player:
+                continue
+            team_name = player_country(player)
+            if team_name not in teams_in_match:
+                team_name = canonical_team_name((goal.get("team") or ""))
+            if team_name not in teams_in_match:
+                continue
+            coach = drafted_coach_for_player(state, player)
+            if coach:
+                points_by_team.setdefault(team_name, {})
+                points_by_team[team_name][coach] = points_by_team[team_name].get(coach, 0) + value
+    return points_by_team
+
+
 def match_clock_text(match):
     status = match_status_label(match)
     status_key = match_status_key(match)
@@ -2906,6 +2928,9 @@ def match_points_by_coach(state, match):
 
 
 def match_point_chips_html(state, match, only_coach=None, include_teams=False):
+    if include_teams and not only_coach:
+        return match_team_ordered_chips_html(state, match)
+
     points_by_coach = match_points_by_coach(state, match)
     if only_coach:
         if only_coach not in points_by_coach:
@@ -2922,6 +2947,30 @@ def match_point_chips_html(state, match, only_coach=None, include_teams=False):
         chips.append(
             f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(coach)} +{points}{html.escape(team_suffix)}</span>"
         )
+    return "".join(chips)
+
+
+def match_team_ordered_chips_html(state, match):
+    player_points = match_player_points_by_team_and_coach(state, match)
+    chips = []
+    for team_name in [canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))]:
+        if not team_name:
+            continue
+        team_owner = drafted_coach_for_team(state, team_name)
+        coaches = []
+        if team_owner:
+            coaches.append(team_owner)
+        for coach in sorted(player_points.get(team_name, {}), key=lambda value: COACHES.index(value) if value in COACHES else 999):
+            if coach not in coaches:
+                coaches.append(coach)
+        for coach in coaches:
+            color = state["teams"][coach]["color"]
+            points = player_points.get(team_name, {}).get(coach, 0)
+            if coach == team_owner:
+                points += score_match_for_team(match, team_name)
+            chips.append(
+                f"<span class='drafted-chip' style='--coach-color:{html.escape(color)}'>{html.escape(team_code(team_name))}<span class='drafted-chip-dot'></span>{html.escape(coach)} +{points}</span>"
+            )
     return "".join(chips)
 
 
@@ -3040,17 +3089,41 @@ def match_section_name(match):
     return "Group Stages"
 
 
-def render_group_stage_match_groups(state, matches):
-    groups = {}
-    for match in matches:
-        group = match_group_label(match) or "TBD"
-        groups.setdefault(group, []).append(match)
-    if not groups:
-        st.caption("No group-stage matches loaded yet.")
-        return
-    group_options = sorted(groups, key=lambda value: (value == "TBD", value))
-    selected_group = st.selectbox("Group", group_options, key="match-tracker-group")
-    render_match_cards(state, groups[selected_group], show_group=True)
+def toggle_button(label, state_key, button_key):
+    is_open = bool(st.session_state.get(state_key))
+    prefix = "▼" if is_open else "▶"
+    if st.button(f"{prefix} {label}", key=button_key, width="stretch"):
+        st.session_state[state_key] = not is_open
+        st.rerun()
+    return bool(st.session_state.get(state_key))
+
+
+def render_match_stage_browser(state, sections):
+    has_open_section = any(st.session_state.get(f"match-browser-stage-{clean_key(name)}") for name in sections)
+    has_open_group = any(key.startswith("match-browser-group-") and value for key, value in st.session_state.items())
+    with st.expander("Browse Matches by Stage and Group", expanded=has_open_section or has_open_group):
+        st.markdown(
+            "<div class='match-browser-note'>Open a stage, then a group, to load just those match cards.</div>",
+            unsafe_allow_html=True,
+        )
+        for section_name, section_matches in sections.items():
+            if not section_matches:
+                continue
+            section_key = f"match-browser-stage-{clean_key(section_name)}"
+            if not toggle_button(section_name, section_key, f"btn-{section_key}"):
+                continue
+
+            if section_name == "Group Stages":
+                groups = {}
+                for match in section_matches:
+                    group = match_group_label(match) or "TBD"
+                    groups.setdefault(group, []).append(match)
+                for group_name in sorted(groups, key=lambda value: (value == "TBD", value)):
+                    group_key = f"match-browser-group-{clean_key(group_name)}"
+                    if toggle_button(f"Group {group_name}", group_key, f"btn-{section_key}-{group_key}"):
+                        render_match_cards(state, groups[group_name], show_group=True)
+            else:
+                render_match_cards(state, section_matches, show_group=True)
 
 
 def render_live_matches(state):
@@ -3093,13 +3166,7 @@ def render_live_matches(state):
             section_name = match_section_name(match)
             if section_name in sections:
                 sections[section_name].append(match)
-        with st.expander("Browse Matches by Stage and Group", expanded=False):
-            section_options = [name for name in sections if sections[name]]
-            selected_section = st.selectbox("Match section", section_options or list(sections), key="match-tracker-section")
-            if selected_section == "Group Stages":
-                render_group_stage_match_groups(state, sections[selected_section])
-            else:
-                render_match_cards(state, sections[selected_section])
+        render_match_stage_browser(state, sections)
 
 
 def format_match_date(value):
