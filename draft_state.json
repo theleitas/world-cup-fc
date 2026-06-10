@@ -112,7 +112,9 @@
         "Algeria",
         "Jordan"
       ],
-      "star_players": []
+      "star_players": [
+        "Kylian Mbappe (France)"
+      ]
     }
   },
   "team_picks": [
@@ -453,7 +455,15 @@
       "picked_at": "2026-06-10T10:22:45.102043-04:00"
     }
   ],
-  "player_picks": [],
+  "player_picks": [
+    {
+      "pick": 49,
+      "round": 1,
+      "coach": "Spencer",
+      "player": "Kylian Mbappe (France)",
+      "picked_at": "2026-06-10T17:44:45.823226-04:00"
+    }
+  ],
   "players": [
     "Lamine Yamal (Spain)",
     "Kylian Mbappe (France)",
@@ -3021,7 +3031,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781101365,
+  "current_pick_started_at": 1781127885,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3110,7 +3120,9 @@
         "Algeria",
         "Jordan"
       ],
-      "star_players": []
+      "star_players": [
+        "Kylian Mbappe (France)"
+      ]
     }
   }
 }
