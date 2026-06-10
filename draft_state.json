@@ -84,7 +84,9 @@
         "South Africa",
         "Iraq"
       ],
-      "star_players": []
+      "star_players": [
+        "Ousmane Dembele (France)"
+      ]
     },
     "Jayme": {
       "team_name": "Jayme",
@@ -471,6 +473,13 @@
       "coach": "Jayme",
       "player": "Lamine Yamal (Spain)",
       "picked_at": "2026-06-10T17:46:35.820780-04:00"
+    },
+    {
+      "pick": 51,
+      "round": 1,
+      "coach": "Herb",
+      "player": "Ousmane Dembele (France)",
+      "picked_at": "2026-06-10T18:10:24.890382-04:00"
     }
   ],
   "players": [
@@ -3040,7 +3049,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781127995,
+  "current_pick_started_at": 1781129424,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3107,7 +3116,9 @@
         "South Africa",
         "Iraq"
       ],
-      "star_players": []
+      "star_players": [
+        "Ousmane Dembele (France)"
+      ]
     },
     "Jayme": {
       "national_teams": [
