@@ -214,12 +214,15 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button {
     justify-content:flex-start!important; text-align:left!important; background:#050505!important;
     color:#ffd54a!important; border:1px solid #2e2e2e!important; border-radius:8px!important;
-    min-height:44px!important; font-size:1.08rem!important; font-weight:1000!important;
+    min-height:44px!important; font-size:1.16rem!important; font-weight:1000!important;
     padding-left:18px!important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)!important;
+}
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button > div {
+    width:100%!important; justify-content:flex-start!important; text-align:left!important;
 }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button *,
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button p {
-    color:#ffd54a!important; font-weight:1000!important; text-align:left!important;
+    color:#ffd54a!important; font-size:1.16rem!important; font-weight:1000!important; text-align:left!important;
 }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hover {
     border-color:#ffd54a!important; background:#080808!important; color:#ffd54a!important;
