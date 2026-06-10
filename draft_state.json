@@ -39,7 +39,8 @@
         "Morocco",
         "Sweden",
         "Korea Republic",
-        "Tunisia"
+        "Tunisia",
+        "New Zealand"
       ],
       "star_players": []
     },
@@ -403,6 +404,13 @@
       "coach": "Jeff",
       "team": "Qatar",
       "picked_at": "2026-06-10T06:08:07.985416-04:00"
+    },
+    {
+      "pick": 43,
+      "round": 6,
+      "coach": "Peter",
+      "team": "New Zealand",
+      "picked_at": "2026-06-10T06:35:24.527678-04:00"
     }
   ],
   "player_picks": [],
@@ -2973,7 +2981,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781086087,
+  "current_pick_started_at": 1781087724,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3004,7 +3012,8 @@
         "Morocco",
         "Sweden",
         "Korea Republic",
-        "Tunisia"
+        "Tunisia",
+        "New Zealand"
       ],
       "star_players": []
     },
