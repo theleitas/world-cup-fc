@@ -1937,14 +1937,13 @@ def render_header(state):
 
 def render_payout_descriptions():
     with st.expander("Important Information", expanded=False):
-        render_power_rating_explanation()
         st.markdown(
             f"""
+<div class='payout-desc'><b>Standings Card Abbreviations</b><br>
+"Group" means Group Stage Winner points only. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. Live Impact appears only for matches currently live and shows the active match score plus the coach's live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
+
 <div class='payout-desc'><b>Gold - $300</b><br>
 Awarded to the coach who finishes first overall in total fantasy points. Total fantasy points are the sum of every drafted national team's match points and advancement bonuses plus every drafted star player's goal and assist points. National teams earn 3 points for a win, 1 for a draw, 1 for each goal scored, and 1 for a clean sheet. Players earn 4 points per goal and 3 per assist.</div>
-
-<div class='payout-desc'><b>Standings Card Abbreviations</b><br>
-Group means Group Stage Winner points only. Empire means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. Cinderella means the coach's best single-team overperformance against the locked FIFA ranking baseline. Live Impact appears only for matches currently live and shows the active match score plus the coach's live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
 
 <div class='payout-desc'><b>Silver - $150</b><br>
 Awarded to the coach who finishes second overall by total fantasy points, using the same full-tournament scoring calculation as Gold.</div>
@@ -1963,6 +1962,7 @@ Awarded to the coach who owns the single drafted national team with the largest 
 """,
             unsafe_allow_html=True,
         )
+        render_power_rating_explanation()
 
 
 def render_standings(state, scores):
