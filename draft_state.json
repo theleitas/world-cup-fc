@@ -98,7 +98,9 @@
         "Saudi Arabia",
         "Curaçao"
       ],
-      "star_players": []
+      "star_players": [
+        "Lamine Yamal (Spain)"
+      ]
     },
     "Spencer": {
       "team_name": "Spencer",
@@ -462,6 +464,13 @@
       "coach": "Spencer",
       "player": "Kylian Mbappe (France)",
       "picked_at": "2026-06-10T17:44:45.823226-04:00"
+    },
+    {
+      "pick": 50,
+      "round": 1,
+      "coach": "Jayme",
+      "player": "Lamine Yamal (Spain)",
+      "picked_at": "2026-06-10T17:46:35.820780-04:00"
     }
   ],
   "players": [
@@ -3031,7 +3040,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781127885,
+  "current_pick_started_at": 1781127995,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3109,7 +3118,9 @@
         "Saudi Arabia",
         "Curaçao"
       ],
-      "star_players": []
+      "star_players": [
+        "Lamine Yamal (Spain)"
+      ]
     },
     "Spencer": {
       "national_teams": [
