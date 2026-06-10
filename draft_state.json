@@ -25,7 +25,8 @@
         "Türkiye",
         "Canada",
         "Austria",
-        "Uzbekistan"
+        "Uzbekistan",
+        "Qatar"
       ],
       "star_players": []
     },
@@ -395,6 +396,13 @@
       "coach": "Benji",
       "team": "Congo DR",
       "picked_at": "2026-06-09T20:55:09.911104-04:00"
+    },
+    {
+      "pick": 42,
+      "round": 6,
+      "coach": "Jeff",
+      "team": "Qatar",
+      "picked_at": "2026-06-10T06:08:07.985416-04:00"
     }
   ],
   "player_picks": [],
@@ -595,7 +603,7 @@
       "group": "GROUP_B",
       "matchday": 1,
       "home": "Canada",
-      "away": "Bosnia-Herzegovina",
+      "away": "Bosnia and Herzegovina",
       "home_score": null,
       "away_score": null,
       "status": "Timed",
@@ -1308,7 +1316,7 @@
       "group": "GROUP_B",
       "matchday": 2,
       "home": "Switzerland",
-      "away": "Bosnia-Herzegovina",
+      "away": "Bosnia and Herzegovina",
       "home_score": null,
       "away_score": null,
       "status": "Timed",
@@ -2051,7 +2059,7 @@
       "stage": "Group Stage",
       "group": "GROUP_B",
       "matchday": 3,
-      "home": "Bosnia-Herzegovina",
+      "home": "Bosnia and Herzegovina",
       "away": "Qatar",
       "home_score": null,
       "away_score": null,
@@ -2965,7 +2973,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781052909,
+  "current_pick_started_at": 1781086087,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -2985,7 +2993,8 @@
         "Türkiye",
         "Canada",
         "Austria",
-        "Uzbekistan"
+        "Uzbekistan",
+        "Qatar"
       ],
       "star_players": []
     },
