@@ -118,6 +118,8 @@ input, textarea, select { color:#fff!important; }
 .round-head { width:64px; color:#00e5ff!important; }
 .pick-cell { border:2px solid var(--coach-color); border-left-width:5px; min-height:74px; border-radius:6px; padding:6px; background:linear-gradient(135deg, rgba(255,255,255,.035), rgba(0,0,0,.02)); box-shadow:inset 0 0 0 1px rgba(255,255,255,.04); }
 .pick-cell:hover { background:color-mix(in srgb, var(--coach-color) 22%, #111); box-shadow:0 0 12px var(--coach-color), inset 0 0 0 1px rgba(255,255,255,.06); }
+.pick-cell-on-clock { border-width:3px; border-left-width:7px; background:color-mix(in srgb, var(--coach-color) 18%, #080808); box-shadow:0 0 18px var(--coach-color), 0 0 30px color-mix(in srgb, var(--coach-color) 55%, transparent), inset 0 0 16px color-mix(in srgb, var(--coach-color) 18%, transparent); }
+.pick-cell-on-clock .pick-num { color:#fff; text-shadow:0 0 8px var(--coach-color); }
 .pick-num { color:#00e5ff; font-size:.75rem; font-weight:1000; }
 .pick-coach { font-weight:1000; color:var(--coach-color); font-size:.78rem; }
 .pick-choice { color:#ffd54a; font-weight:900; margin-top:3px; overflow-wrap:anywhere; }
@@ -2565,6 +2567,8 @@ def render_make_pick_prompt(stage_label, current, state):
 def render_draft_board(title, sequence, picks, field, state, power_rosters=None):
     st.markdown(f"<div class='section-title'>{html.escape(title)}</div>", unsafe_allow_html=True)
     pick_map = pick_by_number(picks)
+    active_pick = current_pick(sequence, picks)
+    active_pick_number = active_pick["pick"] if active_pick else None
     rounds = max(item["round"] for item in sequence)
     rows = []
     rows.append("<div class='draft-board'><table><thead><tr>")
@@ -2593,9 +2597,10 @@ def render_draft_board(title, sequence, picks, field, state, power_rosters=None)
                     label = display_player_html(choice, include_info=False)
             else:
                 label = "Open"
+            cell_class = "pick-cell pick-cell-on-clock" if item["pick"] == active_pick_number else "pick-cell"
             rows.append(
                 f"""
-<td><div class='pick-cell' style='--coach-color:{html.escape(cell_color)}'>
+<td><div class='{cell_class}' style='--coach-color:{html.escape(cell_color)}'>
   <div class='pick-num'>Pick {item["pick"]}</div>
   <div class='pick-choice'>{label}</div>
 </div></td>
