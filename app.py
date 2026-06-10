@@ -202,10 +202,21 @@ input, textarea, select { color:#fff!important; }
 .matches-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
 .match-section-spacer { height:14px; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
+.match-day-title { color:#ffd54a; font-weight:1000; font-size:.95rem; margin:.7rem 0 .35rem; padding-left:10px; border-left:3px solid #ffd54a; }
+.match-sub-title { color:#b9c2c9; font-weight:950; font-size:.86rem; margin:.45rem 0 .25rem; padding-left:10px; }
 div[data-testid="stExpander"] summary p { font-size:1.03rem; }
-.drafted-chip { display:inline-flex; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; }
-.drafted-chip-bullet { color:var(--coach-color); margin:0 3px; font-size:.78em; line-height:1; }
+.drafted-chip { display:inline-flex; align-items:center; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; line-height:1.15; }
+.drafted-chip-bullet { color:var(--coach-color); margin:0 3px; font-size:.78em; line-height:1; display:inline-flex; align-items:center; transform:translateY(-.01em); }
 .match-browser-note { color:#b9c2c9; font-size:.82rem; font-weight:850; margin:0 0 .35rem; }
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button {
+    justify-content:flex-start!important; text-align:left!important; background:#050505!important;
+    color:#ffd54a!important; border:1px solid #2e2e2e!important; border-radius:8px!important;
+    min-height:44px!important; font-size:1.03rem!important; font-weight:1000!important;
+    padding-left:18px!important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)!important;
+}
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hover {
+    border-color:#ffd54a!important; background:#080808!important; color:#ffd54a!important;
+}
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
 .payout-item { border:1px solid #2d2d2d; border-radius:8px; padding:10px; background:#070707; }
 .payout-item b { color:#ffd54a; }
@@ -3094,6 +3105,26 @@ def compact_date_label(value):
     return value.strftime("%b %-d") if os.name != "nt" else value.strftime("%b %#d")
 
 
+def full_day_label(value):
+    return value.strftime("%A, %b %-d") if os.name != "nt" else value.strftime("%A, %b %#d")
+
+
+def stage_bucket_label(match):
+    stage = str(match.get("stage") or "")
+    if stage_is_group(stage):
+        return "Group Stages"
+    return stage_to_advancement(stage) or stage.replace("_", " ").title() or "Other Matches"
+
+
+def unique_stage_labels(matches):
+    labels = []
+    for match in matches:
+        label = stage_bucket_label(match)
+        if label and label not in labels:
+            labels.append(label)
+    return labels
+
+
 def match_week_groups(matches):
     future = sorted(
         [match for match in matches if local_match_datetime(match)],
@@ -3118,11 +3149,57 @@ def match_week_groups(matches):
     return [(start, end, group_matches) for start, end, group_matches in groups if group_matches]
 
 
-def render_lazy_match_section(state, label, matches, key, default_open=False, empty_text="No matches in this section yet."):
+def render_day_grouped_match_cards(state, matches, newest_first=False, heading_class="match-day-title"):
+    dated = [match for match in matches if local_match_datetime(match)]
+    undated = [match for match in matches if not local_match_datetime(match)]
+    day_groups = {}
+    for match in dated:
+        local_dt = local_match_datetime(match)
+        day_groups.setdefault(local_dt.date(), []).append(match)
+
+    for day in sorted(day_groups, reverse=newest_first):
+        day_matches = sorted(
+            day_groups[day],
+            key=lambda match: local_match_datetime(match) or datetime.max.replace(tzinfo=ZoneInfo("America/New_York")),
+            reverse=newest_first,
+        )
+        st.markdown(f"<div class='{html.escape(heading_class)}'>{html.escape(full_day_label(day))}</div>", unsafe_allow_html=True)
+        render_match_cards(state, day_matches, show_group=True)
+
+    if undated:
+        st.markdown(f"<div class='{html.escape(heading_class)}'>Date TBD</div>", unsafe_allow_html=True)
+        render_match_cards(state, undated, show_group=True)
+
+
+def render_completed_match_cards(state, matches):
+    group_matches = {}
+    other_matches = {}
+    for match in matches:
+        if stage_is_group(match.get("stage")):
+            group = match_group_label(match) or "TBD"
+            group_matches.setdefault(group, []).append(match)
+        else:
+            other_matches.setdefault(stage_bucket_label(match), []).append(match)
+
+    for group in sorted(group_matches, key=lambda value: (value == "TBD", value)):
+        st.markdown(f"<div class='match-day-title'>Group {html.escape(group)}</div>", unsafe_allow_html=True)
+        render_day_grouped_match_cards(state, group_matches[group], newest_first=True, heading_class="match-sub-title")
+
+    for stage_name, stage_matches in other_matches.items():
+        st.markdown(f"<div class='match-day-title'>{html.escape(stage_name)}</div>", unsafe_allow_html=True)
+        render_day_grouped_match_cards(state, stage_matches, newest_first=True, heading_class="match-sub-title")
+
+
+def render_lazy_match_section(state, label, matches, key, default_open=False, empty_text="No matches in this section yet.", render_mode="day"):
     if not toggle_button(label, f"match-timeline-{key}", f"btn-match-timeline-{key}", default_open=default_open):
         return
     if matches:
-        render_match_cards(state, matches, show_group=True)
+        if render_mode == "completed":
+            render_completed_match_cards(state, matches)
+        elif render_mode == "flat":
+            render_match_cards(state, matches, show_group=True)
+        else:
+            render_day_grouped_match_cards(state, matches)
     else:
         st.caption(empty_text)
 
@@ -3160,6 +3237,7 @@ def render_match_timeline(state, matches):
         "completed",
         default_open=False,
         empty_text="No completed matches yet.",
+        render_mode="completed",
     )
     render_lazy_match_section(
         state,
@@ -3168,11 +3246,14 @@ def render_match_timeline(state, matches):
         "live",
         default_open=True,
         empty_text="No live matches right now.",
+        render_mode="flat",
     )
 
     for index, (start, end, week_matches) in enumerate(match_week_groups(future_matches)):
         date_label = f"{compact_date_label(start)} - {compact_date_label(end)}"
-        label = f"Upcoming Matches ({date_label})" if index == 0 else f"Week {index + 1}: {date_label}"
+        stages = ", ".join(unique_stage_labels(week_matches))
+        stage_suffix = f" • {stages}" if stages else ""
+        label = f"Upcoming Matches ({date_label}){stage_suffix}" if index == 0 else f"Week {index + 1}: {date_label}{stage_suffix}"
         render_lazy_match_section(
             state,
             label,
