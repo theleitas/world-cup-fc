@@ -109,7 +109,8 @@
         "Netherlands",
         "Switzerland",
         "Australia",
-        "Algeria"
+        "Algeria",
+        "Jordan"
       ],
       "star_players": []
     }
@@ -443,6 +444,13 @@
       "coach": "Jayme",
       "team": "Curaçao",
       "picked_at": "2026-06-10T10:22:27.070835-04:00"
+    },
+    {
+      "pick": 48,
+      "round": 6,
+      "coach": "Spencer",
+      "team": "Jordan",
+      "picked_at": "2026-06-10T10:22:45.102043-04:00"
     }
   ],
   "player_picks": [],
@@ -3013,7 +3021,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781101347,
+  "current_pick_started_at": 1781101365,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3099,7 +3107,8 @@
         "Netherlands",
         "Switzerland",
         "Australia",
-        "Algeria"
+        "Algeria",
+        "Jordan"
       ],
       "star_players": []
     }
