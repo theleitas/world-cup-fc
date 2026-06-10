@@ -70,7 +70,9 @@
         "Ghana",
         "Haiti"
       ],
-      "star_players": []
+      "star_players": [
+        "Erling Haaland (Norway)"
+      ]
     },
     "Herb": {
       "team_name": "Herb",
@@ -480,6 +482,13 @@
       "coach": "Herb",
       "player": "Ousmane Dembele (France)",
       "picked_at": "2026-06-10T18:10:24.890382-04:00"
+    },
+    {
+      "pick": 52,
+      "round": 1,
+      "coach": "Lamp",
+      "player": "Erling Haaland (Norway)",
+      "picked_at": "2026-06-10T18:13:31.360351-04:00"
     }
   ],
   "players": [
@@ -3049,7 +3058,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781129424,
+  "current_pick_started_at": 1781129611,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3105,7 +3114,9 @@
         "Ghana",
         "Haiti"
       ],
-      "star_players": []
+      "star_players": [
+        "Erling Haaland (Norway)"
+      ]
     },
     "Herb": {
       "national_teams": [
