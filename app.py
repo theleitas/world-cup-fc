@@ -909,6 +909,8 @@ def player_lookup(players):
 
 def match_player_to_pool(name, players):
     normalized = normalize_player_name(name)
+    if not normalized:
+        return ""
     lookup = player_lookup(players)
     if normalized in lookup:
         return lookup[normalized]
@@ -916,6 +918,17 @@ def match_player_to_pool(name, players):
         if key and (key in normalized or normalized in key):
             return player
     return ""
+
+
+def player_is_in_match(player, match):
+    country = canonical_team_name(player_country(player))
+    if not country:
+        return False
+    match_teams = {
+        canonical_team_name(match.get("home")),
+        canonical_team_name(match.get("away")),
+    }
+    return country in match_teams
 
 
 def display_player(player):
@@ -1163,6 +1176,7 @@ def default_state():
         "last_score_refresh_attempt_at": 0,
         "last_api_error": "",
         "last_friendly_api_error": "",
+        "manual_player_stats_override": False,
         "current_pick_started_at": int(time.time()),
     }
 
@@ -1188,6 +1202,7 @@ def normalize_state(state):
     state.setdefault("last_score_refresh_attempt_at", 0)
     state.setdefault("last_api_error", "")
     state.setdefault("last_friendly_api_error", "")
+    state.setdefault("manual_player_stats_override", False)
     state.setdefault("current_pick_started_at", int(time.time()))
 
     state["players"] = [str(player).strip() for player in state.get("players", []) if str(player).strip()]
@@ -1928,16 +1943,23 @@ def player_stats_from_matches(matches, players):
         is_group = stage_is_group(match.get("stage"))
         for goal in match.get("goals", []):
             scorer = match_player_to_pool(goal.get("scorer"), players)
-            if scorer:
+            if scorer and player_is_in_match(scorer, match):
                 stats[scorer]["goals"] += 1
                 if is_group:
                     stats[scorer]["group_goals"] += 1
             assist = match_player_to_pool(goal.get("assist"), players)
-            if assist:
+            if assist and player_is_in_match(assist, match):
                 stats[assist]["assists"] += 1
                 if is_group:
                     stats[assist]["group_assists"] += 1
     return stats
+
+
+def reconcile_player_stats_with_matches(state):
+    if state.get("manual_player_stats_override") or not state.get("matches"):
+        return state
+    state["player_stats"] = player_stats_from_matches(state["matches"], state["players"])
+    return state
 
 
 def merge_scorer_aggregates(stats, scorers, players):
@@ -1965,6 +1987,7 @@ def refresh_api_scores():
             if matches:
                 state["matches"] = matches
                 state["player_stats"] = player_stats_from_matches(matches, state["players"])
+                state["manual_player_stats_override"] = False
                 state["advancement"] = derive_advancement_from_matches(matches)
                 state["last_score_refresh_at"] = int(time.time())
                 state["last_api_error"] = ""
@@ -3886,6 +3909,7 @@ def render_admin(state):
                             "group_assists": none_or_int(row.get("group_assists")) or 0,
                         }
                     fresh["player_stats"] = stats
+                    fresh["manual_player_stats_override"] = True
                     return True
                 ok, _ = mutate_shared_state(mutator, "Update player stats")
                 if ok:
@@ -3917,6 +3941,7 @@ def render_admin(state):
             st.markdown("</div>", unsafe_allow_html=True)
 state, sha = load_state_from_github()
 state = normalize_state(state)
+state = reconcile_player_stats_with_matches(state)
 draft_in_progress = state.get("draft_active") and not full_draft_complete(state)
 if draft_in_progress:
     draft_refresh_count = st_autorefresh(interval=DRAFT_AUTO_REFRESH_SECONDS * 1000, key="world_cup_fc_draft_refresh")
@@ -3929,6 +3954,7 @@ if FOOTBALL_DATA_TOKEN and (not draft_in_progress) and int(time.time()) - int(st
     _, refreshed_state = refresh_api_scores()
     if refreshed_state:
         state = normalize_state(refreshed_state)
+        state = reconcile_player_stats_with_matches(state)
 scores = calculate_scores(state)
 
 render_header(state)
