@@ -3163,8 +3163,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781208053,
-  "last_score_refresh_attempt_at": 1781208052,
+  "last_score_refresh_at": 1781208392,
+  "last_score_refresh_attempt_at": 1781208391,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
@@ -3282,5 +3282,6 @@
         "Neymar Jr. (Brazil)"
       ]
     }
-  }
+  },
+  "manual_player_stats_override": false
 }
