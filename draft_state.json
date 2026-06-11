@@ -753,17 +753,17 @@
           "minute": 9,
           "injury_time": null,
           "type": "REGULAR",
-          "team": "",
-          "scorer": "",
-          "assist": ""
+          "team": "Mexico",
+          "scorer": "Julián Quiñones",
+          "assist": "Erik Lira"
         },
         {
           "minute": 67,
           "injury_time": null,
           "type": "REGULAR",
-          "team": "",
-          "scorer": "",
-          "assist": ""
+          "team": "Mexico",
+          "scorer": "Raúl Jiménez",
+          "assist": "Roberto Alvarado"
         }
       ]
     },
@@ -3171,8 +3171,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781216536,
-  "last_score_refresh_attempt_at": 1781216535,
+  "last_score_refresh_at": 1781216928,
+  "last_score_refresh_attempt_at": 1781216928,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
