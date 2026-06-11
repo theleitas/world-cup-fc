@@ -1964,12 +1964,7 @@ def refresh_api_scores():
             )
             if matches:
                 state["matches"] = matches
-                match_stats = player_stats_from_matches(matches, state["players"])
-                try:
-                    scorers = fetch_scorers_from_football_data(FOOTBALL_DATA_TOKEN)
-                except Exception:
-                    scorers = {}
-                state["player_stats"] = merge_scorer_aggregates(match_stats, scorers, state["players"])
+                state["player_stats"] = player_stats_from_matches(matches, state["players"])
                 state["advancement"] = derive_advancement_from_matches(matches)
                 state["last_score_refresh_at"] = int(time.time())
                 state["last_api_error"] = ""
