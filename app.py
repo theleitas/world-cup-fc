@@ -212,8 +212,8 @@ input, textarea, select { color:#fff!important; }
 .match-line { display:flex; flex-wrap:wrap; align-items:center; gap:8px; font-weight:1000; }
 .match-score { color:#ffd54a; }
 .match-player-line { display:flex; flex-wrap:wrap; align-items:center; gap:6px; margin-top:5px; }
-.match-player-chip { display:inline-flex; align-items:center; gap:5px; border:1px solid rgba(255,255,255,.14); border-radius:6px; background:#0d0d0d; color:#eaf7fa; padding:2px 6px; font-size:.76rem; font-weight:900; }
-.match-player-dot { width:.55rem; height:.55rem; border-radius:50%; background:var(--coach-color); box-shadow:0 0 7px var(--coach-color); flex:0 0 auto; }
+.match-player-chip { display:inline-flex; align-items:center; border:1px solid var(--coach-color); border-radius:6px; background:color-mix(in srgb, var(--coach-color) 13%, #0d0d0d); color:var(--coach-color); box-shadow:0 0 7px color-mix(in srgb, var(--coach-color) 35%, transparent); padding:2px 6px; font-size:.76rem; font-weight:900; line-height:1.15; }
+.match-player-bullet { color:var(--coach-color); margin:0 4px; font-size:.78em; line-height:1; display:inline-flex; align-items:center; transform:translateY(-.01em); }
 .matches-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
 .match-section-spacer { height:14px; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
@@ -2932,14 +2932,27 @@ def owned_players_in_match(state, match):
     return sorted(rows, key=lambda item: (COACHES.index(item[0]) if item[0] in COACHES else 999, clean_key(player_base_name(item[2]))))
 
 
+def match_points_for_player(state, match, drafted_player):
+    total = 0
+    for goal in match.get("goals", []):
+        scorer = match_player_to_pool(goal.get("scorer"), state.get("players", []))
+        if scorer == drafted_player:
+            total += 4
+        assist = match_player_to_pool(goal.get("assist"), state.get("players", []))
+        if assist == drafted_player:
+            total += 3
+    return total
+
+
 def match_player_line_html(state, match):
     rows = owned_players_in_match(state, match)
     if not rows:
         return "<span class='subtle'>No drafted players in this match.</span>"
     chips = []
     for coach, color, player in rows:
+        points = match_points_for_player(state, match, player)
         chips.append(
-            f"<span class='match-player-chip'><span class='match-player-dot' style='--coach-color:{html.escape(color)}'></span>{html.escape(player_base_name(player))} <span class='subtle'>({html.escape(coach)})</span></span>"
+            f"<span class='match-player-chip' style='--coach-color:{html.escape(color)}'>{html.escape(player_last_name(player))}<span class='match-player-bullet'>•</span>{html.escape(coach)} +{points}</span>"
         )
     return "".join(chips)
 
