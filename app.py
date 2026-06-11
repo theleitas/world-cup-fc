@@ -238,6 +238,10 @@ div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button {
     min-height:44px!important; font-size:1.35rem!important; line-height:1.12!important; font-weight:1000!important;
     padding-left:18px!important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)!important;
 }
+div[class*="st-key-btn-points-tracker"],
+div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] {
+    margin-bottom:0!important; padding-bottom:0!important;
+}
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button > div,
 div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button > div {
     width:100%!important; justify-content:flex-start!important; text-align:left!important;
@@ -2273,9 +2277,7 @@ def points_tracker_svg(state, scores):
 
 
 def render_points_tracker(state, scores):
-    st.markdown("<div class='points-tracker-wrap'>", unsafe_allow_html=True)
     if not toggle_button("Points Tracker", "points-tracker-open", "btn-points-tracker", default_open=False):
-        st.markdown("</div>", unsafe_allow_html=True)
         return
     st.markdown(
         f"""
@@ -2286,7 +2288,6 @@ def render_points_tracker(state, scores):
 """,
         unsafe_allow_html=True,
     )
-    st.markdown("</div>", unsafe_allow_html=True)
 
 
 def render_power_rating_explanation():
