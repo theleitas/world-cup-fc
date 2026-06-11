@@ -1658,8 +1658,6 @@ def score_match_for_team(match, team_name):
         return 0
     goals_for = home_score if team_name == home else away_score
     goals_against = away_score if team_name == home else home_score
-    if not match_is_completed(match):
-        return goals_for
     result_points = 3 if goals_for > goals_against else 1 if goals_for == goals_against else 0
     clean_sheet = 1 if goals_against == 0 else 0
     return result_points + goals_for + clean_sheet
