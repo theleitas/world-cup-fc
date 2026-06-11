@@ -108,6 +108,10 @@ input, textarea, select { color:#fff!important; }
 .roster-flag { display:flex; align-items:center; justify-content:center; min-height:29px; font-size:1.51rem; line-height:1; }
 .roster-flag .flag-icon { margin:0; width:1.85em; height:1.85em; vertical-align:0; }
 .roster-name { color:#fff; font-size:.92rem; line-height:1; font-weight:500; overflow-wrap:anywhere; max-width:100%; }
+.team-roster-cell { gap:0; padding-top:3px; padding-bottom:3px; }
+.team-roster-cell .roster-flag { min-height:25px; font-size:1.82rem; margin-bottom:-1px; }
+.team-roster-cell .roster-flag .flag-icon { width:1.08em; height:1.08em; }
+.team-roster-cell .roster-name { line-height:.98; }
 .player-roster-cell { min-height:64px; flex-direction:row; justify-content:flex-start; align-items:center; gap:8px; text-align:left; padding:6px 34px 6px 6px; }
 .player-thumb { width:48px; height:48px; border-radius:50%; object-fit:cover; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
 .player-thumb-placeholder { width:48px; height:48px; border-radius:50%; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.88rem; font-weight:900; box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
@@ -815,7 +819,7 @@ def roster_grid_cell_html(flag_html="", label="", points=None):
     if not label:
         return "<div class='roster-cell roster-cell-empty'></div>"
     return f"""
-<div class='roster-cell'>
+<div class='roster-cell team-roster-cell'>
   {asset_score_badge_html(points)}
   <div class='roster-flag'>{flag_html}</div>
   <div class='roster-name'>{html.escape(label)}</div>
