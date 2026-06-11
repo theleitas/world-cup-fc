@@ -66,7 +66,8 @@
         "Cabo Verde"
       ],
       "star_players": [
-        "Harry Kane (England)"
+        "Harry Kane (England)",
+        "Cristiano Ronaldo (Portugal)"
       ]
     },
     "Lamp": {
@@ -549,6 +550,13 @@
       "coach": "Peter",
       "player": "Raphinha (Brazil)",
       "picked_at": "2026-06-10T22:44:32.626075-04:00"
+    },
+    {
+      "pick": 60,
+      "round": 2,
+      "coach": "Chad",
+      "player": "Cristiano Ronaldo (Portugal)",
+      "picked_at": "2026-06-11T06:46:18.382386-04:00"
     }
   ],
   "players": [
@@ -3118,7 +3126,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781174650,
+  "current_pick_started_at": 1781174778,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3173,7 +3181,8 @@
         "Cabo Verde"
       ],
       "star_players": [
-        "Harry Kane (England)"
+        "Harry Kane (England)",
+        "Cristiano Ronaldo (Portugal)"
       ]
     },
     "Lamp": {
