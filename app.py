@@ -71,7 +71,7 @@ input, textarea, select { color:#fff!important; }
 .hero-title h1 { margin:0; padding:0; font-size:clamp(1.75rem, 6.4vw, 3.35rem); line-height:.98; font-weight:1000; color:#ffd54a; }
 .hero-kicker { color:#00e5ff; text-transform:uppercase; font-size:.82rem; letter-spacing:.12em; font-weight:1000; }
 .deadline-pill { border:2px solid #ffd54a; color:#ffd54a; border-radius:8px; padding:8px 10px; font-weight:950; background:#090909; }
-.section-title { color:#ffd54a; font-weight:1000; font-size:1.35rem; margin:1.2rem 0 .55rem; }
+.section-title { color:#ffd54a; font-weight:1000; font-size:1.35rem; line-height:1.12; margin:.75rem 0 .35rem; }
 .admin-title { color:#ff1744; text-shadow:0 0 10px #ff1744; }
 .subtle { color:#b9c2c9; font-size:.9rem; }
 .rules-box { border-left:5px solid #00e5ff; border-radius:8px; background:#070707; padding:12px 14px; margin:.8rem 0 1rem; color:#dceff5; }
@@ -96,6 +96,8 @@ input, textarea, select { color:#fff!important; }
 .live-dot { width:.55rem; height:.55rem; border-radius:50%; background:#ff1744; box-shadow:0 0 9px #ff1744; display:inline-block; }
 .coach-live-match { border:1px solid rgba(255,23,68,.35); border-radius:8px; background:#090606; padding:6px 7px; margin-top:6px; }
 .coach-live-line { display:flex; flex-wrap:wrap; align-items:center; justify-content:center; gap:5px; font-size:.76rem; font-weight:1000; text-align:center; }
+.coach-live-goals { display:flex; flex-wrap:wrap; justify-content:center; gap:4px 8px; color:#ffd54a; font-size:.8rem; line-height:1.15; font-weight:1000; margin-top:4px; }
+.coach-live-goal { color:var(--goal-color, #ffd54a); text-shadow:0 0 7px color-mix(in srgb, var(--goal-color, #ffd54a) 42%, transparent); }
 .coach-live-meta { color:#b9c2c9; text-align:center; font-size:.68rem; font-weight:900; margin-top:3px; }
 .coach-live-players { color:#eaf7fa; text-align:center; font-size:.68rem; line-height:1.2; font-weight:850; margin-top:4px; }
 .coach-live-empty { border-top:1px solid rgba(185,194,201,.28); border-bottom:1px solid rgba(185,194,201,.28); color:#9aa3aa; text-align:center; font-size:.72rem; font-style:italic; font-weight:800; margin:8px 0 0; padding:5px 0; }
@@ -219,11 +221,13 @@ input, textarea, select { color:#fff!important; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
 .match-day-title { color:#ffd54a; font-weight:1000; font-size:.95rem; margin:.7rem 0 .35rem; padding-left:10px; border-left:3px solid #ffd54a; }
 .match-sub-title { color:#b9c2c9; font-weight:950; font-size:.86rem; margin:.45rem 0 .25rem; padding-left:10px; }
-div[data-testid="stExpander"] summary p { font-size:1.03rem; }
+div[data-testid="stExpander"] { margin:.18rem 0!important; }
+div[data-testid="stExpander"] details > summary { min-height:44px!important; padding:.45rem .85rem!important; }
+div[data-testid="stExpander"] summary p { font-size:1.35rem!important; line-height:1.12!important; margin:0!important; }
 .drafted-chip { display:inline-flex; align-items:center; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; line-height:1.15; }
 .drafted-chip-bullet { color:var(--coach-color); margin:0 3px; font-size:.78em; line-height:1; display:inline-flex; align-items:center; transform:translateY(-.01em); }
 .match-browser-note { color:#b9c2c9; font-size:.82rem; font-weight:850; margin:0 0 .35rem; }
-.points-tracker-wrap { margin:12px 0 14px; }
+.points-tracker-wrap { margin:.18rem 0 .28rem; }
 .points-tracker-card { border:1px solid #2e2e2e; border-radius:8px; background:#050505; padding:9px; box-shadow:inset 0 0 18px rgba(255,255,255,.045); }
 .points-tracker-note { color:#9aa3aa; font-size:.78rem; font-weight:850; margin:0 0 4px; }
 .points-tracker-svg { width:100%; height:auto; display:block; min-height:315px; }
@@ -231,7 +235,7 @@ div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button,
 div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button {
     justify-content:flex-start!important; text-align:left!important; background:#050505!important;
     color:#ffd54a!important; border:1px solid #2e2e2e!important; border-radius:8px!important;
-    min-height:44px!important; font-size:1.16rem!important; font-weight:1000!important;
+    min-height:44px!important; font-size:1.35rem!important; line-height:1.12!important; font-weight:1000!important;
     padding-left:18px!important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)!important;
 }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button > div,
@@ -242,7 +246,7 @@ div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button *,
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button p,
 div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button *,
 div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button p {
-    color:#ffd54a!important; font-size:1.16rem!important; font-weight:1000!important; text-align:left!important;
+    color:#ffd54a!important; font-size:1.35rem!important; line-height:1.12!important; font-weight:1000!important; text-align:left!important;
 }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hover,
 div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button:hover {
@@ -1448,13 +1452,22 @@ def normalize_goal_event(goal):
     scorer = goal.get("scorer") if isinstance(goal.get("scorer"), dict) else {}
     assist = goal.get("assist") if isinstance(goal.get("assist"), dict) else {}
     team = goal.get("team") if isinstance(goal.get("team"), dict) else {}
+    team_name = team.get("name") or team.get("shortName") if isinstance(team, dict) else ""
+    if not team_name:
+        team_name = goal.get("team")
+    scorer_name = scorer.get("name") if isinstance(scorer, dict) else ""
+    if not scorer_name:
+        scorer_name = goal.get("scorer")
+    assist_name = assist.get("name") if isinstance(assist, dict) else ""
+    if not assist_name:
+        assist_name = goal.get("assist")
     return {
         "minute": none_or_int(goal.get("minute")),
-        "injury_time": none_or_int(goal.get("injuryTime")),
+        "injury_time": none_or_int(goal.get("injuryTime") if "injuryTime" in goal else goal.get("injury_time")),
         "type": str(goal.get("type") or ""),
-        "team": canonical_team_name(team.get("name") or team.get("shortName")),
-        "scorer": str(scorer.get("name") or "").strip(),
-        "assist": str(assist.get("name") or "").strip(),
+        "team": canonical_team_name(team_name),
+        "scorer": str(scorer_name or "").strip(),
+        "assist": str(assist_name or "").strip(),
     }
 
 
@@ -2020,7 +2033,7 @@ def render_payout_descriptions():
         st.markdown(
             f"""
 <div class='payout-desc'><b>Standings Card Abbreviations</b><br>
-"Group" means Group Stage Winner points only. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. Live Impact appears only for matches currently live and shows the active match score plus the coach's live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
+"Group" means Group Stage Winner points only. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
 
 <div class='payout-desc'><b>Gold - $300</b><br>
 Awarded to the coach who finishes first overall in total fantasy points. Total fantasy points are the sum of every drafted national team's match points and advancement bonuses plus every drafted star player's goal and assist points. National teams earn 3 points for a win, 1 for a draw, 1 for each goal scored, and 1 for a clean sheet. Players earn 4 points per goal and 3 per assist.</div>
@@ -3100,12 +3113,12 @@ def match_player_points_by_coach(state, match):
     points_by_coach = {}
     for goal in match.get("goals", []):
         scorer = match_player_to_pool(goal.get("scorer"), state.get("players", []))
-        if scorer:
+        if scorer and player_is_in_match(scorer, match):
             coach = drafted_coach_for_player(state, scorer)
             if coach:
                 points_by_coach[coach] = points_by_coach.get(coach, 0) + 4
         assist = match_player_to_pool(goal.get("assist"), state.get("players", []))
-        if assist:
+        if assist and player_is_in_match(assist, match):
             coach = drafted_coach_for_player(state, assist)
             if coach:
                 points_by_coach[coach] = points_by_coach.get(coach, 0) + 3
@@ -3127,10 +3140,10 @@ def match_points_for_player(state, match, drafted_player):
     total = 0
     for goal in match.get("goals", []):
         scorer = match_player_to_pool(goal.get("scorer"), state.get("players", []))
-        if scorer == drafted_player:
+        if scorer == drafted_player and player_is_in_match(scorer, match):
             total += 4
         assist = match_player_to_pool(goal.get("assist"), state.get("players", []))
-        if assist == drafted_player:
+        if assist == drafted_player and player_is_in_match(assist, match):
             total += 3
     return total
 
@@ -3153,6 +3166,38 @@ def match_score_text(match):
     if match.get("home_score") is None or match.get("away_score") is None:
         return "vs"
     return f"{match['home_score']} - {match['away_score']}"
+
+
+def goal_minute_text(goal):
+    minute = none_or_int(goal.get("minute"))
+    injury = none_or_int(goal.get("injury_time"))
+    if minute is None:
+        return ""
+    if injury:
+        return f"{minute}+{injury}'"
+    return f"{minute}'"
+
+
+def match_goal_events_html(state, match):
+    pieces = []
+    for goal in match.get("goals", []):
+        minute = goal_minute_text(goal)
+        scorer = match_player_to_pool(goal.get("scorer"), state.get("players", []))
+        scorer_owner = drafted_coach_for_player(state, scorer) if scorer and player_is_in_match(scorer, match) else ""
+        color = state["teams"].get(scorer_owner, {}).get("color") or "#ffd54a"
+        team_name = canonical_team_name(goal.get("team"))
+        team_text = team_code(team_name) if team_name else ""
+        raw_scorer = str(goal.get("scorer") or "").strip()
+        scorer_text = player_last_name(scorer) if scorer else raw_scorer
+        label_parts = [part for part in [minute, team_text, scorer_text or "Goal"] if part]
+        if not label_parts:
+            continue
+        pieces.append(
+            f"<span class='coach-live-goal' style='--goal-color:{html.escape(color)}'>{html.escape(' '.join(label_parts))}</span>"
+        )
+    if not pieces:
+        return ""
+    return "<div class='coach-live-goals'>" + "".join(pieces) + "</div>"
 
 
 def match_owned_teams_by_coach(state, match):
@@ -3310,18 +3355,20 @@ def coach_live_matches_html(state, coach):
     for match in live_matches[:2]:
         home = display_team_html(canonical_team_name(match.get("home")), include_info=False)
         away = display_team_html(canonical_team_name(match.get("away")), include_info=False)
-        chips = match_point_chips_html(state, match, only_coach=coach) or "<span class='subtle'>No points yet.</span>"
+        chips = match_point_chips_html(state, match, include_teams=True) or "<span class='subtle'>No points yet.</span>"
+        players = match_player_line_html(state, match)
         match_blocks.append(
             f"<div class='coach-live-match'>"
             f"<div class='coach-live-line'><span>{home}</span><span class='match-score'>{html.escape(match_score_text(match))}</span><span>{away}</span></div>"
+            f"{match_goal_events_html(state, match)}"
             f"<div class='coach-live-meta'>LIVE | {html.escape(match_clock_text(match))}</div>"
             f"<div>{chips}</div>"
-            f"{coach_live_players_html(state, coach, match)}"
+            f"<div class='match-player-line'>{players}</div>"
             f"</div>"
         )
     return (
         "<div class='coach-live-impact'>"
-        "<div class='live-impact-title'><span class='live-dot'></span>Live Impact</div>"
+        "<div class='live-impact-title'><span class='live-dot'></span>Live Matches</div>"
         + "".join(match_blocks)
         + "</div>"
     )
