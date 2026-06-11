@@ -32,7 +32,8 @@
         "Qatar"
       ],
       "star_players": [
-        "Vinicius Junior (Brazil)"
+        "Vinicius Junior (Brazil)",
+        "Lionel Messi (Argentina)"
       ]
     },
     "Peter": {
@@ -533,6 +534,13 @@
       "coach": "Benji",
       "player": "Julian Alvarez (Argentina)",
       "picked_at": "2026-06-10T22:20:18.364829-04:00"
+    },
+    {
+      "pick": 58,
+      "round": 2,
+      "coach": "Jeff",
+      "player": "Lionel Messi (Argentina)",
+      "picked_at": "2026-06-10T22:31:22.355980-04:00"
     }
   ],
   "players": [
@@ -3102,7 +3110,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781144418,
+  "current_pick_started_at": 1781145082,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3129,7 +3137,8 @@
         "Qatar"
       ],
       "star_players": [
-        "Vinicius Junior (Brazil)"
+        "Vinicius Junior (Brazil)",
+        "Lionel Messi (Argentina)"
       ]
     },
     "Peter": {
