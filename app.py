@@ -2953,7 +2953,7 @@ def match_player_line_html(state, match):
         points = match_points_for_player(state, match, player)
         team = team_code(player_country(player))
         chips.append(
-            f"<span class='match-player-chip' style='--coach-color:{html.escape(color)}'>{html.escape(player_last_name(player))}<span class='match-player-bullet'>•</span>{html.escape(team)}<span class='match-player-bullet'>•</span>{html.escape(coach)} +{points}</span>"
+            f"<span class='match-player-chip' style='--coach-color:{html.escape(color)}'>{html.escape(team)}<span class='match-player-bullet'>•</span>{html.escape(player_last_name(player))}<span class='match-player-bullet'>•</span>{html.escape(coach)} +{points}</span>"
         )
     return "".join(chips)
 
