@@ -330,7 +330,7 @@ REPO_NAME = "world-cup-fc"
 TITLE_THUMBNAIL_PATH = "titlethumb.png"
 AUTO_SCORE_REFRESH_SECONDS = 5 * 60
 DRAFT_AUTO_REFRESH_SECONDS = 20
-KICKOFF_DEADLINE = "Thursday, June 11 at 3pm EST"
+DRAFT_DEADLINE_TEXT = "Draft will end on Thursday, June 11 at 3pm"
 
 TEAM_ROUND_DIRECTIONS = ["forward", "reverse", "reverse", "forward", "reverse", "forward"]
 PLAYER_ROUND_DIRECTIONS = ["reverse", "forward"]
@@ -1981,7 +1981,7 @@ def render_header(state):
     <div class="hero-kicker">Fantasy Challenge</div>
     <h1>{html.escape(state.get("app_title") or "World Cup FC")}</h1>
   </div>
-  <div class="deadline-pill">Draft locks before {html.escape(KICKOFF_DEADLINE)}</div>
+  <div class="deadline-pill">{html.escape(DRAFT_DEADLINE_TEXT)}</div>
 </div>
 """,
         unsafe_allow_html=True,
@@ -2535,7 +2535,7 @@ def render_draft_status(stage_label, current, state, compact=False, show_meta=Tr
             )
     if show_meta:
         st.markdown(
-            f"<div class='draft-status-line'><b>Deadline:</b> {html.escape(KICKOFF_DEADLINE)} <b>Status:</b> {'Live' if state.get('draft_active') else 'Paused'}</div>",
+            f"<div class='draft-status-line'><b>{html.escape(DRAFT_DEADLINE_TEXT)}</b> <b>Status:</b> {'Live' if state.get('draft_active') else 'Paused'}</div>",
             unsafe_allow_html=True,
         )
 
