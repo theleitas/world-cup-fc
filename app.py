@@ -223,20 +223,29 @@ div[data-testid="stExpander"] summary p { font-size:1.03rem; }
 .drafted-chip { display:inline-flex; align-items:center; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; line-height:1.15; }
 .drafted-chip-bullet { color:var(--coach-color); margin:0 3px; font-size:.78em; line-height:1; display:inline-flex; align-items:center; transform:translateY(-.01em); }
 .match-browser-note { color:#b9c2c9; font-size:.82rem; font-weight:850; margin:0 0 .35rem; }
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button {
+.points-tracker-wrap { margin:12px 0 14px; }
+.points-tracker-card { border:1px solid #2e2e2e; border-radius:8px; background:#050505; padding:9px; box-shadow:inset 0 0 18px rgba(255,255,255,.045); }
+.points-tracker-note { color:#9aa3aa; font-size:.78rem; font-weight:850; margin:0 0 4px; }
+.points-tracker-svg { width:100%; height:auto; display:block; min-height:315px; }
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button,
+div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button {
     justify-content:flex-start!important; text-align:left!important; background:#050505!important;
     color:#ffd54a!important; border:1px solid #2e2e2e!important; border-radius:8px!important;
     min-height:44px!important; font-size:1.16rem!important; font-weight:1000!important;
     padding-left:18px!important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)!important;
 }
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button > div {
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button > div,
+div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button > div {
     width:100%!important; justify-content:flex-start!important; text-align:left!important;
 }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button *,
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button p {
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button p,
+div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button *,
+div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button p {
     color:#ffd54a!important; font-size:1.16rem!important; font-weight:1000!important; text-align:left!important;
 }
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hover {
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hover,
+div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button:hover {
     border-color:#ffd54a!important; background:#080808!important; color:#ffd54a!important;
 }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
@@ -2085,6 +2094,170 @@ def render_standings(state, scores):
     st.markdown("".join(cards), unsafe_allow_html=True)
 
 
+def points_tracker_updated_text(state):
+    if state.get("last_score_refresh_at"):
+        refreshed = datetime.fromtimestamp(int(state["last_score_refresh_at"]), tz=ZoneInfo("America/New_York"))
+        return f"Data last updated {refreshed.strftime('%b %d, %I:%M %p ET')}"
+    return "Data last updated from the current draft state."
+
+
+def points_tracker_dates(state):
+    today = datetime.now(tz=ZoneInfo("America/New_York")).date()
+    match_dates = [
+        local_match_datetime(match).date()
+        for match in state.get("matches", [])
+        if "friendly" not in str(match.get("stage") or "").lower() and local_match_datetime(match)
+    ]
+    start = min([today] + match_dates) if match_dates else today
+    completed_dates = []
+    for match in state.get("matches", []):
+        local_dt = local_match_datetime(match)
+        if not local_dt or "friendly" in str(match.get("stage") or "").lower():
+            continue
+        if local_dt.date() <= today and any(match_points_by_coach(state, match).values()):
+            completed_dates.append(local_dt.date())
+    end = max([today] + completed_dates) if completed_dates else today
+    if end < start:
+        end = start
+    return [start + timedelta(days=offset) for offset in range((end - start).days + 1)]
+
+
+def points_tracker_series(state, scores):
+    dates = points_tracker_dates(state)
+    start = dates[0]
+    daily = {coach: [0 for _ in dates] for coach in COACHES}
+    for match in state.get("matches", []):
+        local_dt = local_match_datetime(match)
+        if not local_dt or "friendly" in str(match.get("stage") or "").lower():
+            continue
+        match_date = local_dt.date()
+        if match_date < start or match_date > dates[-1]:
+            continue
+        day_index = (match_date - start).days
+        for coach, points in match_points_by_coach(state, match).items():
+            if coach in daily:
+                daily[coach][day_index] += int(points or 0)
+
+    series = {}
+    for coach in COACHES:
+        running = 0
+        values = []
+        for points in daily[coach]:
+            running += points
+            values.append(running)
+        official_total = int(scores.get(coach, {}).get("total_points", values[-1] if values else 0))
+        if values:
+            values[-1] += official_total - values[-1]
+        else:
+            values = [official_total]
+        series[coach] = values
+    return dates, series
+
+
+def spread_endpoint_positions(items, top, bottom, min_gap):
+    if not items:
+        return {}
+    adjusted = sorted([{"coach": coach, "y": y} for coach, y in items], key=lambda item: item["y"])
+    for index in range(1, len(adjusted)):
+        if adjusted[index]["y"] - adjusted[index - 1]["y"] < min_gap:
+            adjusted[index]["y"] = adjusted[index - 1]["y"] + min_gap
+    overflow = adjusted[-1]["y"] - bottom
+    if overflow > 0:
+        for item in adjusted:
+            item["y"] -= overflow
+    underflow = top - adjusted[0]["y"]
+    if underflow > 0:
+        for item in adjusted:
+            item["y"] += underflow
+    return {item["coach"]: item["y"] for item in adjusted}
+
+
+def points_tracker_svg(state, scores):
+    dates, series = points_tracker_series(state, scores)
+    width, height = 760, 330
+    plot_left, plot_right = 44, 674
+    plot_top, plot_bottom = 42, 276
+    all_values = [value for values in series.values() for value in values]
+    max_points = max(all_values + [0])
+    min_points = min(all_values + [0])
+    padding = max(5, int((max_points - min_points) * 0.16))
+    y_min = max(0, min_points - padding)
+    y_max = max(10, max_points + padding)
+    if y_max == y_min:
+        y_max = y_min + 10
+
+    def x_at(index):
+        if len(dates) <= 1:
+            return plot_left
+        return plot_left + (plot_right - plot_left) * index / (len(dates) - 1)
+
+    def y_at(value):
+        return plot_bottom - (value - y_min) * (plot_bottom - plot_top) / (y_max - y_min)
+
+    y_ticks = [round(y_min + (y_max - y_min) * index / 4) for index in range(5)]
+    day_step = max(1, len(dates) // 9)
+    endpoint_y = [(coach, y_at(values[-1])) for coach, values in series.items()]
+    icon_y = spread_endpoint_positions(endpoint_y, plot_top + 17, plot_bottom - 17, 27)
+
+    parts = [
+        "<svg class='points-tracker-svg' viewBox='0 0 760 330' role='img' aria-label='Coach points tracker'>",
+        "<rect x='0' y='0' width='760' height='330' rx='8' fill='#050505'/>",
+    ]
+    for tick in y_ticks:
+        y = y_at(tick)
+        parts.append(f"<line x1='{plot_left}' y1='{y:.1f}' x2='{plot_right + 46}' y2='{y:.1f}' stroke='rgba(185,194,201,.12)'/>")
+        parts.append(f"<text x='{plot_left - 8}' y='{y + 4:.1f}' text-anchor='end' fill='#9aa3aa' font-size='11' font-weight='800'>{tick}</text>")
+    parts.append(f"<line x1='{plot_left}' y1='{plot_bottom}' x2='{plot_right + 46}' y2='{plot_bottom}' stroke='rgba(185,194,201,.28)'/>")
+    parts.append(f"<line x1='{plot_left}' y1='{plot_top}' x2='{plot_left}' y2='{plot_bottom}' stroke='rgba(185,194,201,.28)'/>")
+    for index, _date in enumerate(dates):
+        if index % day_step == 0 or index == len(dates) - 1:
+            x = x_at(index)
+            parts.append(f"<text x='{x:.1f}' y='{plot_bottom + 22}' text-anchor='middle' fill='#9aa3aa' font-size='11' font-weight='800'>{index + 1}</text>")
+    parts.append(f"<text x='{(plot_left + plot_right) / 2:.1f}' y='{height - 8}' text-anchor='middle' fill='#7f888f' font-size='11' font-style='italic'>Tournament day number</text>")
+
+    for coach in COACHES:
+        values = series.get(coach, [])
+        if not values:
+            continue
+        color = state["teams"].get(coach, {}).get("color") or "#FFD54A"
+        points_attr = " ".join(f"{x_at(index):.1f},{y_at(value):.1f}" for index, value in enumerate(values))
+        parts.append(f"<polyline points='{points_attr}' fill='none' stroke='{html.escape(color)}' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' opacity='.88'/>")
+        actual_x = x_at(len(values) - 1)
+        actual_y = y_at(values[-1])
+        face_x = plot_right + 30
+        face_y = icon_y.get(coach, actual_y)
+        parts.append(f"<line x1='{actual_x:.1f}' y1='{actual_y:.1f}' x2='{face_x - 17:.1f}' y2='{face_y:.1f}' stroke='{html.escape(color)}' stroke-width='1.6' opacity='.55'/>")
+        data_uri = image_to_data_uri(coach_photo_filename(coach), max_width=64, max_height=64, quality=72)
+        clip_id = f"points-face-{html.escape(coach)}"
+        parts.append(f"<defs><clipPath id='{clip_id}'><circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='16'/></clipPath></defs>")
+        parts.append(f"<circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='17.5' fill='#050505' stroke='{html.escape(color)}' stroke-width='3'/>")
+        if data_uri:
+            parts.append(f"<image x='{face_x - 16:.1f}' y='{face_y - 16:.1f}' width='32' height='32' href='{html.escape(data_uri, quote=True)}' clip-path='url(#{clip_id})' preserveAspectRatio='xMidYMid slice'/>")
+        else:
+            parts.append(f"<text x='{face_x:.1f}' y='{face_y + 4:.1f}' text-anchor='middle' fill='{html.escape(color)}' font-size='10' font-weight='1000'>{html.escape(coach[:2])}</text>")
+        parts.append(f"<text x='{face_x + 21:.1f}' y='{face_y + 4:.1f}' fill='{html.escape(color)}' font-size='12' font-weight='1000'>{int(values[-1])}</text>")
+
+    parts.append("</svg>")
+    return "".join(parts)
+
+
+def render_points_tracker(state, scores):
+    st.markdown("<div class='points-tracker-wrap'>", unsafe_allow_html=True)
+    if not toggle_button("Points Tracker", "points-tracker-open", "btn-points-tracker", default_open=False):
+        st.markdown("</div>", unsafe_allow_html=True)
+        return
+    st.markdown(
+        f"""
+<div class='points-tracker-card'>
+  <div class='points-tracker-note'>{html.escape(points_tracker_updated_text(state))}</div>
+  {points_tracker_svg(state, scores)}
+</div>
+""",
+        unsafe_allow_html=True,
+    )
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def render_power_rating_explanation():
     st.markdown(
         f"""
@@ -3766,9 +3939,11 @@ draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
     render_standings(state, scores)
+    render_points_tracker(state, scores)
     render_live_matches(state)
 else:
     render_standings(state, scores)
+    render_points_tracker(state, scores)
     render_live_matches(state)
     render_team_standings(state)
     render_drafted_player_stats(state)
