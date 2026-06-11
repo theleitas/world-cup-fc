@@ -3294,19 +3294,19 @@ def coach_live_matches_html(state, coach):
         away = display_team_html(canonical_team_name(match.get("away")), include_info=False)
         chips = match_point_chips_html(state, match, only_coach=coach) or "<span class='subtle'>No points yet.</span>"
         match_blocks.append(
-            f"""
-    <div class='coach-live-match'>
-      <div class='coach-live-line'><span>{home}</span><span class='match-score'>{html.escape(match_score_text(match))}</span><span>{away}</span></div>
-      <div class='coach-live-meta'>LIVE | {html.escape(match_clock_text(match))}</div>
-      <div>{chips}</div>
-      {coach_live_players_html(state, coach, match)}
-    </div>
-"""
+            f"<div class='coach-live-match'>"
+            f"<div class='coach-live-line'><span>{home}</span><span class='match-score'>{html.escape(match_score_text(match))}</span><span>{away}</span></div>"
+            f"<div class='coach-live-meta'>LIVE | {html.escape(match_clock_text(match))}</div>"
+            f"<div>{chips}</div>"
+            f"{coach_live_players_html(state, coach, match)}"
+            f"</div>"
         )
-    return """
-  <div class='coach-live-impact'>
-    <div class='live-impact-title'><span class='live-dot'></span>Live Impact</div>
-""" + "".join(match_blocks) + "  </div>\n"
+    return (
+        "<div class='coach-live-impact'>"
+        "<div class='live-impact-title'><span class='live-dot'></span>Live Impact</div>"
+        + "".join(match_blocks)
+        + "</div>"
+    )
 
 
 def render_match_cards(state, matches, show_group=False):
