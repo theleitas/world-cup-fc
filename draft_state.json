@@ -28,7 +28,9 @@
         "Uzbekistan",
         "Qatar"
       ],
-      "star_players": []
+      "star_players": [
+        "Vinicius Junior (Brazil)"
+      ]
     },
     "Peter": {
       "team_name": "Peter",
@@ -507,6 +509,13 @@
       "coach": "Peter",
       "player": "Michael Olise (France)",
       "picked_at": "2026-06-10T21:48:56.362287-04:00"
+    },
+    {
+      "pick": 55,
+      "round": 1,
+      "coach": "Jeff",
+      "player": "Vinicius Junior (Brazil)",
+      "picked_at": "2026-06-10T22:11:28.894092-04:00"
     }
   ],
   "players": [
@@ -3076,7 +3085,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781142536,
+  "current_pick_started_at": 1781143888,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3099,7 +3108,9 @@
         "Uzbekistan",
         "Qatar"
       ],
-      "star_players": []
+      "star_players": [
+        "Vinicius Junior (Brazil)"
+      ]
     },
     "Peter": {
       "national_teams": [
