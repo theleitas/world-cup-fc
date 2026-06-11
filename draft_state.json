@@ -15,7 +15,8 @@
         "Congo DR"
       ],
       "star_players": [
-        "Desire Doue (France)"
+        "Desire Doue (France)",
+        "Julian Alvarez (Argentina)"
       ]
     },
     "Jeff": {
@@ -525,6 +526,13 @@
       "coach": "Benji",
       "player": "Desire Doue (France)",
       "picked_at": "2026-06-10T22:19:30.372529-04:00"
+    },
+    {
+      "pick": 57,
+      "round": 2,
+      "coach": "Benji",
+      "player": "Julian Alvarez (Argentina)",
+      "picked_at": "2026-06-10T22:19:59.613677-04:00"
     }
   ],
   "players": [
@@ -3094,7 +3102,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781144370,
+  "current_pick_started_at": 1781144399,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3107,7 +3115,8 @@
         "Congo DR"
       ],
       "star_players": [
-        "Desire Doue (France)"
+        "Desire Doue (France)",
+        "Julian Alvarez (Argentina)"
       ]
     },
     "Jeff": {
