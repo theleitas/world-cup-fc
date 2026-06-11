@@ -102,15 +102,16 @@ input, textarea, select { color:#fff!important; }
 .roster-grid { display:grid; gap:3px; width:100%; border-radius:6px; background:rgba(185,194,201,.08); border:1px solid rgba(185,194,201,.16); padding:4px; margin-top:5px; }
 .team-roster-grid { grid-template-columns:repeat(3, minmax(0, 1fr)); }
 .player-roster-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
-.roster-cell { min-height:60px; border:1px solid color-mix(in srgb, var(--coach-color) 62%, rgba(255,255,255,.18)); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; text-align:center; padding:4px 3px; overflow:hidden; box-shadow:inset 0 0 9px rgba(255,255,255,.035), 0 0 9px color-mix(in srgb, var(--coach-color) 24%, transparent); }
+.roster-cell { position:relative; min-height:60px; border:1px solid color-mix(in srgb, var(--coach-color) 62%, rgba(255,255,255,.18)); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:3px; text-align:center; padding:4px 30px 4px 3px; overflow:hidden; box-shadow:inset 0 0 9px rgba(255,255,255,.035), 0 0 9px color-mix(in srgb, var(--coach-color) 24%, transparent); }
 .roster-cell-empty { background:rgba(255,255,255,.025); border-color:color-mix(in srgb, var(--coach-color) 42%, rgba(255,255,255,.12)); box-shadow:inset 0 0 10px color-mix(in srgb, var(--coach-color) 20%, transparent); }
+.asset-score-badge { position:absolute; top:4px; right:4px; width:24px; height:24px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--coach-color); color:#000; font-size:.72rem; line-height:1; font-weight:1000; box-shadow:0 0 9px var(--coach-color); z-index:2; }
 .roster-flag { display:flex; align-items:center; justify-content:center; min-height:29px; font-size:1.51rem; line-height:1; }
 .roster-flag .flag-icon { margin:0; width:1.85em; height:1.85em; vertical-align:0; }
 .roster-name { color:#fff; font-size:.92rem; line-height:1; font-weight:500; overflow-wrap:anywhere; max-width:100%; }
-.player-roster-cell { min-height:58px; flex-direction:row; justify-content:flex-start; align-items:center; gap:7px; text-align:left; padding:5px 6px; }
-.player-thumb { width:42px; height:42px; border-radius:50%; object-fit:cover; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 42px; background:#111; }
-.player-thumb-placeholder { width:42px; height:42px; border-radius:50%; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.82rem; font-weight:900; box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 42px; background:#111; }
-.player-roster-text { min-width:0; display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.02; }
+.player-roster-cell { min-height:64px; flex-direction:row; justify-content:flex-start; align-items:center; gap:8px; text-align:left; padding:6px 34px 6px 6px; }
+.player-thumb { width:48px; height:48px; border-radius:50%; object-fit:cover; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
+.player-thumb-placeholder { width:48px; height:48px; border-radius:50%; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.88rem; font-weight:900; box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
+.player-roster-text { min-width:0; flex:1 1 auto; display:flex; flex-direction:column; align-items:flex-start; gap:1px; line-height:1.02; }
 .player-roster-name { color:#fff; font-size:.92rem; font-weight:700; overflow-wrap:anywhere; }
 .player-roster-team { color:#b9c2c9; font-size:.72rem; font-weight:700; overflow-wrap:anywhere; }
 .player-roster-flag { font-size:1.02rem; line-height:1; }
@@ -806,23 +807,29 @@ def player_thumb_html(player):
     return f"<div class='player-thumb-placeholder'>{html.escape(initials)}</div>"
 
 
-def roster_grid_cell_html(flag_html="", label=""):
+def asset_score_badge_html(points):
+    return f"<div class='asset-score-badge'>{int(points or 0)}</div>"
+
+
+def roster_grid_cell_html(flag_html="", label="", points=None):
     if not label:
         return "<div class='roster-cell roster-cell-empty'></div>"
     return f"""
 <div class='roster-cell'>
+  {asset_score_badge_html(points)}
   <div class='roster-flag'>{flag_html}</div>
   <div class='roster-name'>{html.escape(label)}</div>
 </div>
 """
 
 
-def player_roster_grid_cell_html(player, country):
+def player_roster_grid_cell_html(player, country, points=None):
     if not player:
         return "<div class='roster-cell roster-cell-empty'></div>"
     team = canonical_team_name(country)
     return f"""
 <div class='roster-cell player-roster-cell'>
+  {asset_score_badge_html(points)}
   {player_thumb_html(player)}
   <div class='player-roster-text'>
     <div class='player-roster-name'>{html.escape(player_last_name(player))}</div>
@@ -833,16 +840,17 @@ def player_roster_grid_cell_html(player, country):
 """
 
 
-def standings_roster_grid_html(items, kind):
+def standings_roster_grid_html(items, kind, points_by_item=None):
+    points_by_item = points_by_item or {}
     target_count = 6 if kind == "team" else 2
     cells = []
     for item in list(items or [])[:target_count]:
         if kind == "team":
             team = canonical_team_name(item)
-            cells.append(roster_grid_cell_html(team_flag_html(team), team))
+            cells.append(roster_grid_cell_html(team_flag_html(team), team, points_by_item.get(team, 0)))
         else:
             country = player_country(item)
-            cells.append(player_roster_grid_cell_html(item, country))
+            cells.append(player_roster_grid_cell_html(item, country, points_by_item.get(item, 0)))
     while len(cells) < target_count:
         cells.append(roster_grid_cell_html())
 
@@ -2025,8 +2033,10 @@ def render_standings(state, scores):
         coach = item["coach"]
         color = item["color"]
         coach_state = state["teams"][coach]
-        teams = standings_roster_grid_html(coach_state.get("national_teams", []), "team")
-        players = standings_roster_grid_html(coach_state.get("star_players", []), "player")
+        team_points_by_item = {team: points for team, points, _baseline, _cinderella in item.get("team_breakdown", [])}
+        player_points_by_item = {player: points for player, points in item.get("player_breakdown", [])}
+        teams = standings_roster_grid_html(coach_state.get("national_teams", []), "team", team_points_by_item)
+        players = standings_roster_grid_html(coach_state.get("star_players", []), "player", player_points_by_item)
         power_rating = format_power_rating(state, coach)
         cinderella_text = "None"
         if item["cinderella_team"]:
