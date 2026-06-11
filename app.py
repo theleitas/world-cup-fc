@@ -330,7 +330,7 @@ REPO_NAME = "world-cup-fc"
 TITLE_THUMBNAIL_PATH = "titlethumb.png"
 AUTO_SCORE_REFRESH_SECONDS = 5 * 60
 DRAFT_AUTO_REFRESH_SECONDS = 20
-KICKOFF_DEADLINE = "Thursday, June 11 at 8:00 PM EST"
+KICKOFF_DEADLINE = "Thursday, June 11 at 3pm EST"
 
 TEAM_ROUND_DIRECTIONS = ["forward", "reverse", "reverse", "forward", "reverse", "forward"]
 PLAYER_ROUND_DIRECTIONS = ["reverse", "forward"]
