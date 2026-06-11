@@ -3945,9 +3945,12 @@ else:
     render_standings(state, scores)
     render_points_tracker(state, scores)
     render_live_matches(state)
-    render_team_standings(state)
-    render_drafted_player_stats(state)
-    render_cinderella_standings(state)
+    with st.expander("Team Standings", expanded=False):
+        render_team_standings(state)
+    with st.expander("Drafted Player Stats", expanded=False):
+        render_drafted_player_stats(state)
+    with st.expander("Cinderella Standings", expanded=False):
+        render_cinderella_standings(state)
 render_payout_descriptions()
 render_completed_draft_table(state)
 render_admin(state)
