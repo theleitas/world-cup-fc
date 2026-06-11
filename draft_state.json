@@ -42,7 +42,9 @@
         "Tunisia",
         "New Zealand"
       ],
-      "star_players": []
+      "star_players": [
+        "Michael Olise (France)"
+      ]
     },
     "Chad": {
       "team_name": "Chad",
@@ -498,6 +500,13 @@
       "coach": "Chad",
       "player": "Harry Kane (England)",
       "picked_at": "2026-06-10T21:23:08.178581-04:00"
+    },
+    {
+      "pick": 54,
+      "round": 1,
+      "coach": "Peter",
+      "player": "Michael Olise (France)",
+      "picked_at": "2026-06-10T21:48:56.362287-04:00"
     }
   ],
   "players": [
@@ -3067,7 +3076,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781140988,
+  "current_pick_started_at": 1781142536,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3101,7 +3110,9 @@
         "Tunisia",
         "New Zealand"
       ],
-      "star_players": []
+      "star_players": [
+        "Michael Olise (France)"
+      ]
     },
     "Chad": {
       "national_teams": [
