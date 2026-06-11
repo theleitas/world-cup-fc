@@ -100,7 +100,8 @@
         "Iraq"
       ],
       "star_players": [
-        "Ousmane Dembele (France)"
+        "Ousmane Dembele (France)",
+        "Lautaro Martinez (Argentina)"
       ]
     },
     "Jayme": {
@@ -565,6 +566,13 @@
       "coach": "Lamp",
       "player": "Bukayo Saka (England)",
       "picked_at": "2026-06-11T06:50:53.285949-04:00"
+    },
+    {
+      "pick": 62,
+      "round": 2,
+      "coach": "Herb",
+      "player": "Lautaro Martinez (Argentina)",
+      "picked_at": "2026-06-11T11:45:10.903432-04:00"
     }
   ],
   "players": [
@@ -3134,7 +3142,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781175053,
+  "current_pick_started_at": 1781192710,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3217,7 +3225,8 @@
         "Iraq"
       ],
       "star_players": [
-        "Ousmane Dembele (France)"
+        "Ousmane Dembele (France)",
+        "Lautaro Martinez (Argentina)"
       ]
     },
     "Jayme": {
