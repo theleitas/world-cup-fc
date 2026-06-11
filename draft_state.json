@@ -49,7 +49,8 @@
         "New Zealand"
       ],
       "star_players": [
-        "Michael Olise (France)"
+        "Michael Olise (France)",
+        "Raphinha (Brazil)"
       ]
     },
     "Chad": {
@@ -541,6 +542,13 @@
       "coach": "Jeff",
       "player": "Lionel Messi (Argentina)",
       "picked_at": "2026-06-10T22:31:22.355980-04:00"
+    },
+    {
+      "pick": 59,
+      "round": 2,
+      "coach": "Peter",
+      "player": "Raphinha (Brazil)",
+      "picked_at": "2026-06-10T22:44:32.626075-04:00"
     }
   ],
   "players": [
@@ -3110,7 +3118,7 @@
   "last_score_refresh_attempt_at": 1781005513,
   "last_api_error": "",
   "draft_enabled": true,
-  "current_pick_started_at": 1781145082,
+  "current_pick_started_at": 1781145872,
   "last_friendly_api_error": "",
   "official_rosters": {
     "Benji": {
@@ -3151,7 +3159,8 @@
         "New Zealand"
       ],
       "star_players": [
-        "Michael Olise (France)"
+        "Michael Olise (France)",
+        "Raphinha (Brazil)"
       ]
     },
     "Chad": {
