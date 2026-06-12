@@ -775,16 +775,16 @@
       "matchday": 1,
       "home": "Korea Republic",
       "away": "Czechia",
-      "home_score": 1,
+      "home_score": 2,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 77,
+      "minute": 86,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": 1,
+          "home": 2,
           "away": 1
         },
         "regular_time": {
@@ -812,6 +812,14 @@
           "team": "Korea Republic",
           "scorer": "In-beom Hwang",
           "assist": "Kang-in Lee"
+        },
+        {
+          "minute": 80,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Korea Republic",
+          "scorer": "Hyun-Gyu Oh",
+          "assist": "In-beom Hwang"
         }
       ]
     },
@@ -3188,8 +3196,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781235370,
-  "last_score_refresh_attempt_at": 1781235369,
+  "last_score_refresh_at": 1781235913,
+  "last_score_refresh_attempt_at": 1781235912,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
