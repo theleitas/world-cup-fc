@@ -65,6 +65,10 @@ div[data-testid="stExpander"] summary svg {
     color:#ffd54a!important; fill:#ffd54a!important; stroke:#ffd54a!important;
 }
 input, textarea, select { color:#fff!important; }
+div[class*="st-key-points-journal-text"] textarea,
+div[class*="st-key-points-journal-text"] textarea:disabled {
+    color:#000!important; background:#fff!important; -webkit-text-fill-color:#000!important;
+}
 .top-thumbnail-wrap { width:100%; display:flex; justify-content:center; margin:.2rem 0 .75rem; }
 .top-thumbnail { width:100%; max-width:1080px; max-height:320px; object-fit:contain; border-radius:8px; display:block; }
 .hero-title { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px; margin:.25rem 0 1rem; }
