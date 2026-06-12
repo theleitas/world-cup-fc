@@ -228,6 +228,23 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 div[data-testid="stExpander"] { margin:.18rem 0!important; }
 div[data-testid="stExpander"] details > summary { min-height:44px!important; padding:.45rem .85rem!important; }
 div[data-testid="stExpander"] summary p { font-size:1.35rem!important; line-height:1.12!important; margin:0!important; }
+.post-standings-gap { height:22px; line-height:0; font-size:0; }
+div[class*="st-key-post-standings-section-stack"] {
+    margin-top:0!important; padding-top:0!important;
+}
+div[class*="st-key-post-standings-section-stack"] > div[data-testid="stVerticalBlock"] {
+    gap:9px!important;
+}
+div[class*="st-key-post-standings-section-stack"] div[data-testid="stVerticalBlock"] {
+    gap:9px!important;
+}
+div[class*="st-key-post-standings-section-stack"] div[data-testid="stElementContainer"],
+div[class*="st-key-post-standings-section-stack"] div[data-testid="stButton"] {
+    margin:0!important; padding:0!important;
+}
+div[class*="st-key-post-standings-section-stack"] div[data-testid="stExpander"] {
+    margin:0!important;
+}
 .drafted-chip { display:inline-flex; align-items:center; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; line-height:1.15; }
 .drafted-chip-bullet { color:var(--coach-color); margin:0 3px; font-size:.78em; line-height:1; display:inline-flex; align-items:center; transform:translateY(-.01em); }
 .match-browser-note { color:#b9c2c9; font-size:.82rem; font-weight:850; margin:0 0 .35rem; }
@@ -2321,6 +2338,23 @@ def render_points_journal(state, scores):
         )
 
 
+def render_post_standings_sections(state, scores, show_detail_tables=False):
+    st.markdown("<div class='post-standings-gap'></div>", unsafe_allow_html=True)
+    with st.container(key="post-standings-section-stack"):
+        render_points_tracker(state, scores)
+        render_points_journal(state, scores)
+        render_live_matches(state)
+        if show_detail_tables:
+            with st.expander("Team Standings", expanded=False):
+                render_team_standings(state)
+            with st.expander("Drafted Player Stats", expanded=False):
+                render_drafted_player_stats(state)
+            with st.expander("Cinderella Standings", expanded=False):
+                render_cinderella_standings(state)
+        render_payout_descriptions()
+        render_completed_draft_table(state)
+
+
 def render_power_rating_explanation():
     st.markdown(
         f"""
@@ -4197,20 +4231,8 @@ draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
     render_standings(state, scores)
-    render_points_tracker(state, scores)
-    render_points_journal(state, scores)
-    render_live_matches(state)
+    render_post_standings_sections(state, scores, show_detail_tables=False)
 else:
     render_standings(state, scores)
-    render_points_tracker(state, scores)
-    render_points_journal(state, scores)
-    render_live_matches(state)
-    with st.expander("Team Standings", expanded=False):
-        render_team_standings(state)
-    with st.expander("Drafted Player Stats", expanded=False):
-        render_drafted_player_stats(state)
-    with st.expander("Cinderella Standings", expanded=False):
-        render_cinderella_standings(state)
-render_payout_descriptions()
-render_completed_draft_table(state)
+    render_post_standings_sections(state, scores, show_detail_tables=True)
 render_admin(state)
