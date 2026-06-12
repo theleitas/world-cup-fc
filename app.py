@@ -225,7 +225,10 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .match-day-title { color:#ffd54a; font-weight:1000; font-size:.95rem; margin:.7rem 0 .35rem; padding-left:10px; border-left:3px solid #ffd54a; }
 .match-sub-title { color:#b9c2c9; font-weight:950; font-size:.86rem; margin:.45rem 0 .25rem; padding-left:10px; }
 div[data-testid="stExpander"] { margin:.18rem 0!important; }
-div[data-testid="stExpander"] details > summary { min-height:44px!important; padding:.45rem .85rem!important; }
+div[data-testid="stExpander"] details > summary {
+    min-height:44px!important; padding:.45rem .85rem!important; display:flex!important;
+    align-items:center!important; gap:.45rem!important;
+}
 div[data-testid="stExpander"] summary p { font-size:1.35rem!important; line-height:1.12!important; margin:0!important; }
 div[class*="st-key-post-standings-section-stack"] {
     margin-top:0!important; padding-top:0!important;
@@ -250,29 +253,20 @@ div[class*="st-key-post-standings-section-stack"] div[data-testid="stExpander"] 
 .points-tracker-card { border:1px solid #2e2e2e; border-radius:8px; background:#050505; padding:9px; box-shadow:inset 0 0 18px rgba(255,255,255,.045); }
 .points-tracker-note { color:#9aa3aa; font-size:.78rem; font-weight:850; margin:0 0 4px; }
 .points-tracker-svg { width:100%; height:auto; display:block; min-height:315px; }
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button,
-div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button {
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button {
     justify-content:flex-start!important; text-align:left!important; background:#050505!important;
     color:#ffd54a!important; border:1px solid #2e2e2e!important; border-radius:8px!important;
     min-height:44px!important; font-size:1.35rem!important; line-height:1.12!important; font-weight:1000!important;
     padding-left:18px!important; box-shadow:inset 0 0 0 1px rgba(255,255,255,.035)!important;
 }
-div[class*="st-key-btn-points-tracker"],
-div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] {
-    margin-bottom:0!important; padding-bottom:0!important;
-}
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button > div,
-div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button > div {
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button > div {
     width:100%!important; justify-content:flex-start!important; text-align:left!important;
 }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button *,
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button p,
-div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button *,
-div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button p {
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button p {
     color:#ffd54a!important; font-size:1.35rem!important; line-height:1.12!important; font-weight:1000!important; text-align:left!important;
 }
-div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hover,
-div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button:hover {
+div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hover {
     border-color:#ffd54a!important; background:#080808!important; color:#ffd54a!important;
 }
 .payout-grid { display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:8px; }
@@ -2309,17 +2303,16 @@ def points_tracker_svg(state, scores):
 
 
 def render_points_tracker(state, scores):
-    if not toggle_button("Points Tracker", "points-tracker-open", "btn-points-tracker", default_open=False):
-        return
-    st.markdown(
-        f"""
+    with st.expander("Points Tracker", expanded=False):
+        st.markdown(
+            f"""
 <div class='points-tracker-card'>
   <div class='points-tracker-note'>{html.escape(points_tracker_updated_text(state))}</div>
   {points_tracker_svg(state, scores)}
 </div>
 """,
-        unsafe_allow_html=True,
-    )
+            unsafe_allow_html=True,
+        )
 
 
 def render_points_journal(state, scores):
