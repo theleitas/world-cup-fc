@@ -341,6 +341,7 @@ div[class*="st-key-btn-points-tracker"] div[data-testid="stButton"] > button:hov
 
 COACHES = ["Benji", "Jeff", "Peter", "Chad", "Lamp", "Herb", "Jayme", "Spencer"]
 STATE_FILE_PATH = "draft_state.json"
+POINTS_JOURNAL_DIR = "points_journals"
 BRANCH = "main"
 REPO_OWNER = "theleitas"
 REPO_NAME = "world-cup-fc"
@@ -2292,6 +2293,30 @@ def render_points_tracker(state, scores):
     )
 
 
+def render_points_journal(state, scores):
+    with st.expander("Points Journal", expanded=False):
+        journals = build_points_journals(state, scores)
+        write_points_journal_files(journals)
+        default_index = COACHES.index("Jayme") if "Jayme" in COACHES else 0
+        selected = st.selectbox("Coach", COACHES, index=default_index, key="points-journal-coach")
+        text = journals.get(selected, "")
+        st.download_button(
+            "Download TXT",
+            data=text,
+            file_name=f"{selected}.txt",
+            mime="text/plain",
+            key=f"points-journal-download-{selected}",
+            width="stretch",
+        )
+        st.text_area(
+            "Journal",
+            value=text,
+            height=420,
+            disabled=True,
+            key=f"points-journal-text-{selected}",
+        )
+
+
 def render_power_rating_explanation():
     st.markdown(
         f"""
@@ -3203,6 +3228,164 @@ def match_goal_events_html(state, match):
     return "<div class='coach-live-goals'>" + "".join(pieces) + "</div>"
 
 
+def match_journal_date(match):
+    kickoff = match_datetime(match.get("date"))
+    if not kickoff:
+        return "Date TBD"
+    local_dt = kickoff.astimezone(ZoneInfo("America/New_York"))
+    return f"{local_dt.strftime('%B')} {local_dt.day}"
+
+
+def match_journal_title(match):
+    home = canonical_team_name(match.get("home")) or "TBD"
+    away = canonical_team_name(match.get("away")) or "TBD"
+    return f"{home} vs. {away}, {match_journal_date(match)}"
+
+
+def match_has_point_context(match):
+    if "friendly" in str(match.get("stage") or "").lower():
+        return False
+    if match.get("home_score") is None or match.get("away_score") is None:
+        return False
+    status = str(match.get("status") or "").lower()
+    return status not in ["scheduled", "timed", "postponed", "cancelled", "canceled", "suspended"]
+
+
+def team_match_journal_lines(match, team_name):
+    team_name = canonical_team_name(team_name)
+    if not match_has_point_context(match) or score_match_for_team(match, team_name) == 0:
+        return []
+    home = canonical_team_name(match.get("home"))
+    away = canonical_team_name(match.get("away"))
+    if team_name not in [home, away]:
+        return []
+    home_score = int(match.get("home_score") or 0)
+    away_score = int(match.get("away_score") or 0)
+    goals_for = home_score if team_name == home else away_score
+    goals_against = away_score if team_name == home else home_score
+
+    lines = []
+    if goals_for > goals_against:
+        lines.append((f"{team_name} Win", 3))
+    elif goals_for == goals_against:
+        lines.append((f"{team_name} Draw", 1))
+    if goals_against == 0:
+        lines.append((f"{team_name} Clean Sheet", 1))
+    for _ in range(goals_for):
+        lines.append((f"{team_name} Goal", 1))
+    return lines
+
+
+def player_match_journal_lines(state, match, player):
+    player = str(player or "").strip()
+    if not player or not match_has_point_context(match) or not player_is_in_match(player, match):
+        return []
+    player_name = player_base_name(player)
+    lines = []
+    for goal in match.get("goals", []):
+        scorer = match_player_to_pool(goal.get("scorer"), state.get("players", []))
+        if scorer == player and player_is_in_match(scorer, match):
+            lines.append((f"{player_name} Goal", 4))
+        assist = match_player_to_pool(goal.get("assist"), state.get("players", []))
+        if assist == player and player_is_in_match(assist, match):
+            lines.append((f"{player_name} Assist", 3))
+    return lines
+
+
+def build_points_journal_text(state, scores, coach):
+    coach_state = state["teams"].get(coach, {})
+    score_total = int(scores.get(coach, {}).get("total_points", 0))
+    generated = datetime.now(ZoneInfo("America/New_York")).strftime("%B %-d, %I:%M %p ET") if os.name != "nt" else datetime.now(ZoneInfo("America/New_York")).strftime("%B %#d, %I:%M %p ET")
+    lines = [
+        f"{coach} Points Journal",
+        "=" * (len(coach) + 15),
+        f"Current Total: {score_total}",
+        f"Updated: {generated}",
+        "",
+    ]
+    running_total = 0
+    entries = 0
+    matches = sorted(
+        [match for match in state.get("matches", []) if match_has_point_context(match)],
+        key=lambda match: match.get("date") or "",
+    )
+    owned_teams = [canonical_team_name(team) for team in coach_state.get("national_teams", []) if canonical_team_name(team)]
+    owned_players = [str(player).strip() for player in coach_state.get("star_players", []) if str(player).strip()]
+
+    for match in matches:
+        match_teams = {canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))}
+        participates = any(team in match_teams for team in owned_teams) or any(player_country(player) in match_teams for player in owned_players)
+        if not participates:
+            continue
+
+        point_lines = []
+        for team_name in owned_teams:
+            if team_name in match_teams:
+                point_lines.extend(team_match_journal_lines(match, team_name))
+        for player in owned_players:
+            if player_country(player) in match_teams:
+                point_lines.extend(player_match_journal_lines(state, match, player))
+
+        title = match_journal_title(match)
+        lines.append(title)
+        lines.append("-" * len(title))
+        if point_lines:
+            match_total = 0
+            for label, points in point_lines:
+                lines.append(f"{label} +{points}")
+                match_total += points
+            running_total += match_total
+            lines.append(f"Match Total +{match_total}")
+        else:
+            lines.append("No points yet")
+        lines.append(f"Running Total: {running_total}")
+        lines.append("")
+        entries += 1
+
+    for team_name in owned_teams:
+        advancement = state.get("advancement", {}).get(team_name, "Group Stage")
+        bonus = int(ADVANCEMENT_BONUSES.get(advancement, 0))
+        if bonus <= 0:
+            continue
+        title = f"{team_name} Advancement"
+        lines.append(title)
+        lines.append("-" * len(title))
+        lines.append(f"{team_name} {advancement} Bonus +{bonus}")
+        running_total += bonus
+        lines.append(f"Running Total: {running_total}")
+        lines.append("")
+        entries += 1
+
+    if entries == 0:
+        lines.append("No points logged yet.")
+        lines.append("")
+
+    lines.append(f"Journal Total: {running_total}")
+    if running_total != score_total:
+        lines.append(f"Scoreboard Total: {score_total}")
+    return "\n".join(lines).rstrip() + "\n"
+
+
+def build_points_journals(state, scores):
+    return {coach: build_points_journal_text(state, scores, coach) for coach in COACHES}
+
+
+def write_points_journal_files(journals):
+    try:
+        os.makedirs(POINTS_JOURNAL_DIR, exist_ok=True)
+        for coach, text in journals.items():
+            path = os.path.join(POINTS_JOURNAL_DIR, f"{coach}.txt")
+            prior = ""
+            if os.path.exists(path):
+                with open(path, "r", encoding="utf-8") as journal_file:
+                    prior = journal_file.read()
+            if prior != text:
+                with open(path, "w", encoding="utf-8") as journal_file:
+                    journal_file.write(text)
+    except OSError:
+        pass
+
+
 def match_owned_teams_by_coach(state, match):
     owned = {}
     for team_name in (canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))):
@@ -4011,10 +4194,12 @@ if draft_visible:
     render_drafts(state)
     render_standings(state, scores)
     render_points_tracker(state, scores)
+    render_points_journal(state, scores)
     render_live_matches(state)
 else:
     render_standings(state, scores)
     render_points_tracker(state, scores)
+    render_points_journal(state, scores)
     render_live_matches(state)
     with st.expander("Team Standings", expanded=False):
         render_team_standings(state)
