@@ -227,7 +227,6 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 div[data-testid="stExpander"] { margin:.18rem 0!important; }
 div[data-testid="stExpander"] details > summary { min-height:44px!important; padding:.45rem .85rem!important; }
 div[data-testid="stExpander"] summary p { font-size:1.35rem!important; line-height:1.12!important; margin:0!important; }
-.post-standings-gap { height:22px; line-height:0; font-size:0; }
 div[class*="st-key-post-standings-section-stack"] {
     margin-top:0!important; padding-top:0!important;
 }
@@ -2104,8 +2103,9 @@ def placement_strip(rank):
     return label, color, text_color
 
 
-def render_standings(state, scores):
-    st.markdown("<div class='section-title'>Standings</div>", unsafe_allow_html=True)
+def render_standings(state, scores, show_title=True):
+    if show_title:
+        st.markdown("<div class='section-title'>Standings</div>", unsafe_allow_html=True)
     leaders = award_leaders(scores)
     rank_by_coach = {item["coach"]: index + 1 for index, item in enumerate(ordered_scores(scores))}
     cards = ["<div class='standings-grid'>"]
@@ -2346,9 +2346,14 @@ def render_points_journal(state, scores):
         )
 
 
+def render_standings_section(state, scores):
+    with st.expander("Standings", expanded=False):
+        render_standings(state, scores, show_title=False)
+
+
 def render_post_standings_sections(state, scores, show_detail_tables=False):
-    st.markdown("<div class='post-standings-gap'></div>", unsafe_allow_html=True)
     with st.container(key="post-standings-section-stack"):
+        render_standings_section(state, scores)
         render_points_tracker(state, scores)
         render_points_journal(state, scores)
         render_live_matches(state)
@@ -4237,9 +4242,7 @@ render_header(state)
 draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
-    render_standings(state, scores)
     render_post_standings_sections(state, scores, show_detail_tables=False)
 else:
-    render_standings(state, scores)
     render_post_standings_sections(state, scores, show_detail_tables=True)
 render_admin(state)
