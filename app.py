@@ -248,7 +248,6 @@ div[class*="st-key-post-standings-section-stack"] div[data-testid="stExpander"] 
 }
 .drafted-chip { display:inline-flex; align-items:center; border-radius:6px; border:1px solid var(--coach-color); color:var(--coach-color); padding:2px 6px; margin:2px 3px 0 0; font-size:.78rem; font-weight:900; line-height:1.15; }
 .drafted-chip-bullet { color:var(--coach-color); margin:0 3px; font-size:.78em; line-height:1; display:inline-flex; align-items:center; transform:translateY(-.01em); }
-.match-browser-note { color:#b9c2c9; font-size:.82rem; font-weight:850; margin:0 0 .35rem; }
 .points-tracker-wrap { margin:.18rem 0 .28rem; }
 .points-tracker-card { border:1px solid #2e2e2e; border-radius:8px; background:#050505; padding:9px; box-shadow:inset 0 0 18px rgba(255,255,255,.045); }
 .points-tracker-note { color:#9aa3aa; font-size:.78rem; font-weight:850; margin:0 0 4px; }
@@ -2347,9 +2346,9 @@ def render_standings_section(state, scores):
 def render_post_standings_sections(state, scores, show_detail_tables=False):
     with st.container(key="post-standings-section-stack"):
         render_standings_section(state, scores)
+        render_live_matches(state)
         render_points_tracker(state, scores)
         render_points_journal(state, scores)
-        render_live_matches(state)
         if show_detail_tables:
             with st.expander("Team Standings", expanded=False):
                 render_team_standings(state)
@@ -3780,10 +3779,6 @@ def render_match_timeline(state, matches):
         key=lambda match: match_datetime(match.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC")),
     )
 
-    st.markdown(
-        "<div class='match-browser-note'>Open a section to load its match cards. Completed matches show where points came from; future weeks show what is next.</div>",
-        unsafe_allow_html=True,
-    )
     render_lazy_match_section(
         state,
         "Completed Matches",
@@ -3819,26 +3814,12 @@ def render_match_timeline(state, matches):
 
 def render_live_matches(state):
     with st.expander("World Cup Tracker", expanded=False):
-        c1, c2 = st.columns([1, 2])
-        with c1:
-            if st.button("Refresh Scores"):
-                ok, _ = refresh_api_scores()
-                if ok:
-                    st.rerun()
-        with c2:
-            if state.get("last_score_refresh_at"):
-                refreshed = datetime.fromtimestamp(int(state["last_score_refresh_at"]), tz=ZoneInfo("America/New_York"))
-                st.caption(f"Last API refresh: {refreshed.strftime('%b %d, %I:%M %p ET')}")
-            if state.get("last_api_error"):
-                st.caption(state["last_api_error"])
-        st.caption("Data provided by football-data.org")
-
         matches = sorted(
             [match for match in state.get("matches", []) if "friendly" not in str(match.get("stage") or "").lower()],
             key=lambda match: match.get("date") or "",
         )
         if not matches:
-            st.info("No World Cup matches loaded yet. Configure Football-Data token or refresh scores.")
+            st.info("No World Cup matches loaded yet.")
             return
 
         render_match_timeline(state, matches)
