@@ -2025,7 +2025,6 @@ def render_header(state):
     <div class="hero-kicker">Fantasy Challenge</div>
     <h1>{html.escape(state.get("app_title") or "World Cup FC")}</h1>
   </div>
-  <div class="deadline-pill">{html.escape(DRAFT_DEADLINE_TEXT)}</div>
 </div>
 """,
         unsafe_allow_html=True,
