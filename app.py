@@ -1814,9 +1814,18 @@ def award_leaders(scores):
         leaders["Group Stage Winner"] = max(values, key=lambda item: item["group_stage_points"])
     if max(item.get("empire_count", 0) for item in values) > 0:
         leaders["Empire Builder"] = max(values, key=lambda item: (item["empire_count"], item["empire_goals"], item["total_points"]))
-    cinderella_candidates = [item for item in values if item.get("cinderella_team") and item.get("cinderella", 0) > 0]
+    cinderella_candidates = []
+    for item in values:
+        for team, team_points, baseline, cinderella in item.get("team_breakdown", []):
+            if team_points <= 0:
+                continue
+            candidate = dict(item)
+            candidate["cinderella_team"] = team
+            candidate["cinderella"] = cinderella
+            candidate["fifa_expected"] = baseline
+            cinderella_candidates.append(candidate)
     if cinderella_candidates:
-        leaders["Cinderella Award"] = max(cinderella_candidates, key=lambda item: item["cinderella"])
+        leaders["Cinderella Winner"] = max(cinderella_candidates, key=lambda item: item["cinderella"])
     return leaders
 
 
