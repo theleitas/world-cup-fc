@@ -221,7 +221,6 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .match-player-chip { display:inline-flex; align-items:center; border:1px solid var(--coach-color); border-radius:6px; background:color-mix(in srgb, var(--coach-color) 13%, #0d0d0d); color:var(--coach-color); box-shadow:0 0 7px color-mix(in srgb, var(--coach-color) 35%, transparent); padding:2px 6px; font-size:.76rem; font-weight:900; line-height:1.15; }
 .match-player-bullet { color:var(--coach-color); margin:0 4px; font-size:.78em; line-height:1; display:inline-flex; align-items:center; transform:translateY(-.01em); }
 .matches-grid { display:grid; grid-template-columns:repeat(2, minmax(0, 1fr)); gap:8px; }
-.match-section-spacer { height:14px; }
 .match-stage-title { color:#ffd54a; font-weight:1000; font-size:1rem; }
 .match-day-title { color:#ffd54a; font-weight:1000; font-size:.95rem; margin:.7rem 0 .35rem; padding-left:10px; border-left:3px solid #ffd54a; }
 .match-sub-title { color:#b9c2c9; font-weight:950; font-size:.86rem; margin:.45rem 0 .25rem; padding-left:10px; }
@@ -3812,7 +3811,6 @@ def render_match_timeline(state, matches):
 
 
 def render_live_matches(state):
-    st.markdown("<div class='match-section-spacer'></div>", unsafe_allow_html=True)
     with st.expander("World Cup Tracker", expanded=False):
         c1, c2 = st.columns([1, 2])
         with c1:
