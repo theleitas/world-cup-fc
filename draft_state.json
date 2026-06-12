@@ -832,16 +832,16 @@
       "home": "Canada",
       "away": "Bosnia and Herzegovina",
       "home_score": 0,
-      "away_score": 0,
+      "away_score": 1,
       "status": "In_Play",
-      "minute": 17,
+      "minute": 45,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 0
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -852,7 +852,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 21,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Bosnia and Herzegovina",
+          "scorer": "Jovo Lukić",
+          "assist": "Sead Kolašinac"
+        }
+      ]
     },
     {
       "id": "537345",
@@ -3196,8 +3205,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781292065,
-  "last_score_refresh_attempt_at": 1781292064,
+  "last_score_refresh_at": 1781293723,
+  "last_score_refresh_attempt_at": 1781293722,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
