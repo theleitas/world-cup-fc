@@ -833,8 +833,8 @@
       "away": "Bosnia and Herzegovina",
       "home_score": 1,
       "away_score": 1,
-      "status": "In_Play",
-      "minute": 89,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -862,7 +862,7 @@
           "assist": "Sead Kolašinac"
         },
         {
-          "minute": 79,
+          "minute": 78,
           "injury_time": null,
           "type": "REGULAR",
           "team": "Canada",
@@ -3213,8 +3213,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781297417,
-  "last_score_refresh_attempt_at": 1781297416,
+  "last_score_refresh_at": 1781298569,
+  "last_score_refresh_attempt_at": 1781298568,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
