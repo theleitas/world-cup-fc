@@ -2272,6 +2272,7 @@ def points_tracker_svg(state, scores):
             parts.append(f"<image x='{face_x - icon_radius:.1f}' y='{face_y - icon_radius:.1f}' width='{icon_radius * 2}' height='{icon_radius * 2}' href='{html.escape(data_uri, quote=True)}' clip-path='url(#{clip_id})' preserveAspectRatio='xMidYMid slice'/>")
         else:
             parts.append(f"<text x='{face_x:.1f}' y='{face_y + 3:.1f}' text-anchor='middle' fill='{html.escape(color)}' font-size='8' font-weight='1000'>{html.escape(coach[:2])}</text>")
+        parts.append(f"<text x='{face_x + icon_radius + 4:.1f}' y='{face_y + 4:.1f}' fill='{html.escape(color)}' font-size='10' font-weight='1000'>{int(values[-1])}</text>")
 
     parts.append("</svg>")
     return "".join(parts)
