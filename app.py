@@ -3800,12 +3800,9 @@ def render_match_timeline(state, matches):
 
     for index, (start, end, week_matches) in enumerate(match_week_groups(future_matches)):
         date_label = f"{compact_date_label(start)} - {compact_date_label(end)}"
-        stages = ", ".join(unique_stage_labels(week_matches))
-        stage_suffix = f" • {stages}" if stages else ""
-        label = f"Upcoming Matches ({date_label}){stage_suffix}" if index == 0 else f"Week {index + 1}: {date_label}{stage_suffix}"
         render_lazy_match_section(
             state,
-            label,
+            date_label,
             week_matches,
             f"week-{index + 1}",
             default_open=index == 0,
