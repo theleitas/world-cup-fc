@@ -2235,12 +2235,12 @@ def spread_endpoint_positions(items, top, bottom, min_gap):
 def points_tracker_svg(state, scores):
     dates, series = points_tracker_series(state, scores)
     width, height = 760, 330
-    plot_left, plot_right = 44, 674
+    plot_left, plot_right = 44, 680
     plot_top, plot_bottom = 42, 276
     all_values = [value for values in series.values() for value in values]
     max_points = max(all_values + [0])
     min_points = min(all_values + [0])
-    padding = max(5, int((max_points - min_points) * 0.16))
+    padding = max(8, int((max_points - min_points) * 0.3))
     y_min = max(0, min_points - padding)
     y_max = max(10, max_points + padding)
     if y_max == y_min:
@@ -2257,7 +2257,8 @@ def points_tracker_svg(state, scores):
     y_ticks = [round(y_min + (y_max - y_min) * index / 4) for index in range(5)]
     day_step = max(1, len(dates) // 9)
     endpoint_y = [(coach, y_at(values[-1])) for coach, values in series.items()]
-    icon_y = spread_endpoint_positions(endpoint_y, plot_top + 17, plot_bottom - 17, 27)
+    icon_radius = 12
+    icon_y = spread_endpoint_positions(endpoint_y, plot_top + icon_radius + 3, plot_bottom - icon_radius - 3, 18)
 
     parts = [
         "<svg class='points-tracker-svg' viewBox='0 0 760 330' role='img' aria-label='Coach points tracker'>",
@@ -2265,9 +2266,9 @@ def points_tracker_svg(state, scores):
     ]
     for tick in y_ticks:
         y = y_at(tick)
-        parts.append(f"<line x1='{plot_left}' y1='{y:.1f}' x2='{plot_right + 46}' y2='{y:.1f}' stroke='rgba(185,194,201,.12)'/>")
+        parts.append(f"<line x1='{plot_left}' y1='{y:.1f}' x2='{plot_right + 52}' y2='{y:.1f}' stroke='rgba(185,194,201,.12)'/>")
         parts.append(f"<text x='{plot_left - 8}' y='{y + 4:.1f}' text-anchor='end' fill='#9aa3aa' font-size='11' font-weight='800'>{tick}</text>")
-    parts.append(f"<line x1='{plot_left}' y1='{plot_bottom}' x2='{plot_right + 46}' y2='{plot_bottom}' stroke='rgba(185,194,201,.28)'/>")
+    parts.append(f"<line x1='{plot_left}' y1='{plot_bottom}' x2='{plot_right + 52}' y2='{plot_bottom}' stroke='rgba(185,194,201,.28)'/>")
     parts.append(f"<line x1='{plot_left}' y1='{plot_top}' x2='{plot_left}' y2='{plot_bottom}' stroke='rgba(185,194,201,.28)'/>")
     for index, _date in enumerate(dates):
         if index % day_step == 0 or index == len(dates) - 1:
@@ -2284,18 +2285,19 @@ def points_tracker_svg(state, scores):
         parts.append(f"<polyline points='{points_attr}' fill='none' stroke='{html.escape(color)}' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' opacity='.88'/>")
         actual_x = x_at(len(values) - 1)
         actual_y = y_at(values[-1])
-        face_x = plot_right + 30
+        face_x = actual_x
         face_y = icon_y.get(coach, actual_y)
-        parts.append(f"<line x1='{actual_x:.1f}' y1='{actual_y:.1f}' x2='{face_x - 17:.1f}' y2='{face_y:.1f}' stroke='{html.escape(color)}' stroke-width='1.6' opacity='.55'/>")
+        if abs(face_y - actual_y) > 1:
+            parts.append(f"<line x1='{actual_x:.1f}' y1='{actual_y:.1f}' x2='{face_x:.1f}' y2='{face_y:.1f}' stroke='{html.escape(color)}' stroke-width='1.6' opacity='.5'/>")
         data_uri = image_to_data_uri(coach_photo_filename(coach), max_width=64, max_height=64, quality=72)
         clip_id = f"points-face-{html.escape(coach)}"
-        parts.append(f"<defs><clipPath id='{clip_id}'><circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='16'/></clipPath></defs>")
-        parts.append(f"<circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='17.5' fill='#050505' stroke='{html.escape(color)}' stroke-width='3'/>")
+        parts.append(f"<defs><clipPath id='{clip_id}'><circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='{icon_radius}'/></clipPath></defs>")
+        parts.append(f"<circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='{icon_radius + 1.4}' fill='#050505' stroke='{html.escape(color)}' stroke-width='2.4'/>")
         if data_uri:
-            parts.append(f"<image x='{face_x - 16:.1f}' y='{face_y - 16:.1f}' width='32' height='32' href='{html.escape(data_uri, quote=True)}' clip-path='url(#{clip_id})' preserveAspectRatio='xMidYMid slice'/>")
+            parts.append(f"<image x='{face_x - icon_radius:.1f}' y='{face_y - icon_radius:.1f}' width='{icon_radius * 2}' height='{icon_radius * 2}' href='{html.escape(data_uri, quote=True)}' clip-path='url(#{clip_id})' preserveAspectRatio='xMidYMid slice'/>")
         else:
-            parts.append(f"<text x='{face_x:.1f}' y='{face_y + 4:.1f}' text-anchor='middle' fill='{html.escape(color)}' font-size='10' font-weight='1000'>{html.escape(coach[:2])}</text>")
-        parts.append(f"<text x='{face_x + 21:.1f}' y='{face_y + 4:.1f}' fill='{html.escape(color)}' font-size='12' font-weight='1000'>{int(values[-1])}</text>")
+            parts.append(f"<text x='{face_x:.1f}' y='{face_y + 3:.1f}' text-anchor='middle' fill='{html.escape(color)}' font-size='8' font-weight='1000'>{html.escape(coach[:2])}</text>")
+        parts.append(f"<text x='{face_x + 17:.1f}' y='{face_y + 4:.1f}' fill='{html.escape(color)}' font-size='12' font-weight='1000'>{int(values[-1])}</text>")
 
     parts.append("</svg>")
     return "".join(parts)
