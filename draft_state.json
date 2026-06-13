@@ -3255,8 +3255,8 @@
     "Türkiye": "Group Stage"
   },
   "last_score_refresh_at": 1781363592,
-  "last_score_refresh_attempt_at": 1781363590,
-  "last_api_error": "",
+  "last_score_refresh_attempt_at": 1781363890,
+  "last_api_error": "('Connection aborted.', RemoteDisconnected('Remote end closed connection without response'))",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
   "last_friendly_api_error": "",
