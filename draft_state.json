@@ -879,16 +879,16 @@
       "matchday": 1,
       "home": "USA",
       "away": "Paraguay",
-      "home_score": 3,
+      "home_score": 4,
       "away_score": 1,
-      "status": "In_Play",
+      "status": "Finished",
       "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 3,
+          "home": 4,
           "away": 1
         },
         "regular_time": {
@@ -932,6 +932,14 @@
           "team": "Paraguay",
           "scorer": "Mauricio",
           "assist": "Julio Enciso"
+        },
+        {
+          "minute": 90,
+          "injury_time": 8,
+          "type": "REGULAR",
+          "team": "USA",
+          "scorer": "Gio Reyna",
+          "assist": ""
         }
       ]
     },
@@ -3246,8 +3254,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781319586,
-  "last_score_refresh_attempt_at": 1781319585,
+  "last_score_refresh_at": 1781319886,
+  "last_score_refresh_attempt_at": 1781319885,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
