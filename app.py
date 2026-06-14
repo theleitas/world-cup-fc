@@ -251,7 +251,7 @@ div[class*="st-key-post-standings-section-stack"] div[data-testid="stExpander"] 
 .points-tracker-wrap { margin:.18rem 0 .28rem; }
 .points-tracker-card { border:1px solid #2e2e2e; border-radius:8px; background:#050505; padding:9px; box-shadow:inset 0 0 18px rgba(255,255,255,.045); }
 .points-tracker-note { color:#9aa3aa; font-size:.78rem; font-weight:850; margin:0 0 4px; }
-.points-tracker-svg { width:100%; height:auto; display:block; min-height:315px; }
+.points-tracker-svg { width:100%; height:auto; display:block; min-height:500px; }
 div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button {
     justify-content:flex-start!important; text-align:left!important; background:#050505!important;
     color:#ffd54a!important; border:1px solid #2e2e2e!important; border-radius:8px!important;
@@ -2222,9 +2222,10 @@ def points_tracker_series(state, scores):
 
 def points_tracker_svg(state, scores):
     dates, series = points_tracker_series(state, scores)
-    width, height = 760, 330
-    plot_left, plot_right = 44, 700
-    plot_top, plot_bottom = 42, 276
+    axis_dates = dates + [dates[-1] + timedelta(days=offset) for offset in range(1, 3)] if dates else dates
+    width, height = 760, 560
+    plot_left, plot_right = 48, 704
+    plot_top, plot_bottom = 46, 498
     all_values = [value for values in series.values() for value in values]
     max_points = max(all_values + [0])
     min_points = min(all_values + [0])
@@ -2235,20 +2236,20 @@ def points_tracker_svg(state, scores):
         y_max = y_min + 10
 
     def x_at(index):
-        if len(dates) <= 1:
+        if len(axis_dates) <= 1:
             return plot_left
-        return plot_left + (plot_right - plot_left) * index / (len(dates) - 1)
+        return plot_left + (plot_right - plot_left) * index / (len(axis_dates) - 1)
 
     def y_at(value):
         return plot_bottom - (value - y_min) * (plot_bottom - plot_top) / (y_max - y_min)
 
     y_ticks = [round(y_min + (y_max - y_min) * index / 4) for index in range(5)]
-    day_step = max(1, len(dates) // 9)
-    icon_radius = 12
+    day_step = max(1, len(axis_dates) // 8)
+    icon_radius = 15
 
     parts = [
-        "<svg class='points-tracker-svg' viewBox='0 0 760 330' role='img' aria-label='Coach points tracker'>",
-        "<rect x='0' y='0' width='760' height='330' rx='8' fill='#050505'/>",
+        f"<svg class='points-tracker-svg' viewBox='0 0 {width} {height}' role='img' aria-label='Coach points tracker'>",
+        f"<rect x='0' y='0' width='{width}' height='{height}' rx='8' fill='#050505'/>",
     ]
     for tick in y_ticks:
         y = y_at(tick)
@@ -2256,8 +2257,8 @@ def points_tracker_svg(state, scores):
         parts.append(f"<text x='{plot_left - 8}' y='{y + 4:.1f}' text-anchor='end' fill='#9aa3aa' font-size='11' font-weight='800'>{tick}</text>")
     parts.append(f"<line x1='{plot_left}' y1='{plot_bottom}' x2='{plot_right + 16}' y2='{plot_bottom}' stroke='rgba(185,194,201,.28)'/>")
     parts.append(f"<line x1='{plot_left}' y1='{plot_top}' x2='{plot_left}' y2='{plot_bottom}' stroke='rgba(185,194,201,.28)'/>")
-    for index, _date in enumerate(dates):
-        if index % day_step == 0 or index == len(dates) - 1:
+    for index, _date in enumerate(axis_dates):
+        if index % day_step == 0 or index == len(axis_dates) - 1:
             x = x_at(index)
             parts.append(f"<text x='{x:.1f}' y='{plot_bottom + 22}' text-anchor='middle' fill='#9aa3aa' font-size='11' font-weight='800'>{index + 1}</text>")
     parts.append(f"<text x='{(plot_left + plot_right) / 2:.1f}' y='{height - 8}' text-anchor='middle' fill='#7f888f' font-size='11' font-style='italic'>Tournament day number</text>")
@@ -2271,15 +2272,15 @@ def points_tracker_svg(state, scores):
         parts.append(f"<polyline points='{points_attr}' fill='none' stroke='{html.escape(color)}' stroke-width='3.5' stroke-linecap='round' stroke-linejoin='round' opacity='.88'/>")
         face_x = x_at(len(values) - 1)
         face_y = y_at(values[-1])
-        data_uri = image_to_data_uri(coach_photo_filename(coach), max_width=64, max_height=64, quality=72)
+        data_uri = image_to_data_uri(coach_photo_filename(coach), max_width=80, max_height=80, quality=74)
         clip_id = f"points-face-{html.escape(coach)}"
         parts.append(f"<defs><clipPath id='{clip_id}'><circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='{icon_radius}'/></clipPath></defs>")
         parts.append(f"<circle cx='{face_x:.1f}' cy='{face_y:.1f}' r='{icon_radius + 1.4}' fill='#050505' stroke='{html.escape(color)}' stroke-width='2.4'/>")
         if data_uri:
             parts.append(f"<image x='{face_x - icon_radius:.1f}' y='{face_y - icon_radius:.1f}' width='{icon_radius * 2}' height='{icon_radius * 2}' href='{html.escape(data_uri, quote=True)}' clip-path='url(#{clip_id})' preserveAspectRatio='xMidYMid slice'/>")
         else:
-            parts.append(f"<text x='{face_x:.1f}' y='{face_y + 3:.1f}' text-anchor='middle' fill='{html.escape(color)}' font-size='8' font-weight='1000'>{html.escape(coach[:2])}</text>")
-        parts.append(f"<text x='{face_x + icon_radius + 4:.1f}' y='{face_y + 4:.1f}' fill='{html.escape(color)}' font-size='10' font-weight='1000'>{int(values[-1])}</text>")
+            parts.append(f"<text x='{face_x:.1f}' y='{face_y + 4:.1f}' text-anchor='middle' fill='{html.escape(color)}' font-size='9' font-weight='1000'>{html.escape(coach[:2])}</text>")
+        parts.append(f"<text x='{face_x + icon_radius + 5:.1f}' y='{face_y + 4:.1f}' fill='{html.escape(color)}' font-size='12' font-weight='1000'>{int(values[-1])}</text>")
 
     parts.append("</svg>")
     return "".join(parts)
