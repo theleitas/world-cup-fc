@@ -71,9 +71,23 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 }
 .top-thumbnail-wrap { width:100%; display:flex; justify-content:center; margin:.2rem 0 .75rem; }
 .top-thumbnail { width:100%; max-width:1080px; max-height:320px; object-fit:contain; border-radius:8px; display:block; }
-.hero-title { display:flex; flex-wrap:wrap; align-items:flex-end; justify-content:space-between; gap:12px; margin:.25rem 0 1rem; }
+.hero-title { margin:.25rem 0 1rem; }
 .hero-title h1 { margin:0; padding:0; font-size:clamp(1.75rem, 6.4vw, 3.35rem); line-height:.98; font-weight:1000; color:#ffd54a; }
 .hero-kicker { color:#00e5ff; text-transform:uppercase; font-size:.82rem; letter-spacing:.12em; font-weight:1000; }
+.st-key-header-refresh div[data-testid="stButton"] { display:flex; justify-content:flex-end; }
+.st-key-header-refresh div[data-testid="stButton"] > button {
+    width:100%!important; min-height:52px!important; border-radius:10px!important;
+    background:linear-gradient(135deg, #00e5ff 0%, #ffd54a 48%, #40ff6a 100%)!important;
+    border:2px solid #ffffff!important; color:#000!important; font-size:1.08rem!important;
+    font-weight:1000!important; text-transform:uppercase!important; letter-spacing:.04em!important;
+    box-shadow:0 0 18px rgba(0,229,255,.78), 0 0 28px rgba(255,213,74,.48), inset 0 0 10px rgba(255,255,255,.55)!important;
+}
+.st-key-header-refresh div[data-testid="stButton"] > button:hover {
+    background:linear-gradient(135deg, #40ff6a 0%, #ffd54a 52%, #00e5ff 100%)!important;
+    border-color:#ffd54a!important; color:#000!important;
+    box-shadow:0 0 24px rgba(64,255,106,.86), 0 0 34px rgba(0,229,255,.6), inset 0 0 12px rgba(255,255,255,.68)!important;
+}
+.st-key-header-refresh div[data-testid="stButton"] > button * { color:#000!important; }
 .deadline-pill { border:2px solid #ffd54a; color:#ffd54a; border-radius:8px; padding:8px 10px; font-weight:950; background:#090909; }
 .section-title { color:#ffd54a; font-weight:1000; font-size:1.35rem; line-height:1.12; margin:.75rem 0 .35rem; }
 .admin-title { color:#ff1744; text-shadow:0 0 10px #ff1744; }
@@ -2047,8 +2061,10 @@ def refresh_api_scores():
 
 def render_header(state):
     st.markdown(top_thumbnail_html(), unsafe_allow_html=True)
-    st.markdown(
-        f"""
+    title_col, refresh_col = st.columns([2, 1], vertical_alignment="center")
+    with title_col:
+        st.markdown(
+            f"""
 <div class="hero-title">
   <div>
     <div class="hero-kicker">Fantasy Challenge</div>
@@ -2056,8 +2072,13 @@ def render_header(state):
   </div>
 </div>
 """,
-        unsafe_allow_html=True,
-    )
+            unsafe_allow_html=True,
+        )
+    with refresh_col:
+        if st.button("Refresh", key="header-refresh", width="stretch"):
+            ok, _ = refresh_api_scores()
+            if ok:
+                st.rerun()
 
 
 def render_payout_descriptions():
