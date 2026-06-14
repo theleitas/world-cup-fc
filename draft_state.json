@@ -3314,9 +3314,9 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781451044,
-  "last_score_refresh_attempt_at": 1781451944,
-  "last_api_error": "HTTPSConnectionPool(host='api.football-data.org', port=443): Read timed out. (read timeout=15)",
+  "last_score_refresh_at": 1781452545,
+  "last_score_refresh_attempt_at": 1781452544,
+  "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
   "last_friendly_api_error": "",
