@@ -1049,8 +1049,8 @@
       "away": "Scotland",
       "home_score": 0,
       "away_score": 1,
-      "status": "Paused",
-      "minute": 45,
+      "status": "In_Play",
+      "minute": 51,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -1070,7 +1070,7 @@
       },
       "goals": [
         {
-          "minute": 29,
+          "minute": 28,
           "injury_time": null,
           "type": "REGULAR",
           "team": "Scotland",
@@ -3297,8 +3297,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781402422,
-  "last_score_refresh_attempt_at": 1781402421,
+  "last_score_refresh_at": 1781403324,
+  "last_score_refresh_attempt_at": 1781403323,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
