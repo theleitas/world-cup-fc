@@ -408,6 +408,11 @@ DEFAULT_PLAYERS = [
     "Arda Guler (Türkiye)",
 ]
 
+PLAYER_SHORT_NAMES = {
+    "Neymar Jr.": "Neymar",
+    "Vinicius Junior": "Vini Jr.",
+}
+
 PLAYER_POWER_RATINGS = {
     "Kylian Mbappe (France)": 91,
     "Erling Haaland (Norway)": 91,
@@ -829,6 +834,8 @@ def player_asset_slug(player):
 
 def player_last_name(player):
     base = player_base_name(player)
+    if base in PLAYER_SHORT_NAMES:
+        return PLAYER_SHORT_NAMES[base]
     parts = [part for part in re.split(r"\s+", base) if part]
     return parts[-1] if parts else base
 
