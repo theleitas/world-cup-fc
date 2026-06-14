@@ -3315,8 +3315,8 @@
     "Türkiye": "Group Stage"
   },
   "last_score_refresh_at": 1781451044,
-  "last_score_refresh_attempt_at": 1781451043,
-  "last_api_error": "",
+  "last_score_refresh_attempt_at": 1781451944,
+  "last_api_error": "HTTPSConnectionPool(host='api.football-data.org', port=443): Read timed out. (read timeout=15)",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
   "last_friendly_api_error": "",
