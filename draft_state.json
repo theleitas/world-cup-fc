@@ -1295,16 +1295,16 @@
       "matchday": 1,
       "home": "Côte d'Ivoire",
       "away": "Ecuador",
-      "home_score": 0,
+      "home_score": 1,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 87,
+      "minute": 93,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": 0,
+          "home": 1,
           "away": 0
         },
         "regular_time": {
@@ -1316,7 +1316,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 90,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Côte d'Ivoire",
+          "scorer": "Amad Diallo",
+          "assist": "Wilfried Singo"
+        }
+      ]
     },
     {
       "id": "537358",
@@ -3412,8 +3421,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781484755,
-  "last_score_refresh_attempt_at": 1781484754,
+  "last_score_refresh_at": 1781485142,
+  "last_score_refresh_attempt_at": 1781485141,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
