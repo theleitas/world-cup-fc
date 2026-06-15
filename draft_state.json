@@ -1335,16 +1335,16 @@
       "matchday": 1,
       "home": "Sweden",
       "away": "Tunisia",
-      "home_score": 3,
+      "home_score": 4,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 86,
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 3,
+          "home": 4,
           "away": 1
         },
         "regular_time": {
@@ -1387,6 +1387,14 @@
           "type": "REGULAR",
           "team": "Sweden",
           "scorer": "Viktor Gyökeres",
+          "assist": "Alexander Isak"
+        },
+        {
+          "minute": 86,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Sweden",
+          "scorer": "Mattias Svanberg",
           "assist": "Alexander Isak"
         }
       ]
@@ -3454,8 +3462,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781495207,
-  "last_score_refresh_attempt_at": 1781495206,
+  "last_score_refresh_at": 1781495507,
+  "last_score_refresh_attempt_at": 1781495506,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
