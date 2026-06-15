@@ -1446,16 +1446,16 @@
       "matchday": 1,
       "home": "Belgium",
       "away": "Egypt",
-      "home_score": 0,
+      "home_score": 1,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 63,
+      "minute": 69,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "AWAY_TEAM",
+        "winner": "DRAW",
         "full_time": {
-          "home": 0,
+          "home": 1,
           "away": 1
         },
         "regular_time": {
@@ -1475,6 +1475,14 @@
           "team": "Egypt",
           "scorer": "Emam Ashour",
           "assist": "Mohamed Salah"
+        },
+        {
+          "minute": 66,
+          "injury_time": null,
+          "type": "OWN",
+          "team": "Egypt",
+          "scorer": "Mohamed Hany",
+          "assist": ""
         }
       ]
     },
@@ -3479,8 +3487,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781555130,
-  "last_score_refresh_attempt_at": 1781555130,
+  "last_score_refresh_at": 1781555435,
+  "last_score_refresh_attempt_at": 1781555434,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
