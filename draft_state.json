@@ -1606,16 +1606,16 @@
       "matchday": 1,
       "home": "France",
       "away": "Senegal",
-      "home_score": 0,
+      "home_score": 1,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 62,
+      "minute": 67,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": 0,
+          "home": 1,
           "away": 0
         },
         "regular_time": {
@@ -1627,7 +1627,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 66,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "France",
+          "scorer": "Kylian Mbappé",
+          "assist": ""
+        }
+      ]
     },
     {
       "id": "537392",
@@ -3343,9 +3352,9 @@
       "group_assists": 0
     },
     "Kylian Mbappe (France)": {
-      "goals": 0,
+      "goals": 1,
       "assists": 0,
-      "group_goals": 0,
+      "group_goals": 1,
       "group_assists": 0
     },
     "Harry Kane (England)": {
@@ -3537,8 +3546,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781641631,
-  "last_score_refresh_attempt_at": 1781641630,
+  "last_score_refresh_at": 1781641895,
+  "last_score_refresh_attempt_at": 1781641894,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
