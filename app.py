@@ -298,6 +298,15 @@ div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hov
 .team-standings-table th:nth-child(4), .team-standings-table td:nth-child(4) { width:14%; text-align:center; }
 .team-standings-table th:nth-child(5), .team-standings-table td:nth-child(5) { width:12%; text-align:center; }
 .team-standings-table th:nth-child(6), .team-standings-table td:nth-child(6) { width:12%; text-align:center; }
+.group-tracker-title { color:#ffd54a; font-size:1rem; font-weight:1000; margin:8px 0 4px; }
+.group-tracker-table { table-layout:fixed; margin-bottom:9px; font-size:.82rem; }
+.group-tracker-table th, .group-tracker-table td { padding:6px 5px; }
+.group-tracker-table th:nth-child(1), .group-tracker-table td:nth-child(1) { width:6%; text-align:center; color:#b9c2c9; }
+.group-tracker-table th:nth-child(2), .group-tracker-table td:nth-child(2) { width:25%; }
+.group-tracker-table th:nth-child(3), .group-tracker-table td:nth-child(3) { width:19%; }
+.group-tracker-table th:nth-child(n+4), .group-tracker-table td:nth-child(n+4) { text-align:center; width:6.25%; }
+.group-tracker-table td:nth-child(8) { font-weight:1000; color:#fff; }
+.group-team-cell { font-weight:950; overflow-wrap:anywhere; }
 .team-main-row td { border-bottom:0; font-weight:900; }
 .team-name-cell { overflow-wrap:anywhere; }
 .team-detail-row td { background:#050505; color:#b9c2c9; padding-top:2px; border-bottom:1px solid rgba(255,255,255,.16); }
@@ -341,6 +350,12 @@ div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hov
     .info-link { font-size:.74rem; margin-left:1px; }
     .data-table { font-size:.78rem; }
     .data-table th, .data-table td { padding:6px 5px; }
+    .group-tracker-table { font-size:.68rem; }
+    .group-tracker-table th, .group-tracker-table td { padding:5px 3px; }
+    .group-tracker-table th:nth-child(1), .group-tracker-table td:nth-child(1) { width:5%; }
+    .group-tracker-table th:nth-child(2), .group-tracker-table td:nth-child(2) { width:25%; }
+    .group-tracker-table th:nth-child(3), .group-tracker-table td:nth-child(3) { width:20%; }
+    .group-tracker-table th:nth-child(n+4), .group-tracker-table td:nth-child(n+4) { width:6.25%; }
     .team-standings-table { font-size:.72rem; }
     .team-standings-table th, .team-standings-table td { padding:5px 4px; }
     .team-standings-table th:nth-child(1), .team-standings-table td:nth-child(1) { width:30%; }
@@ -2349,9 +2364,148 @@ def render_standings_section(state, scores):
         render_standings(state, scores, show_title=False)
 
 
+def group_tracker_match_counts(match):
+    if not stage_is_group(match.get("stage")):
+        return False
+    if "friendly" in str(match.get("stage") or "").lower():
+        return False
+    if match.get("home_score") is None or match.get("away_score") is None:
+        return False
+    status = str(match.get("status") or "").lower()
+    return status not in ["scheduled", "timed", "postponed", "cancelled", "canceled", "suspended"]
+
+
+def group_tracker_team_groups(state):
+    groups = {}
+    for match in state.get("matches", []):
+        if not stage_is_group(match.get("stage")):
+            continue
+        group = match_group_label(match)
+        if not group:
+            continue
+        for team_name in [match.get("home"), match.get("away")]:
+            team_name = canonical_team_name(team_name)
+            if team_name:
+                groups[team_name] = group
+    return groups
+
+
+def group_tracker_rows(state):
+    team_groups = group_tracker_team_groups(state)
+    if not team_groups:
+        team_groups = {team["name"]: team_group_label(state, team["name"]) for team in WORLD_CUP_TEAMS}
+    rows = {}
+    for team in WORLD_CUP_TEAMS:
+        team_name = team["name"]
+        group = team_groups.get(team_name) or "TBD"
+        rows[team_name] = {
+            "team": team_name,
+            "group": group,
+            "mp": 0,
+            "w": 0,
+            "d": 0,
+            "l": 0,
+            "pts": 0,
+            "gf": 0,
+            "ga": 0,
+            "gd": 0,
+        }
+
+    for match in state.get("matches", []):
+        if not group_tracker_match_counts(match):
+            continue
+        home = canonical_team_name(match.get("home"))
+        away = canonical_team_name(match.get("away"))
+        if home not in rows or away not in rows:
+            continue
+        home_score = int(match.get("home_score") or 0)
+        away_score = int(match.get("away_score") or 0)
+        for team_name, goals_for, goals_against in [(home, home_score, away_score), (away, away_score, home_score)]:
+            row = rows[team_name]
+            row["mp"] += 1
+            row["gf"] += goals_for
+            row["ga"] += goals_against
+            if goals_for > goals_against:
+                row["w"] += 1
+                row["pts"] += 3
+            elif goals_for == goals_against:
+                row["d"] += 1
+                row["pts"] += 1
+            else:
+                row["l"] += 1
+        group = match_group_label(match)
+        if group:
+            rows[home]["group"] = group
+            rows[away]["group"] = group
+
+    for row in rows.values():
+        row["gd"] = row["gf"] - row["ga"]
+        coach = drafted_coach_for_team(state, row["team"])
+        coach_data = state["teams"].get(coach, {}) if coach else {}
+        row["coach"] = coach
+        row["coach_name"] = coach_data.get("team_name") or coach or "Undrafted"
+        row["coach_color"] = coach_data.get("color") or "#777777"
+
+    by_group = {}
+    for row in rows.values():
+        by_group.setdefault(row["group"] or "TBD", []).append(row)
+    for group, group_rows in by_group.items():
+        by_group[group] = sorted(
+            group_rows,
+            key=lambda item: (-item["pts"], -item["gd"], -item["gf"], item["team"]),
+        )
+    return dict(sorted(by_group.items(), key=lambda item: (item[0] == "TBD", item[0])))
+
+
+def group_tracker_table_html(group_rows):
+    html_rows = [
+        "<table class='data-table group-tracker-table'><thead><tr>"
+        "<th></th><th>Team</th><th>Owner</th><th>MP</th><th>W</th><th>D</th><th>L</th><th>Pts</th><th>GF</th><th>GA</th><th>GD</th>"
+        "</tr></thead><tbody>"
+    ]
+    for rank, row in enumerate(group_rows, start=1):
+        color = html.escape(row["coach_color"])
+        owner_html = (
+            f"<span class='coach-dot' style='--coach-color:{color}'></span>{html.escape(row['coach_name'])}"
+            if row["coach"]
+            else "<span class='subtle'>Undrafted</span>"
+        )
+        gd = int(row["gd"])
+        gd_text = f"+{gd}" if gd > 0 else str(gd)
+        html_rows.append(
+            f"""
+<tr>
+  <td>{rank}</td>
+  <td class='group-team-cell'>{display_team_html(row["team"], include_info=False)}</td>
+  <td>{owner_html}</td>
+  <td>{int(row["mp"])}</td>
+  <td>{int(row["w"])}</td>
+  <td>{int(row["d"])}</td>
+  <td>{int(row["l"])}</td>
+  <td>{int(row["pts"])}</td>
+  <td>{int(row["gf"])}</td>
+  <td>{int(row["ga"])}</td>
+  <td>{html.escape(gd_text)}</td>
+</tr>
+"""
+        )
+    html_rows.append("</tbody></table>")
+    return "".join(html_rows)
+
+
+def render_group_tracker(state):
+    with st.expander("Group Tracker", expanded=False):
+        groups = group_tracker_rows(state)
+        for group, rows in groups.items():
+            label = f"Group {group}" if group != "TBD" else "Group TBD"
+            st.markdown(f"<div class='group-tracker-title'>{html.escape(label)}</div>", unsafe_allow_html=True)
+            st.markdown(group_tracker_table_html(rows), unsafe_allow_html=True)
+
+
 def render_post_standings_sections(state, scores, show_detail_tables=False):
     with st.container(key="post-standings-section-stack"):
         render_standings_section(state, scores)
+        render_group_tracker(state)
         render_live_matches(state)
         render_points_tracker(state, scores)
         render_points_journal(state, scores)
