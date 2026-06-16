@@ -3970,7 +3970,7 @@ def render_match_timeline(state, matches):
 
 
 def render_live_matches(state):
-    with st.expander("World Cup Tracker", expanded=False):
+    with st.expander("Match Tracker", expanded=False):
         matches = sorted(
             [match for match in state.get("matches", []) if "friendly" not in str(match.get("stage") or "").lower()],
             key=lambda match: match.get("date") or "",
