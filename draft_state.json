@@ -1671,16 +1671,16 @@
       "home": "Iraq",
       "away": "Norway",
       "home_score": 0,
-      "away_score": 0,
+      "away_score": 1,
       "status": "In_Play",
-      "minute": 24,
+      "minute": 34,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 0
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -1691,7 +1691,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 29,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Norway",
+          "scorer": "Erling Haaland",
+          "assist": "David Wolfe"
+        }
+      ]
     },
     {
       "id": "537397",
@@ -3400,9 +3409,9 @@
       "group_assists": 1
     },
     "Erling Haaland (Norway)": {
-      "goals": 0,
+      "goals": 1,
       "assists": 0,
-      "group_goals": 0,
+      "group_goals": 1,
       "group_assists": 0
     },
     "Vinicius Junior (Brazil)": {
@@ -3570,8 +3579,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781648834,
-  "last_score_refresh_attempt_at": 1781648833,
+  "last_score_refresh_at": 1781649434,
+  "last_score_refresh_attempt_at": 1781649433,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
