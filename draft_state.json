@@ -1864,8 +1864,8 @@
       "away": "Congo DR",
       "home_score": 1,
       "away_score": 1,
-      "status": "In_Play",
-      "minute": 81,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3686,8 +3686,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781721922,
-  "last_score_refresh_attempt_at": 1781721920,
+  "last_score_refresh_at": 1781722790,
+  "last_score_refresh_attempt_at": 1781722789,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
