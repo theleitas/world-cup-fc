@@ -1798,17 +1798,17 @@
       "matchday": 1,
       "home": "Austria",
       "away": "Jordan",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 3,
+      "away_score": 1,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 3,
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -1819,7 +1819,40 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 20,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Austria",
+          "scorer": "Romano Schmid",
+          "assist": "Xaver Schlager"
+        },
+        {
+          "minute": 50,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Jordan",
+          "scorer": "Ali Olwan",
+          "assist": "Noor Al Rawabdeh"
+        },
+        {
+          "minute": 76,
+          "injury_time": null,
+          "type": "OWN",
+          "team": "Jordan",
+          "scorer": "Yazan Al Arab",
+          "assist": "Marcel Sabitzer"
+        },
+        {
+          "minute": 90,
+          "injury_time": 12,
+          "type": "PENALTY",
+          "team": "Austria",
+          "scorer": "Marko Arnautovic",
+          "assist": ""
+        }
+      ]
     },
     {
       "id": "537403",
@@ -3636,8 +3669,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781666051,
-  "last_score_refresh_attempt_at": 1781666050,
+  "last_score_refresh_at": 1781678514,
+  "last_score_refresh_attempt_at": 1781678513,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
