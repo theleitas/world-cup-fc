@@ -3621,8 +3621,8 @@
     "Türkiye": "Group Stage"
   },
   "last_score_refresh_at": 1781660936,
-  "last_score_refresh_attempt_at": 1781660936,
-  "last_api_error": "",
+  "last_score_refresh_attempt_at": 1781663449,
+  "last_api_error": "('Connection aborted.', ConnectionResetError(104, 'Connection reset by peer'))",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
   "last_friendly_api_error": "",
