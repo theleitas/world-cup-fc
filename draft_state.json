@@ -1910,16 +1910,16 @@
       "matchday": 1,
       "home": "England",
       "away": "Croatia",
-      "home_score": 3,
+      "home_score": 4,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 68,
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 3,
+          "home": 4,
           "away": 2
         },
         "regular_time": {
@@ -1971,6 +1971,14 @@
           "team": "England",
           "scorer": "Jude Bellingham",
           "assist": ""
+        },
+        {
+          "minute": 85,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "England",
+          "scorer": "Marcus Rashford",
+          "assist": "Bukayo Saka"
         }
       ]
     },
@@ -3606,9 +3614,9 @@
     },
     "Bukayo Saka (England)": {
       "goals": 0,
-      "assists": 0,
+      "assists": 1,
       "group_goals": 0,
-      "group_assists": 0
+      "group_assists": 1
     },
     "Desire Doue (France)": {
       "goals": 0,
@@ -3727,8 +3735,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781731909,
-  "last_score_refresh_attempt_at": 1781731907,
+  "last_score_refresh_at": 1781733594,
+  "last_score_refresh_attempt_at": 1781733593,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
