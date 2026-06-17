@@ -1910,17 +1910,17 @@
       "matchday": 1,
       "home": "England",
       "away": "Croatia",
-      "home_score": 1,
-      "away_score": 0,
+      "home_score": 3,
+      "away_score": 2,
       "status": "In_Play",
-      "minute": 23,
+      "minute": 51,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 1,
-          "away": 0
+          "home": 3,
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -1939,6 +1939,38 @@
           "team": "England",
           "scorer": "Harry Kane",
           "assist": "Noni Madueke"
+        },
+        {
+          "minute": 36,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Croatia",
+          "scorer": "Martin Baturina",
+          "assist": "Petar Sucic"
+        },
+        {
+          "minute": 42,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "England",
+          "scorer": "Harry Kane",
+          "assist": "Declan Rice"
+        },
+        {
+          "minute": 45,
+          "injury_time": 5,
+          "type": "REGULAR",
+          "team": "Croatia",
+          "scorer": "Petar Musa",
+          "assist": "Ivan Perišić"
+        },
+        {
+          "minute": 47,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "England",
+          "scorer": "Jude Bellingham",
+          "assist": ""
         }
       ]
     },
@@ -3507,9 +3539,9 @@
       "group_assists": 0
     },
     "Harry Kane (England)": {
-      "goals": 1,
+      "goals": 2,
       "assists": 0,
-      "group_goals": 1,
+      "group_goals": 2,
       "group_assists": 0
     },
     "Ousmane Dembele (France)": {
@@ -3695,8 +3727,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781727831,
-  "last_score_refresh_attempt_at": 1781727829,
+  "last_score_refresh_at": 1781730939,
+  "last_score_refresh_attempt_at": 1781730937,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
