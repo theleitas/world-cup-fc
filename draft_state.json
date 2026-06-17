@@ -1671,16 +1671,16 @@
       "home": "Iraq",
       "away": "Norway",
       "home_score": 1,
-      "away_score": 3,
+      "away_score": 4,
       "status": "In_Play",
-      "minute": 89,
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
           "home": 1,
-          "away": 3
+          "away": 4
         },
         "regular_time": {
           "home": null,
@@ -1723,6 +1723,14 @@
           "team": "Norway",
           "scorer": "Leo Østigård",
           "assist": "Martin Ødegaard"
+        },
+        {
+          "minute": 90,
+          "injury_time": 7,
+          "type": "REGULAR",
+          "team": "Norway",
+          "scorer": "Kristian Thorstvedt",
+          "assist": "Erling Haaland"
         }
       ]
     },
@@ -3434,9 +3442,9 @@
     },
     "Erling Haaland (Norway)": {
       "goals": 2,
-      "assists": 0,
+      "assists": 1,
       "group_goals": 2,
-      "group_assists": 0
+      "group_assists": 1
     },
     "Vinicius Junior (Brazil)": {
       "goals": 1,
@@ -3603,8 +3611,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781653999,
-  "last_score_refresh_attempt_at": 1781653998,
+  "last_score_refresh_at": 1781654536,
+  "last_score_refresh_attempt_at": 1781654535,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
