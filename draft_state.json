@@ -1745,7 +1745,7 @@
       "home_score": 1,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 18,
+      "minute": 24,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -1770,7 +1770,7 @@
           "type": "REGULAR",
           "team": "Argentina",
           "scorer": "Lionel Messi",
-          "assist": ""
+          "assist": "Rodrigo de Paul"
         }
       ]
     },
@@ -3620,8 +3620,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781659295,
-  "last_score_refresh_attempt_at": 1781659294,
+  "last_score_refresh_at": 1781659638,
+  "last_score_refresh_attempt_at": 1781659637,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
