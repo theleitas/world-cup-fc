@@ -1672,7 +1672,7 @@
       "away": "Norway",
       "home_score": 1,
       "away_score": 4,
-      "status": "In_Play",
+      "status": "Finished",
       "minute": 90,
       "elapsed": null,
       "clock": "",
@@ -1730,6 +1730,14 @@
           "type": "REGULAR",
           "team": "Norway",
           "scorer": "Kristian Thorstvedt",
+          "assist": "Erling Haaland"
+        },
+        {
+          "minute": 90,
+          "injury_time": 6,
+          "type": "OWN",
+          "team": "Iraq",
+          "scorer": "Aymen Hussein",
           "assist": "Erling Haaland"
         }
       ]
@@ -3442,9 +3450,9 @@
     },
     "Erling Haaland (Norway)": {
       "goals": 2,
-      "assists": 1,
+      "assists": 2,
       "group_goals": 2,
-      "group_assists": 1
+      "group_assists": 2
     },
     "Vinicius Junior (Brazil)": {
       "goals": 1,
@@ -3611,8 +3619,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781654536,
-  "last_score_refresh_attempt_at": 1781654535,
+  "last_score_refresh_at": 1781654726,
+  "last_score_refresh_attempt_at": 1781654725,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
