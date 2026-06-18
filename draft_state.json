@@ -2095,16 +2095,16 @@
       "home": "Czechia",
       "away": "South Africa",
       "home_score": 1,
-      "away_score": 0,
-      "status": "In_Play",
-      "minute": 76,
+      "away_score": 1,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "HOME_TEAM",
+        "winner": "DRAW",
         "full_time": {
           "home": 1,
-          "away": 0
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -2123,6 +2123,14 @@
           "team": "Czechia",
           "scorer": "Michal Sadílek",
           "assist": "Alexandr Sojka"
+        },
+        {
+          "minute": 83,
+          "injury_time": null,
+          "type": "PENALTY",
+          "team": "South Africa",
+          "scorer": "Teboho Mokoena",
+          "assist": ""
         }
       ]
     },
@@ -3786,8 +3794,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781804253,
-  "last_score_refresh_attempt_at": 1781804252,
+  "last_score_refresh_at": 1781805667,
+  "last_score_refresh_attempt_at": 1781805665,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
