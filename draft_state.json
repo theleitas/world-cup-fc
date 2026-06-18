@@ -2031,16 +2031,16 @@
       "home": "Uzbekistan",
       "away": "Colombia",
       "home_score": 1,
-      "away_score": 1,
+      "away_score": 2,
       "status": "In_Play",
-      "minute": 63,
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 1,
-          "away": 1
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -2067,6 +2067,14 @@
           "team": "Uzbekistan",
           "scorer": "Abbosbek Fayzullaev",
           "assist": ""
+        },
+        {
+          "minute": 65,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Colombia",
+          "scorer": "Luis Díaz",
+          "assist": "Gustavo Puerta"
         }
       ]
     },
@@ -3621,9 +3629,9 @@
       "group_assists": 0
     },
     "Luis Diaz (Colombia)": {
-      "goals": 0,
+      "goals": 1,
       "assists": 1,
-      "group_goals": 0,
+      "group_goals": 1,
       "group_assists": 1
     },
     "Antoine Semenyo (Ghana)": {
@@ -3761,8 +3769,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781753065,
-  "last_score_refresh_attempt_at": 1781753065,
+  "last_score_refresh_at": 1781755131,
+  "last_score_refresh_attempt_at": 1781755130,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
