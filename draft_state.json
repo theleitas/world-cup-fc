@@ -2030,17 +2030,17 @@
       "matchday": 1,
       "home": "Uzbekistan",
       "away": "Colombia",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 0,
+      "away_score": 1,
+      "status": "In_Play",
+      "minute": 55,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "AWAY_TEAM",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -2051,7 +2051,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 40,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Colombia",
+          "scorer": "Daniel Muñoz",
+          "assist": "Luis Díaz"
+        }
+      ]
     },
     {
       "id": "537329",
@@ -3605,9 +3614,9 @@
     },
     "Luis Diaz (Colombia)": {
       "goals": 0,
-      "assists": 0,
+      "assists": 1,
       "group_goals": 0,
-      "group_assists": 0
+      "group_assists": 1
     },
     "Antoine Semenyo (Ghana)": {
       "goals": 0,
@@ -3744,8 +3753,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781745433,
-  "last_score_refresh_attempt_at": 1781745432,
+  "last_score_refresh_at": 1781752532,
+  "last_score_refresh_attempt_at": 1781752530,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
