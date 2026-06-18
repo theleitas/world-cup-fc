@@ -2214,16 +2214,16 @@
       "matchday": 2,
       "home": "Canada",
       "away": "Qatar",
-      "home_score": 0,
+      "home_score": 3,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 13,
+      "minute": 45,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": 0,
+          "home": 3,
           "away": 0
         },
         "regular_time": {
@@ -2235,7 +2235,32 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 16,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Canada",
+          "scorer": "Cyle Larin",
+          "assist": ""
+        },
+        {
+          "minute": 29,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Canada",
+          "scorer": "Jonathan David",
+          "assist": ""
+        },
+        {
+          "minute": 45,
+          "injury_time": 3,
+          "type": "REGULAR",
+          "team": "Canada",
+          "scorer": "Jonathan David",
+          "assist": ""
+        }
+      ]
     },
     {
       "id": "537330",
@@ -3835,8 +3860,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781820925,
-  "last_score_refresh_attempt_at": 1781820924,
+  "last_score_refresh_at": 1781823065,
+  "last_score_refresh_attempt_at": 1781823064,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
