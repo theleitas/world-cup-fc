@@ -2214,16 +2214,16 @@
       "matchday": 2,
       "home": "Canada",
       "away": "Qatar",
-      "home_score": 3,
+      "home_score": 4,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 64,
+      "minute": 67,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 3,
+          "home": 4,
           "away": 0
         },
         "regular_time": {
@@ -2258,6 +2258,14 @@
           "type": "REGULAR",
           "team": "Canada",
           "scorer": "Jonathan David",
+          "assist": ""
+        },
+        {
+          "minute": 64,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Canada",
+          "scorer": "Nathan-Dylan Saliba",
           "assist": ""
         }
       ]
@@ -3860,8 +3868,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781825301,
-  "last_score_refresh_attempt_at": 1781825301,
+  "last_score_refresh_at": 1781825384,
+  "last_score_refresh_attempt_at": 1781825383,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
