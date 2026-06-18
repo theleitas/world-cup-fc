@@ -2142,17 +2142,17 @@
       "matchday": 2,
       "home": "Switzerland",
       "away": "Bosnia and Herzegovina",
-      "home_score": 3,
-      "away_score": 0,
-      "status": "In_Play",
-      "minute": 91,
+      "home_score": 4,
+      "away_score": 1,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 3,
-          "away": 0
+          "home": 4,
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -2187,6 +2187,22 @@
           "team": "Switzerland",
           "scorer": "Johan Manzambi",
           "assist": "Ruben Vargas"
+        },
+        {
+          "minute": 90,
+          "injury_time": 3,
+          "type": "REGULAR",
+          "team": "Bosnia and Herzegovina",
+          "scorer": "Ermin Mahmic",
+          "assist": ""
+        },
+        {
+          "minute": 90,
+          "injury_time": 7,
+          "type": "PENALTY",
+          "team": "Switzerland",
+          "scorer": "Granit Xhaka",
+          "assist": ""
         }
       ]
     },
@@ -3819,8 +3835,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781815860,
-  "last_score_refresh_attempt_at": 1781815860,
+  "last_score_refresh_at": 1781817283,
+  "last_score_refresh_attempt_at": 1781817282,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
