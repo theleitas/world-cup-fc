@@ -2518,16 +2518,16 @@
       "matchday": 2,
       "home": "Netherlands",
       "away": "Sweden",
-      "home_score": 4,
+      "home_score": 5,
       "away_score": 1,
-      "status": "In_Play",
-      "minute": 81,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 4,
+          "home": 5,
           "away": 1
         },
         "regular_time": {
@@ -2579,6 +2579,14 @@
           "team": "Sweden",
           "scorer": "Anthony Elanga",
           "assist": "Alexander Isak"
+        },
+        {
+          "minute": 89,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Netherlands",
+          "scorer": "Memphis Depay",
+          "assist": "Cody Gakpo"
         }
       ]
     },
@@ -3994,8 +4002,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781980983,
-  "last_score_refresh_attempt_at": 1781980977,
+  "last_score_refresh_at": 1781982467,
+  "last_score_refresh_attempt_at": 1781982466,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
