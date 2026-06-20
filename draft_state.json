@@ -2422,16 +2422,16 @@
       "matchday": 2,
       "home": "Brazil",
       "away": "Haiti",
-      "home_score": 1,
+      "home_score": 2,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 33,
+      "minute": 38,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 1,
+          "home": 2,
           "away": 0
         },
         "regular_time": {
@@ -2446,6 +2446,14 @@
       "goals": [
         {
           "minute": 23,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Brazil",
+          "scorer": "Matheus Cunha",
+          "assist": "Vinicius Junior"
+        },
+        {
+          "minute": 36,
           "injury_time": null,
           "type": "REGULAR",
           "team": "Brazil",
@@ -3765,9 +3773,9 @@
     },
     "Vinicius Junior (Brazil)": {
       "goals": 1,
-      "assists": 1,
+      "assists": 2,
       "group_goals": 1,
-      "group_assists": 1
+      "group_assists": 2
     },
     "Julian Alvarez (Argentina)": {
       "goals": 0,
@@ -3928,8 +3936,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781917590,
-  "last_score_refresh_attempt_at": 1781917588,
+  "last_score_refresh_at": 1781917932,
+  "last_score_refresh_attempt_at": 1781917930,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
