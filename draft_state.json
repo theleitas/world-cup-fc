@@ -2480,8 +2480,8 @@
       "away": "Paraguay",
       "home_score": 0,
       "away_score": 1,
-      "status": "In_Play",
-      "minute": 4,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -2506,7 +2506,7 @@
           "type": "REGULAR",
           "team": "Paraguay",
           "scorer": "Matías Galarza",
-          "assist": "Isidro Pitta"
+          "assist": "Julio Enciso"
         }
       ]
     },
@@ -3953,8 +3953,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1781924727,
-  "last_score_refresh_attempt_at": 1781924726,
+  "last_score_refresh_at": 1781952827,
+  "last_score_refresh_attempt_at": 1781952826,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
