@@ -2686,16 +2686,16 @@
       "home": "Tunisia",
       "away": "Japan",
       "home_score": 0,
-      "away_score": 2,
-      "status": "In_Play",
-      "minute": 36,
+      "away_score": 4,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 2
+          "away": 4
         },
         "regular_time": {
           "home": null,
@@ -2722,6 +2722,22 @@
           "team": "Japan",
           "scorer": "Ayase Ueda",
           "assist": "Ko Itakura"
+        },
+        {
+          "minute": 69,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Japan",
+          "scorer": "Junya Ito",
+          "assist": "Ayase Ueda"
+        },
+        {
+          "minute": 83,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Japan",
+          "scorer": "Ayase Ueda",
+          "assist": "Kaishu Sano"
         }
       ]
     },
@@ -4044,8 +4060,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782016834,
-  "last_score_refresh_attempt_at": 1782016834,
+  "last_score_refresh_at": 1782023391,
+  "last_score_refresh_attempt_at": 1782023389,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
