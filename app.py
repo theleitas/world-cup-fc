@@ -88,6 +88,16 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
     box-shadow:0 0 24px rgba(64,255,106,.86), 0 0 34px rgba(0,229,255,.6), inset 0 0 12px rgba(255,255,255,.68)!important;
 }
 .st-key-header-refresh div[data-testid="stButton"] > button * { color:#000!important; }
+.payment-panel { border:1px solid rgba(255,213,74,.5); border-radius:8px; background:#060606; box-shadow:0 0 18px rgba(255,213,74,.18), inset 0 0 16px rgba(255,255,255,.04); padding:10px 12px; margin:-.25rem 0 .65rem; }
+.payment-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:7px; }
+.payment-title { color:#ffd54a; font-size:1.08rem; font-weight:1000; line-height:1; text-shadow:0 0 10px rgba(255,213,74,.45); }
+.payment-link { display:inline-flex; align-items:center; justify-content:center; border-radius:8px; padding:8px 12px; background:linear-gradient(135deg, #00e5ff 0%, #b56cff 50%, #ff2daa 100%); color:#fff!important; text-decoration:none!important; font-weight:1000; box-shadow:0 0 14px rgba(181,108,255,.55), inset 0 0 8px rgba(255,255,255,.28); }
+.payment-note { color:#eaf7fa; font-size:.82rem; font-weight:900; margin-bottom:7px; }
+.payment-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:5px 8px; }
+.payment-row { background:#0a0a0a; border:1px solid rgba(255,255,255,.1); border-radius:7px; padding:5px 7px; font-size:.84rem; font-weight:900; line-height:1.15; overflow-wrap:anywhere; }
+.payment-name { color:var(--coach-color); text-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 42%, transparent); }
+.payment-paid { color:#40ff6a; font-weight:1000; }
+.payment-unpaid { color:#ff1744; font-weight:1000; }
 .deadline-pill { border:2px solid #ffd54a; color:#ffd54a; border-radius:8px; padding:8px 10px; font-weight:950; background:#090909; }
 .section-title { color:#ffd54a; font-weight:1000; font-size:1.35rem; line-height:1.12; margin:.75rem 0 .35rem; }
 .admin-title { color:#ff1744; text-shadow:0 0 10px #ff1744; }
@@ -320,6 +330,11 @@ div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hov
     div[data-testid="stButton"] > button { min-height:42px!important; font-size:.84rem!important; padding:6px 7px!important; }
     .top-thumbnail-wrap { width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
     .top-thumbnail { width:100vw; max-width:none; max-height:34vh; object-fit:cover; border-radius:0; }
+    .payment-panel { margin:-.2rem 0 .55rem; padding:9px; }
+    .payment-head { align-items:stretch; }
+    .payment-link { width:100%; }
+    .payment-grid { grid-template-columns:1fr 1fr; gap:5px; }
+    .payment-row { font-size:.78rem; padding:5px 6px; }
     .standings-grid { grid-template-columns:1fr; }
     .coach-card { min-height:auto; }
     .coach-face, .coach-face-placeholder { width:60px; height:60px; }
@@ -1221,6 +1236,7 @@ def default_state():
         "draft_active": True,
         "teams": default_coaches(),
         "official_rosters": empty_official_rosters(),
+        "payments": {coach: False for coach in COACHES},
         "team_picks": [],
         "player_picks": [],
         "players": list(DEFAULT_PLAYERS),
@@ -1246,6 +1262,7 @@ def normalize_state(state):
     state.setdefault("app_title", base["app_title"])
     state.setdefault("draft_enabled", base["draft_enabled"])
     state.setdefault("draft_active", True)
+    state.setdefault("payments", {})
     has_official_rosters = isinstance(state.get("official_rosters"), dict)
     state.setdefault("team_picks", [])
     state.setdefault("player_picks", [])
@@ -1306,6 +1323,8 @@ def normalize_state(state):
             "star_players": [str(item).strip() for item in prior.get("star_players", []) if str(item).strip()],
         }
     state["teams"] = normalized_coaches
+    prior_payments = state.get("payments") if isinstance(state.get("payments"), dict) else {}
+    state["payments"] = {coach: bool(prior_payments.get(coach, False)) for coach in COACHES}
 
     state["team_picks"] = normalize_pick_list(state.get("team_picks"), TEAM_DRAFT_SEQUENCE, "team")
     state["player_picks"] = normalize_pick_list(state.get("player_picks"), PLAYER_DRAFT_SEQUENCE, "player")
@@ -2094,6 +2113,37 @@ def render_header(state):
             ok, _ = refresh_api_scores()
             if ok:
                 st.rerun()
+    render_payment_panel(state)
+
+
+def render_payment_panel(state):
+    rows = []
+    payments = state.get("payments", {})
+    for coach in COACHES:
+        color = state["teams"].get(coach, {}).get("color") or "#FFD54A"
+        paid = bool(payments.get(coach, False))
+        status_class = "payment-paid" if paid else "payment-unpaid"
+        status_text = "PAID 🙂" if paid else "NOT PAID"
+        rows.append(
+            f"""
+<div class='payment-row' style='--coach-color:{html.escape(color)}'>
+  <span class='payment-name'>{html.escape(coach)}</span> has <span class='{status_class}'>{html.escape(status_text)}</span>
+</div>
+"""
+        )
+    st.markdown(
+        f"""
+<div class='payment-panel'>
+  <div class='payment-head'>
+    <div class='payment-title'>Time to Pay Up</div>
+    <a class='payment-link' href='https://www.venmo.com/u/Jayme-Leita' target='_blank' rel='noopener'>Pay $100 on Venmo</a>
+  </div>
+  <div class='payment-note'>Please send your $100 World Cup FC ante to Jayme.</div>
+  <div class='payment-grid'>{''.join(rows)}</div>
+</div>
+""",
+        unsafe_allow_html=True,
+    )
 
 
 def render_payout_descriptions():
@@ -4152,6 +4202,29 @@ def render_admin(state):
             st.session_state["clear_admin_password"] = True
             st.rerun()
         st.caption("Admin controls are open for this private league app.")
+
+        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+        st.subheader("Payment Status")
+        payment_updates = {}
+        payments = state.get("payments", {})
+        for row_start in range(0, len(COACHES), 4):
+            cols = st.columns(4, gap="small")
+            for col, coach in zip(cols, COACHES[row_start:row_start + 4]):
+                with col:
+                    payment_updates[coach] = st.checkbox(
+                        f"{coach} paid",
+                        value=bool(payments.get(coach, False)),
+                        key=f"admin-payment-{coach}",
+                    )
+        if st.button("Save Payment Status", key="admin-save-payment-status", width="stretch"):
+            def mutator(fresh):
+                fresh = normalize_state(fresh)
+                fresh["payments"] = {coach: bool(payment_updates.get(coach, False)) for coach in COACHES}
+                return True
+            ok, _ = mutate_shared_state(mutator, "Update payment status")
+            if ok:
+                st.rerun()
+        st.markdown("</div>", unsafe_allow_html=True)
 
         status_label, status_text = draft_status_summary(state)
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
