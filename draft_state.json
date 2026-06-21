@@ -4149,13 +4149,13 @@
   },
   "manual_player_stats_override": false,
   "payments": {
-    "Benji": false,
+    "Benji": true,
     "Jeff": false,
     "Peter": false,
     "Chad": false,
     "Lamp": false,
     "Herb": false,
-    "Jayme": false,
+    "Jayme": true,
     "Spencer": false
   }
 }
