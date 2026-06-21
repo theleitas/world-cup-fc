@@ -95,7 +95,7 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .payment-note { color:#eaf7fa; font-size:.82rem; font-weight:900; margin-bottom:7px; }
 .payment-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:5px 8px; }
 .payment-row { background:#0a0a0a; border:1px solid rgba(255,255,255,.1); border-radius:7px; padding:5px 7px; font-size:.84rem; font-weight:900; line-height:1.15; overflow-wrap:anywhere; }
-.payment-name { color:var(--coach-color); text-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 42%, transparent); }
+.payment-name, .payment-connector { color:var(--coach-color); text-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 42%, transparent); }
 .payment-paid { color:#40ff6a; font-weight:1000; }
 .payment-unpaid { color:#ff1744; font-weight:1000; }
 .deadline-pill { border:2px solid #ffd54a; color:#ffd54a; border-radius:8px; padding:8px 10px; font-weight:950; background:#090909; }
@@ -2127,7 +2127,7 @@ def render_payment_panel(state):
         rows.append(
             f"""
 <div class='payment-row' style='--coach-color:{html.escape(color)}'>
-  <span class='payment-name'>{html.escape(coach)}</span> has <span class='{status_class}'>{html.escape(status_text)}</span>
+  <span class='payment-name'>{html.escape(coach)}</span> <span class='payment-connector'>has</span> <span class='{status_class}'>{html.escape(status_text)}</span>
 </div>
 """
         )
