@@ -4183,9 +4183,9 @@
   "manual_player_stats_override": false,
   "payments": {
     "Benji": true,
-    "Jeff": false,
-    "Peter": false,
-    "Chad": false,
+    "Jeff": true,
+    "Peter": true,
+    "Chad": true,
     "Lamp": false,
     "Herb": false,
     "Jayme": true,
