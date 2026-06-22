@@ -4286,7 +4286,7 @@
     "Peter": true,
     "Chad": true,
     "Lamp": true,
-    "Herb": false,
+    "Herb": true,
     "Jayme": true,
     "Spencer": true
   }
