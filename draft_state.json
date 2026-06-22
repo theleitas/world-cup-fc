@@ -3020,17 +3020,17 @@
       "matchday": 2,
       "home": "France",
       "away": "Iraq",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 1,
+      "away_score": 0,
+      "status": "In_Play",
+      "minute": 17,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 0
         },
         "regular_time": {
           "home": null,
@@ -3041,7 +3041,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 14,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "France",
+          "scorer": "Kylian Mbappé",
+          "assist": "Michael Olise"
+        }
+      ]
     },
     {
       "id": "537394",
@@ -3982,9 +3991,9 @@
       "group_assists": 0
     },
     "Kylian Mbappe (France)": {
-      "goals": 2,
+      "goals": 3,
       "assists": 0,
-      "group_goals": 2,
+      "group_goals": 3,
       "group_assists": 0
     },
     "Harry Kane (England)": {
@@ -4001,9 +4010,9 @@
     },
     "Michael Olise (France)": {
       "goals": 0,
-      "assists": 1,
+      "assists": 2,
       "group_goals": 0,
-      "group_assists": 1
+      "group_assists": 2
     },
     "Erling Haaland (Norway)": {
       "goals": 2,
@@ -4176,8 +4185,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782157097,
-  "last_score_refresh_attempt_at": 1782157097,
+  "last_score_refresh_at": 1782163125,
+  "last_score_refresh_attempt_at": 1782163124,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
