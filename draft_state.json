@@ -2911,7 +2911,7 @@
       "home_score": 1,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 70,
+      "minute": 75,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -2952,7 +2952,7 @@
           "type": "REGULAR",
           "team": "Egypt",
           "scorer": "Mohamed Salah",
-          "assist": ""
+          "assist": "Mostafa Ziko"
         }
       ]
     },
@@ -4151,8 +4151,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782095453,
-  "last_score_refresh_attempt_at": 1782095452,
+  "last_score_refresh_at": 1782095753,
+  "last_score_refresh_attempt_at": 1782095752,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
