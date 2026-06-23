@@ -3077,16 +3077,16 @@
       "home": "Norway",
       "away": "Senegal",
       "home_score": 3,
-      "away_score": 1,
+      "away_score": 2,
       "status": "In_Play",
-      "minute": 77,
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
           "home": 3,
-          "away": 1
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -3129,6 +3129,14 @@
           "team": "Norway",
           "scorer": "Erling Haaland",
           "assist": "Patrick Berg"
+        },
+        {
+          "minute": 90,
+          "injury_time": 3,
+          "type": "REGULAR",
+          "team": "Senegal",
+          "scorer": "Ismaïla Sarr",
+          "assist": "Nicolas Jackson"
         }
       ]
     },
@@ -4234,8 +4242,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782178608,
-  "last_score_refresh_attempt_at": 1782178607,
+  "last_score_refresh_at": 1782180039,
+  "last_score_refresh_attempt_at": 1782180037,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
