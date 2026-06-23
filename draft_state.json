@@ -3149,16 +3149,16 @@
       "home": "Jordan",
       "away": "Algeria",
       "home_score": 1,
-      "away_score": 0,
-      "status": "Paused",
-      "minute": 45,
+      "away_score": 2,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "HOME_TEAM",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 1,
-          "away": 0
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -3177,6 +3177,22 @@
           "team": "Jordan",
           "scorer": "Nizar Al Rashdan",
           "assist": "Musa Al Taamari"
+        },
+        {
+          "minute": 69,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Algeria",
+          "scorer": "Nadhir Benbouali",
+          "assist": "Riyad Mahrez"
+        },
+        {
+          "minute": 82,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Algeria",
+          "scorer": "Amine Gouiri",
+          "assist": ""
         }
       ]
     },
@@ -4251,8 +4267,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782186828,
-  "last_score_refresh_attempt_at": 1782186826,
+  "last_score_refresh_at": 1782208224,
+  "last_score_refresh_attempt_at": 1782208222,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
