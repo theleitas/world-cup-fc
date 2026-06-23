@@ -2450,7 +2450,7 @@
           "type": "REGULAR",
           "team": "Brazil",
           "scorer": "Matheus Cunha",
-          "assist": "Vinicius Junior"
+          "assist": ""
         },
         {
           "minute": 36,
@@ -3207,7 +3207,7 @@
       "home_score": 3,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 46,
+      "minute": 52,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4129,9 +4129,9 @@
     },
     "Vinicius Junior (Brazil)": {
       "goals": 2,
-      "assists": 2,
+      "assists": 1,
       "group_goals": 2,
-      "group_assists": 2
+      "group_assists": 1
     },
     "Julian Alvarez (Argentina)": {
       "goals": 0,
@@ -4292,8 +4292,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782238247,
-  "last_score_refresh_attempt_at": 1782238246,
+  "last_score_refresh_at": 1782238549,
+  "last_score_refresh_attempt_at": 1782238547,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
