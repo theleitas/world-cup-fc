@@ -3204,16 +3204,16 @@
       "matchday": 2,
       "home": "Portugal",
       "away": "Uzbekistan",
-      "home_score": 0,
+      "home_score": 1,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 5,
+      "minute": 9,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": 0,
+          "home": 1,
           "away": 0
         },
         "regular_time": {
@@ -3225,7 +3225,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 6,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Portugal",
+          "scorer": "Cristiano Ronaldo",
+          "assist": "João Cancelo"
+        }
+      ]
     },
     {
       "id": "537411",
@@ -4163,9 +4172,9 @@
       "group_assists": 0
     },
     "Cristiano Ronaldo (Portugal)": {
-      "goals": 0,
+      "goals": 1,
       "assists": 0,
-      "group_goals": 0,
+      "group_goals": 1,
       "group_assists": 0
     },
     "Neymar Jr. (Brazil)": {
@@ -4267,8 +4276,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782234358,
-  "last_score_refresh_attempt_at": 1782234356,
+  "last_score_refresh_at": 1782234651,
+  "last_score_refresh_attempt_at": 1782234650,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
