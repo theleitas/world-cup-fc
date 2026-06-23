@@ -3225,56 +3225,7 @@
           "away": null
         }
       },
-      "goals": [
-        {
-          "minute": 6,
-          "injury_time": null,
-          "type": "REGULAR",
-          "team": "Portugal",
-          "scorer": "Cristiano Ronaldo",
-          "assist": "João Cancelo"
-        },
-        {
-          "minute": 17,
-          "injury_time": null,
-          "type": "REGULAR",
-          "team": "Portugal",
-          "scorer": "Nuno Mendes",
-          "assist": ""
-        },
-        {
-          "minute": 39,
-          "injury_time": null,
-          "type": "REGULAR",
-          "team": "Portugal",
-          "scorer": "Cristiano Ronaldo",
-          "assist": "Bruno Fernandes"
-        },
-        {
-          "minute": 60,
-          "injury_time": null,
-          "type": "OWN",
-          "team": "Uzbekistan",
-          "scorer": "Abdukodir Khusanov",
-          "assist": ""
-        },
-        {
-          "minute": 60,
-          "injury_time": null,
-          "type": "REGULAR",
-          "team": "Portugal",
-          "scorer": "Abduvakhid Nematov",
-          "assist": ""
-        },
-        {
-          "minute": 87,
-          "injury_time": null,
-          "type": "REGULAR",
-          "team": "Portugal",
-          "scorer": "Rafael Leão",
-          "assist": ""
-        }
-      ]
+      "goals": []
     },
     {
       "id": "537411",
@@ -4212,9 +4163,9 @@
       "group_assists": 0
     },
     "Cristiano Ronaldo (Portugal)": {
-      "goals": 2,
+      "goals": 0,
       "assists": 0,
-      "group_goals": 2,
+      "group_goals": 0,
       "group_assists": 0
     },
     "Neymar Jr. (Brazil)": {
@@ -4316,8 +4267,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782241545,
-  "last_score_refresh_attempt_at": 1782241545,
+  "last_score_refresh_at": 1782242028,
+  "last_score_refresh_attempt_at": 1782242026,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
