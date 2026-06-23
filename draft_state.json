@@ -3076,17 +3076,17 @@
       "matchday": 2,
       "home": "Norway",
       "away": "Senegal",
-      "home_score": 1,
-      "away_score": 0,
-      "status": "Paused",
-      "minute": 45,
+      "home_score": 3,
+      "away_score": 1,
+      "status": "In_Play",
+      "minute": 64,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 1,
-          "away": 0
+          "home": 3,
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -3105,6 +3105,30 @@
           "team": "Norway",
           "scorer": "Marcus Pedersen",
           "assist": ""
+        },
+        {
+          "minute": 48,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Norway",
+          "scorer": "Erling Haaland",
+          "assist": "Martin Ødegaard"
+        },
+        {
+          "minute": 53,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Senegal",
+          "scorer": "Ismaïla Sarr",
+          "assist": ""
+        },
+        {
+          "minute": 58,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Norway",
+          "scorer": "Erling Haaland",
+          "assist": "Patrick Berg"
         }
       ]
     },
@@ -4040,9 +4064,9 @@
       "group_assists": 2
     },
     "Erling Haaland (Norway)": {
-      "goals": 2,
+      "goals": 4,
       "assists": 0,
-      "group_goals": 2,
+      "group_goals": 4,
       "group_assists": 0
     },
     "Vinicius Junior (Brazil)": {
@@ -4210,8 +4234,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782176547,
-  "last_score_refresh_attempt_at": 1782176547,
+  "last_score_refresh_at": 1782177837,
+  "last_score_refresh_attempt_at": 1782177836,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
