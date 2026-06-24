@@ -3390,7 +3390,7 @@
       "home_score": 0,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 40,
+      "minute": 45,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3419,16 +3419,16 @@
       "home": "Bosnia and Herzegovina",
       "away": "Qatar",
       "home_score": 2,
-      "away_score": 0,
+      "away_score": 1,
       "status": "In_Play",
-      "minute": 40,
+      "minute": 45,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
           "home": 2,
-          "away": 0
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -3454,6 +3454,14 @@
           "type": "OWN",
           "team": "Qatar",
           "scorer": "Sultan Al Brake",
+          "assist": ""
+        },
+        {
+          "minute": 42,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Qatar",
+          "scorer": "Edmílson",
           "assist": ""
         }
       ]
@@ -4343,8 +4351,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782330083,
-  "last_score_refresh_attempt_at": 1782330082,
+  "last_score_refresh_at": 1782330564,
+  "last_score_refresh_attempt_at": 1782330562,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
