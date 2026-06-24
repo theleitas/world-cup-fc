@@ -3510,7 +3510,7 @@
       "home_score": 2,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 46,
+      "minute": 51,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3573,8 +3573,8 @@
       "away": "Brazil",
       "home_score": 0,
       "away_score": 2,
-      "status": "Paused",
-      "minute": 45,
+      "status": "In_Play",
+      "minute": 49,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3607,7 +3607,7 @@
           "type": "REGULAR",
           "team": "Brazil",
           "scorer": "Vinicius Junior",
-          "assist": ""
+          "assist": "Bruno Guimarães"
         }
       ]
     },
@@ -4434,8 +4434,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782342568,
-  "last_score_refresh_attempt_at": 1782342567,
+  "last_score_refresh_at": 1782342869,
+  "last_score_refresh_attempt_at": 1782342867,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
