@@ -3253,8 +3253,8 @@
         {
           "minute": 60,
           "injury_time": null,
-          "type": "REGULAR",
-          "team": "Portugal",
+          "type": "OWN",
+          "team": "Uzbekistan",
           "scorer": "Abduvakhid Nematov",
           "assist": ""
         },
@@ -4326,8 +4326,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782290952,
-  "last_score_refresh_attempt_at": 1782290951,
+  "last_score_refresh_at": 1782291502,
+  "last_score_refresh_attempt_at": 1782291500,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
