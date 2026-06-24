@@ -3507,16 +3507,16 @@
       "matchday": 3,
       "home": "Morocco",
       "away": "Haiti",
-      "home_score": 2,
+      "home_score": 3,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 78,
+      "minute": 86,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": 2,
+          "home": 3,
           "away": 2
         },
         "regular_time": {
@@ -3560,6 +3560,14 @@
           "team": "Morocco",
           "scorer": "Ismael Saibari",
           "assist": "Achraf Hakimi"
+        },
+        {
+          "minute": 78,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Morocco",
+          "scorer": "Soufiane Rahimi",
+          "assist": "Chadi Riad"
         }
       ]
     },
@@ -4442,8 +4450,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782344607,
-  "last_score_refresh_attempt_at": 1782344607,
+  "last_score_refresh_at": 1782344968,
+  "last_score_refresh_attempt_at": 1782344967,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
