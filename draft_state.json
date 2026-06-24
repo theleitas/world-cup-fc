@@ -3390,7 +3390,7 @@
       "home_score": 2,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 81,
+      "minute": 86,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3443,16 +3443,16 @@
       "matchday": 3,
       "home": "Bosnia and Herzegovina",
       "away": "Qatar",
-      "home_score": 2,
+      "home_score": 3,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 78,
+      "minute": 82,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 2,
+          "home": 3,
           "away": 1
         },
         "regular_time": {
@@ -3488,6 +3488,14 @@
           "team": "Qatar",
           "scorer": "Hassan Al Haydos",
           "assist": "Edmílson"
+        },
+        {
+          "minute": 80,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Bosnia and Herzegovina",
+          "scorer": "Esmir Bajraktarevic",
+          "assist": ""
         }
       ]
     },
@@ -4376,9 +4384,9 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782333586,
-  "last_score_refresh_attempt_at": 1782333901,
-  "last_api_error": "HTTPSConnectionPool(host='api.football-data.org', port=443): Max retries exceeded with url: /v4/competitions/WC/matches?season=2026 (Caused by SSLError(SSLEOFError(8, '[SSL: UNEXPECTED_EOF_WHILE_READING] EOF occurred in violation of protocol (_ssl.c:1081)')))",
+  "last_score_refresh_at": 1782333906,
+  "last_score_refresh_attempt_at": 1782333903,
+  "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
   "last_friendly_api_error": "",
