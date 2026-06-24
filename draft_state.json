@@ -3510,7 +3510,7 @@
       "home_score": 2,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 61,
+      "minute": 68,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3572,16 +3572,16 @@
       "home": "Scotland",
       "away": "Brazil",
       "home_score": 0,
-      "away_score": 2,
+      "away_score": 3,
       "status": "In_Play",
-      "minute": 59,
+      "minute": 66,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 2
+          "away": 3
         },
         "regular_time": {
           "home": null,
@@ -3607,6 +3607,14 @@
           "type": "REGULAR",
           "team": "Brazil",
           "scorer": "Vinicius Junior",
+          "assist": "Bruno Guimarães"
+        },
+        {
+          "minute": 60,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Brazil",
+          "scorer": "Matheus Cunha",
           "assist": "Bruno Guimarães"
         }
       ]
@@ -4434,8 +4442,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782343468,
-  "last_score_refresh_attempt_at": 1782343467,
+  "last_score_refresh_at": 1782343889,
+  "last_score_refresh_attempt_at": 1782343888,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
