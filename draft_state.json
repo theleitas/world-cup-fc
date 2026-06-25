@@ -3575,7 +3575,7 @@
           "type": "REGULAR",
           "team": "Morocco",
           "scorer": "Gessime Yassine",
-          "assist": ""
+          "assist": "Soufiane Rahimi"
         }
       ]
     },
@@ -4458,8 +4458,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782345269,
-  "last_score_refresh_attempt_at": 1782345267,
+  "last_score_refresh_at": 1782345690,
+  "last_score_refresh_attempt_at": 1782345688,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
