@@ -3064,7 +3064,7 @@
           "type": "REGULAR",
           "team": "France",
           "scorer": "Ousmane Dembélé",
-          "assist": ""
+          "assist": "Michael Olise"
         }
       ]
     },
@@ -4348,9 +4348,9 @@
     },
     "Michael Olise (France)": {
       "goals": 0,
-      "assists": 2,
+      "assists": 3,
       "group_goals": 0,
-      "group_assists": 2
+      "group_assists": 3
     },
     "Erling Haaland (Norway)": {
       "goals": 4,
@@ -4523,8 +4523,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782385656,
-  "last_score_refresh_attempt_at": 1782385656,
+  "last_score_refresh_at": 1782386224,
+  "last_score_refresh_attempt_at": 1782386223,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
