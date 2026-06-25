@@ -3644,16 +3644,16 @@
       "home": "Czechia",
       "away": "Mexico",
       "home_score": 0,
-      "away_score": 0,
+      "away_score": 1,
       "status": "In_Play",
-      "minute": 51,
+      "minute": 59,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 0
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -3664,7 +3664,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 55,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Mexico",
+          "scorer": "Mateo Chávez",
+          "assist": "Luis Romo"
+        }
+      ]
     },
     {
       "id": "537332",
@@ -3677,7 +3686,7 @@
       "home_score": 0,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 51,
+      "minute": 58,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4458,8 +4467,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782353493,
-  "last_score_refresh_attempt_at": 1782353491,
+  "last_score_refresh_at": 1782353964,
+  "last_score_refresh_attempt_at": 1782353962,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
