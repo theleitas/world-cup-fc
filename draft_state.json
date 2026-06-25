@@ -3478,7 +3478,7 @@
           "injury_time": null,
           "type": "OWN",
           "team": "Qatar",
-          "scorer": "Sultan Al Brake",
+          "scorer": "Mahmoud Abunada",
           "assist": ""
         },
         {
@@ -3532,10 +3532,10 @@
         {
           "minute": 10,
           "injury_time": null,
-          "type": "REGULAR",
-          "team": "Haiti",
-          "scorer": "Lenny Joseph",
-          "assist": "Jean-Kevin Duverne"
+          "type": "OWN",
+          "team": "Morocco",
+          "scorer": "Yassine Bounou",
+          "assist": ""
         },
         {
           "minute": 39,
@@ -3543,7 +3543,7 @@
           "type": "REGULAR",
           "team": "Morocco",
           "scorer": "Achraf Hakimi",
-          "assist": "Bilal El Khannouss"
+          "assist": ""
         },
         {
           "minute": 43,
@@ -4523,8 +4523,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782389027,
-  "last_score_refresh_attempt_at": 1782389026,
+  "last_score_refresh_at": 1782389627,
+  "last_score_refresh_attempt_at": 1782389626,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
