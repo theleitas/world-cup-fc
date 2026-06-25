@@ -3739,16 +3739,16 @@
       "matchday": 3,
       "home": "Ecuador",
       "away": "Germany",
-      "home_score": 1,
+      "home_score": 2,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 73,
+      "minute": 80,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": 1,
+          "home": 2,
           "away": 1
         },
         "regular_time": {
@@ -3776,6 +3776,14 @@
           "team": "Ecuador",
           "scorer": "Nilson Angulo",
           "assist": "Pedro Vite"
+        },
+        {
+          "minute": 78,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Ecuador",
+          "scorer": "Gonzalo Plata",
+          "assist": "Kevin Rodríguez"
         }
       ]
     },
@@ -3790,7 +3798,7 @@
       "home_score": 0,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 73,
+      "minute": 78,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4557,8 +4565,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782423281,
-  "last_score_refresh_attempt_at": 1782423279,
+  "last_score_refresh_at": 1782423580,
+  "last_score_refresh_attempt_at": 1782423579,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
