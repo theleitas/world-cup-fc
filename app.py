@@ -88,7 +88,7 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
     box-shadow:0 0 24px rgba(64,255,106,.86), 0 0 34px rgba(0,229,255,.6), inset 0 0 12px rgba(255,255,255,.68)!important;
 }
 .st-key-header-refresh div[data-testid="stButton"] > button * { color:#000!important; }
-.payment-panel { border:1px solid rgba(255,213,74,.5); border-radius:8px; background:#060606; box-shadow:0 0 18px rgba(255,213,74,.18), inset 0 0 16px rgba(255,255,255,.04); padding:10px 12px; margin:-.25rem 0 .65rem; }
+.payment-panel { border:1px solid rgba(255,213,74,.5); border-radius:8px; background:#060606; box-shadow:0 0 18px rgba(255,213,74,.18), inset 0 0 16px rgba(255,255,255,.04); padding:10px 12px; margin:0; }
 .payment-head { display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-bottom:7px; }
 .payment-title { color:#ffd54a; font-size:1.08rem; font-weight:1000; line-height:1; text-shadow:0 0 10px rgba(255,213,74,.45); }
 .payment-link { display:inline-flex; align-items:center; justify-content:center; border-radius:8px; padding:8px 12px; background:linear-gradient(135deg, #00e5ff 0%, #b56cff 50%, #ff2daa 100%); color:#fff!important; text-decoration:none!important; font-weight:1000; box-shadow:0 0 14px rgba(181,108,255,.55), inset 0 0 8px rgba(255,255,255,.28); }
@@ -330,7 +330,7 @@ div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hov
     div[data-testid="stButton"] > button { min-height:42px!important; font-size:.84rem!important; padding:6px 7px!important; }
     .top-thumbnail-wrap { width:100vw; margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw); }
     .top-thumbnail { width:100vw; max-width:none; max-height:34vh; object-fit:cover; border-radius:0; }
-    .payment-panel { margin:-.2rem 0 .55rem; padding:9px; }
+    .payment-panel { margin:0; padding:9px; }
     .payment-head { align-items:stretch; }
     .payment-link { width:100%; }
     .payment-grid { grid-template-columns:1fr 1fr; gap:5px; }
@@ -2113,7 +2113,6 @@ def render_header(state):
             ok, _ = refresh_api_scores()
             if ok:
                 st.rerun()
-    render_payment_panel(state)
 
 
 def render_payment_panel(state):
@@ -2144,6 +2143,11 @@ def render_payment_panel(state):
 """,
         unsafe_allow_html=True,
     )
+
+
+def render_payments_section(state):
+    with st.expander("Payments", expanded=False):
+        render_payment_panel(state)
 
 
 def render_payout_descriptions():
@@ -2568,6 +2572,7 @@ def render_post_standings_sections(state, scores, show_detail_tables=False):
                 render_cinderella_standings(state)
         render_payout_descriptions()
         render_completed_draft_table(state)
+        render_payments_section(state)
 
 
 def render_power_rating_explanation():
