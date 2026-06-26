@@ -4059,16 +4059,16 @@
       "home": "Norway",
       "away": "France",
       "home_score": 1,
-      "away_score": 3,
-      "status": "In_Play",
-      "minute": 88,
+      "away_score": 4,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
           "home": 1,
-          "away": 3
+          "away": 4
         },
         "regular_time": {
           "home": null,
@@ -4111,6 +4111,14 @@
           "team": "France",
           "scorer": "Ousmane Dembélé",
           "assist": "Aurélien Tchouameni"
+        },
+        {
+          "minute": 90,
+          "injury_time": 4,
+          "type": "REGULAR",
+          "team": "France",
+          "scorer": "Desire Doue",
+          "assist": "Bradley Barcola"
         }
       ]
     },
@@ -4122,16 +4130,16 @@
       "matchday": 3,
       "home": "Senegal",
       "away": "Iraq",
-      "home_score": 4,
+      "home_score": 5,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 83,
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 4,
+          "home": 5,
           "away": 0
         },
         "regular_time": {
@@ -4175,6 +4183,14 @@
           "team": "Senegal",
           "scorer": "Pape Gueye",
           "assist": "Iliman Ndiaye"
+        },
+        {
+          "minute": 82,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Senegal",
+          "scorer": "Iliman Ndiaye",
+          "assist": "Pape Gueye"
         }
       ]
     },
@@ -4699,9 +4715,9 @@
       "group_assists": 1
     },
     "Desire Doue (France)": {
-      "goals": 0,
+      "goals": 1,
       "assists": 0,
-      "group_goals": 0,
+      "group_goals": 1,
       "group_assists": 0
     },
     "Jeremy Doku (Belgium)": {
@@ -4815,8 +4831,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782507148,
-  "last_score_refresh_attempt_at": 1782507148,
+  "last_score_refresh_at": 1782507754,
+  "last_score_refresh_attempt_at": 1782507753,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
