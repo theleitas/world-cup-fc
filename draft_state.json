@@ -3843,17 +3843,17 @@
       "matchday": 3,
       "home": "Tunisia",
       "away": "Netherlands",
-      "home_score": 0,
-      "away_score": 2,
+      "home_score": 1,
+      "away_score": 3,
       "status": "In_Play",
-      "minute": 52,
+      "minute": 64,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
-          "home": 0,
-          "away": 2
+          "home": 1,
+          "away": 3
         },
         "regular_time": {
           "home": null,
@@ -3880,6 +3880,22 @@
           "team": "Netherlands",
           "scorer": "Brian Brobbey",
           "assist": "Virgil van Dijk"
+        },
+        {
+          "minute": 54,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Tunisia",
+          "scorer": "Hazem Mastouri",
+          "assist": "Hannibal Mejbri"
+        },
+        {
+          "minute": 62,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Netherlands",
+          "scorer": "Jan Paul van Hecke",
+          "assist": "Tijjani Reijnders"
         }
       ]
     },
@@ -3891,17 +3907,17 @@
       "matchday": 3,
       "home": "Japan",
       "away": "Sweden",
-      "home_score": 0,
-      "away_score": 0,
+      "home_score": 1,
+      "away_score": 1,
       "status": "In_Play",
-      "minute": 51,
+      "minute": 63,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "DRAW",
         "full_time": {
-          "home": 0,
-          "away": 0
+          "home": 1,
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -3912,7 +3928,24 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 56,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Japan",
+          "scorer": "Daizen Maeda",
+          "assist": "Ritsu Doan"
+        },
+        {
+          "minute": 62,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Sweden",
+          "scorer": "Anthony Elanga",
+          "assist": "Viktor Gyökeres"
+        }
+      ]
     },
     {
       "id": "537349",
@@ -4521,9 +4554,9 @@
     },
     "Victor Gyokeres (Sweden)": {
       "goals": 1,
-      "assists": 1,
+      "assists": 2,
       "group_goals": 1,
-      "group_assists": 1
+      "group_assists": 2
     },
     "Arda Guler (Türkiye)": {
       "goals": 0,
@@ -4582,8 +4615,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782432687,
-  "last_score_refresh_attempt_at": 1782432686,
+  "last_score_refresh_at": 1782433437,
+  "last_score_refresh_attempt_at": 1782433436,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
