@@ -4058,17 +4058,17 @@
       "matchday": 3,
       "home": "Norway",
       "away": "France",
-      "home_score": 0,
-      "away_score": 1,
+      "home_score": 1,
+      "away_score": 2,
       "status": "In_Play",
-      "minute": 15,
+      "minute": 25,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
-          "home": 0,
-          "away": 1
+          "home": 1,
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -4087,6 +4087,22 @@
           "team": "France",
           "scorer": "Ousmane Dembélé",
           "assist": "Kylian Mbappé"
+        },
+        {
+          "minute": 20,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "France",
+          "scorer": "Ousmane Dembélé",
+          "assist": "Kylian Mbappé"
+        },
+        {
+          "minute": 21,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Norway",
+          "scorer": "Thelo Aasgaard",
+          "assist": "Andreas Schjelderup"
         }
       ]
     },
@@ -4101,7 +4117,7 @@
       "home_score": 1,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 15,
+      "minute": 25,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4574,9 +4590,9 @@
     },
     "Kylian Mbappe (France)": {
       "goals": 4,
-      "assists": 1,
+      "assists": 2,
       "group_goals": 4,
-      "group_assists": 1
+      "group_assists": 2
     },
     "Harry Kane (England)": {
       "goals": 2,
@@ -4585,9 +4601,9 @@
       "group_assists": 0
     },
     "Ousmane Dembele (France)": {
-      "goals": 2,
+      "goals": 3,
       "assists": 1,
-      "group_goals": 2,
+      "group_goals": 3,
       "group_assists": 1
     },
     "Michael Olise (France)": {
@@ -4767,8 +4783,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782501444,
-  "last_score_refresh_attempt_at": 1782501444,
+  "last_score_refresh_at": 1782502044,
+  "last_score_refresh_attempt_at": 1782502043,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
