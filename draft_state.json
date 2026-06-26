@@ -4060,8 +4060,8 @@
       "away": "France",
       "home_score": 1,
       "away_score": 3,
-      "status": "Paused",
-      "minute": 45,
+      "status": "In_Play",
+      "minute": 48,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4149,8 +4149,8 @@
           "injury_time": null,
           "type": "REGULAR",
           "team": "Senegal",
-          "scorer": "Abdoulaye Seck",
-          "assist": "Lamine Camara"
+          "scorer": "Habib Diarra",
+          "assist": "Abdoulaye Seck"
         }
       ]
     },
@@ -4791,8 +4791,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782504441,
-  "last_score_refresh_attempt_at": 1782504439,
+  "last_score_refresh_at": 1782504741,
+  "last_score_refresh_attempt_at": 1782504739,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
