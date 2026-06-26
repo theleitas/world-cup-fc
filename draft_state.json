@@ -4452,6 +4452,99 @@
         }
       },
       "goals": []
+    },
+    {
+      "id": "537423",
+      "date": "2026-06-29T17:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Brazil",
+      "away": "Japan",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537418",
+      "date": "2026-06-30T01:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Netherlands",
+      "away": "Morocco",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537421",
+      "date": "2026-07-02T00:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "USA",
+      "away": "Bosnia and Herzegovina",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
     }
   ],
   "player_stats": {
@@ -4609,11 +4702,11 @@
   "advancement": {
     "Canada": "Round of 32",
     "Mexico": "Group Stage",
-    "USA": "Group Stage",
+    "USA": "Round of 32",
     "Australia": "Group Stage",
     "Iraq": "Group Stage",
     "IR Iran": "Group Stage",
-    "Japan": "Group Stage",
+    "Japan": "Round of 32",
     "Jordan": "Group Stage",
     "Korea Republic": "Group Stage",
     "Qatar": "Group Stage",
@@ -4625,7 +4718,7 @@
     "Côte d'Ivoire": "Group Stage",
     "Egypt": "Group Stage",
     "Ghana": "Group Stage",
-    "Morocco": "Group Stage",
+    "Morocco": "Round of 32",
     "Senegal": "Group Stage",
     "South Africa": "Round of 32",
     "Tunisia": "Group Stage",
@@ -4633,7 +4726,7 @@
     "Haiti": "Group Stage",
     "Panama": "Group Stage",
     "Argentina": "Group Stage",
-    "Brazil": "Group Stage",
+    "Brazil": "Round of 32",
     "Colombia": "Group Stage",
     "Ecuador": "Group Stage",
     "Paraguay": "Group Stage",
@@ -4641,13 +4734,13 @@
     "New Zealand": "Group Stage",
     "Austria": "Group Stage",
     "Belgium": "Group Stage",
-    "Bosnia and Herzegovina": "Group Stage",
+    "Bosnia and Herzegovina": "Round of 32",
     "Croatia": "Group Stage",
     "Czechia": "Group Stage",
     "England": "Group Stage",
     "France": "Group Stage",
     "Germany": "Group Stage",
-    "Netherlands": "Group Stage",
+    "Netherlands": "Round of 32",
     "Norway": "Group Stage",
     "Portugal": "Group Stage",
     "Scotland": "Group Stage",
@@ -4656,8 +4749,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782452710,
-  "last_score_refresh_attempt_at": 1782452709,
+  "last_score_refresh_at": 1782453089,
+  "last_score_refresh_attempt_at": 1782453088,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
