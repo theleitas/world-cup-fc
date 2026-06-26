@@ -3956,16 +3956,16 @@
       "home": "Türkiye",
       "away": "USA",
       "home_score": 0,
-      "away_score": 0,
+      "away_score": 1,
       "status": "In_Play",
-      "minute": 3,
+      "minute": 9,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 0
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -3976,7 +3976,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 3,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "USA",
+          "scorer": "Auston Trusty",
+          "assist": "Sebastian Berhalter"
+        }
+      ]
     },
     {
       "id": "537350",
@@ -3989,7 +3998,7 @@
       "home_score": 0,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 3,
+      "minute": 9,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4615,8 +4624,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782439439,
-  "last_score_refresh_attempt_at": 1782439438,
+  "last_score_refresh_at": 1782439809,
+  "last_score_refresh_attempt_at": 1782439805,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
