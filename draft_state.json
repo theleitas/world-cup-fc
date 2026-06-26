@@ -3845,8 +3845,8 @@
       "away": "Netherlands",
       "home_score": 0,
       "away_score": 2,
-      "status": "Paused",
-      "minute": 45,
+      "status": "In_Play",
+      "minute": 52,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3893,8 +3893,8 @@
       "away": "Sweden",
       "home_score": 0,
       "away_score": 0,
-      "status": "Paused",
-      "minute": 45,
+      "status": "In_Play",
+      "minute": 51,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4582,8 +4582,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782432091,
-  "last_score_refresh_attempt_at": 1782432090,
+  "last_score_refresh_at": 1782432687,
+  "last_score_refresh_attempt_at": 1782432686,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
