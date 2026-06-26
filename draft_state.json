@@ -3958,7 +3958,7 @@
       "home_score": 2,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 31,
+      "minute": 37,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -3999,7 +3999,7 @@
           "type": "REGULAR",
           "team": "Türkiye",
           "scorer": "Orkun Kökçü",
-          "assist": ""
+          "assist": "Evren Eren Elmalı"
         }
       ]
     },
@@ -4014,7 +4014,7 @@
       "home_score": 0,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 32,
+      "minute": 38,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4640,8 +4640,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782441168,
-  "last_score_refresh_attempt_at": 1782441167,
+  "last_score_refresh_at": 1782441540,
+  "last_score_refresh_attempt_at": 1782441539,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
