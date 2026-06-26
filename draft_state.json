@@ -3955,16 +3955,16 @@
       "matchday": 3,
       "home": "Türkiye",
       "away": "USA",
-      "home_score": 0,
+      "home_score": 1,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 9,
+      "minute": 19,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "AWAY_TEAM",
+        "winner": "DRAW",
         "full_time": {
-          "home": 0,
+          "home": 1,
           "away": 1
         },
         "regular_time": {
@@ -3984,6 +3984,14 @@
           "team": "USA",
           "scorer": "Auston Trusty",
           "assist": "Sebastian Berhalter"
+        },
+        {
+          "minute": 10,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Türkiye",
+          "scorer": "Arda Guler",
+          "assist": "Baris Yilmaz"
         }
       ]
     },
@@ -3998,7 +4006,7 @@
       "home_score": 0,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 9,
+      "minute": 19,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4568,9 +4576,9 @@
       "group_assists": 2
     },
     "Arda Guler (Türkiye)": {
-      "goals": 0,
+      "goals": 1,
       "assists": 0,
-      "group_goals": 0,
+      "group_goals": 1,
       "group_assists": 0
     }
   },
@@ -4624,8 +4632,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782439931,
-  "last_score_refresh_attempt_at": 1782439931,
+  "last_score_refresh_at": 1782440412,
+  "last_score_refresh_attempt_at": 1782440405,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
