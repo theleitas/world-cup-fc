@@ -4244,8 +4244,8 @@
       "away": "Saudi Arabia",
       "home_score": 0,
       "away_score": 0,
-      "status": "In_Play",
-      "minute": 88,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4840,8 +4840,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782525333,
-  "last_score_refresh_attempt_at": 1782525332,
+  "last_score_refresh_at": 1782525730,
+  "last_score_refresh_attempt_at": 1782525729,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
