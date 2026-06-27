@@ -3940,22 +3940,7 @@ def render_day_grouped_match_cards(state, matches, newest_first=False, heading_c
 
 
 def render_completed_match_cards(state, matches):
-    group_matches = {}
-    other_matches = {}
-    for match in matches:
-        if stage_is_group(match.get("stage")):
-            group = match_group_label(match) or "TBD"
-            group_matches.setdefault(group, []).append(match)
-        else:
-            other_matches.setdefault(stage_bucket_label(match), []).append(match)
-
-    for group in sorted(group_matches, key=lambda value: (value == "TBD", value)):
-        st.markdown(f"<div class='match-day-title'>Group {html.escape(group)}</div>", unsafe_allow_html=True)
-        render_day_grouped_match_cards(state, group_matches[group], newest_first=True, heading_class="match-sub-title")
-
-    for stage_name, stage_matches in other_matches.items():
-        st.markdown(f"<div class='match-day-title'>{html.escape(stage_name)}</div>", unsafe_allow_html=True)
-        render_day_grouped_match_cards(state, stage_matches, newest_first=True, heading_class="match-sub-title")
+    render_match_cards(state, matches, show_group=True)
 
 
 def render_lazy_match_section(state, label, matches, key, default_open=False, empty_text="No matches in this section yet.", render_mode="day"):
