@@ -4642,6 +4642,37 @@
       "goals": []
     },
     {
+      "id": "537415",
+      "date": "2026-06-29T20:30:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Germany",
+      "away": "Paraguay",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
       "id": "537418",
       "date": "2026-06-30T01:00:00Z",
       "stage": "Last 32",
@@ -4673,6 +4704,68 @@
       "goals": []
     },
     {
+      "id": "537424",
+      "date": "2026-06-30T17:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Côte d'Ivoire",
+      "away": "Norway",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537416",
+      "date": "2026-06-30T21:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "France",
+      "away": "Sweden",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
       "id": "537421",
       "date": "2026-07-02T00:00:00Z",
       "stage": "Last 32",
@@ -4680,6 +4773,68 @@
       "matchday": null,
       "home": "USA",
       "away": "Bosnia and Herzegovina",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537428",
+      "date": "2026-07-03T18:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Australia",
+      "away": "Egypt",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537427",
+      "date": "2026-07-03T22:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Argentina",
+      "away": "Cabo Verde",
       "home_score": null,
       "away_score": null,
       "status": "Timed",
@@ -4860,7 +5015,7 @@
     "Canada": "Round of 32",
     "Mexico": "Group Stage",
     "USA": "Round of 32",
-    "Australia": "Group Stage",
+    "Australia": "Round of 32",
     "Iraq": "Group Stage",
     "IR Iran": "Group Stage",
     "Japan": "Round of 32",
@@ -4870,10 +5025,10 @@
     "Saudi Arabia": "Group Stage",
     "Uzbekistan": "Group Stage",
     "Algeria": "Group Stage",
-    "Cabo Verde": "Group Stage",
+    "Cabo Verde": "Round of 32",
     "Congo DR": "Group Stage",
-    "Côte d'Ivoire": "Group Stage",
-    "Egypt": "Group Stage",
+    "Côte d'Ivoire": "Round of 32",
+    "Egypt": "Round of 32",
     "Ghana": "Group Stage",
     "Morocco": "Round of 32",
     "Senegal": "Group Stage",
@@ -4882,11 +5037,11 @@
     "Curaçao": "Group Stage",
     "Haiti": "Group Stage",
     "Panama": "Group Stage",
-    "Argentina": "Group Stage",
+    "Argentina": "Round of 32",
     "Brazil": "Round of 32",
     "Colombia": "Group Stage",
     "Ecuador": "Group Stage",
-    "Paraguay": "Group Stage",
+    "Paraguay": "Round of 32",
     "Uruguay": "Group Stage",
     "New Zealand": "Group Stage",
     "Austria": "Group Stage",
@@ -4895,19 +5050,19 @@
     "Croatia": "Group Stage",
     "Czechia": "Group Stage",
     "England": "Group Stage",
-    "France": "Group Stage",
-    "Germany": "Group Stage",
+    "France": "Round of 32",
+    "Germany": "Round of 32",
     "Netherlands": "Round of 32",
-    "Norway": "Group Stage",
+    "Norway": "Round of 32",
     "Portugal": "Group Stage",
     "Scotland": "Group Stage",
     "Spain": "Group Stage",
-    "Sweden": "Group Stage",
+    "Sweden": "Round of 32",
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782544629,
-  "last_score_refresh_attempt_at": 1782544628,
+  "last_score_refresh_at": 1782545229,
+  "last_score_refresh_attempt_at": 1782545228,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
