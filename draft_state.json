@@ -4273,17 +4273,17 @@
       "matchday": 3,
       "home": "New Zealand",
       "away": "Belgium",
-      "home_score": 0,
-      "away_score": 3,
+      "home_score": 1,
+      "away_score": 4,
       "status": "In_Play",
-      "minute": 84,
+      "minute": 89,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
-          "home": 0,
-          "away": 3
+          "home": 1,
+          "away": 4
         },
         "regular_time": {
           "home": null,
@@ -4318,6 +4318,22 @@
           "team": "Belgium",
           "scorer": "Kevin De Bruyne",
           "assist": ""
+        },
+        {
+          "minute": 84,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "New Zealand",
+          "scorer": "Elijah Just",
+          "assist": ""
+        },
+        {
+          "minute": 86,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Belgium",
+          "scorer": "Romelu Lukaku",
+          "assist": "Nicolas Raskin"
         }
       ]
     },
@@ -4332,7 +4348,7 @@
       "home_score": 1,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 82,
+      "minute": 87,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4882,8 +4898,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782535619,
-  "last_score_refresh_attempt_at": 1782535618,
+  "last_score_refresh_at": 1782535920,
+  "last_score_refresh_attempt_at": 1782535918,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
