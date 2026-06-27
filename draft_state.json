@@ -4230,7 +4230,7 @@
           "type": "REGULAR",
           "team": "Spain",
           "scorer": "Álex Baena",
-          "assist": ""
+          "assist": "Marcos Llorente"
         }
       ]
     },
@@ -4840,8 +4840,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782522315,
-  "last_score_refresh_attempt_at": 1782522313,
+  "last_score_refresh_at": 1782522615,
+  "last_score_refresh_attempt_at": 1782522613,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
