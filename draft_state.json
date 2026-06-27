@@ -4505,17 +4505,17 @@
       "matchday": 3,
       "home": "Colombia",
       "away": "Portugal",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 0,
+      "away_score": 0,
+      "status": "In_Play",
+      "minute": 2,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "DRAW",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regular_time": {
           "home": null,
@@ -4536,17 +4536,17 @@
       "matchday": 3,
       "home": "Congo DR",
       "away": "Uzbekistan",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 0,
+      "away_score": 0,
+      "status": "In_Play",
+      "minute": 1,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "DRAW",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 0,
+          "away": 0
         },
         "regular_time": {
           "home": null,
@@ -4784,6 +4784,37 @@
       "matchday": null,
       "home": "France",
       "away": "Sweden",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537425",
+      "date": "2026-07-01T01:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Mexico",
+      "away": "Ecuador",
       "home_score": null,
       "away_score": null,
       "status": "Timed",
@@ -5055,7 +5086,7 @@
   },
   "advancement": {
     "Canada": "Round of 32",
-    "Mexico": "Group Stage",
+    "Mexico": "Round of 32",
     "USA": "Round of 32",
     "Australia": "Round of 32",
     "Iraq": "Group Stage",
@@ -5082,7 +5113,7 @@
     "Argentina": "Round of 32",
     "Brazil": "Round of 32",
     "Colombia": "Group Stage",
-    "Ecuador": "Group Stage",
+    "Ecuador": "Round of 32",
     "Paraguay": "Round of 32",
     "Uruguay": "Group Stage",
     "New Zealand": "Group Stage",
@@ -5103,8 +5134,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782602799,
-  "last_score_refresh_attempt_at": 1782602797,
+  "last_score_refresh_at": 1782603225,
+  "last_score_refresh_attempt_at": 1782603223,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
