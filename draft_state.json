@@ -4402,16 +4402,16 @@
       "home": "Panama",
       "away": "England",
       "home_score": 0,
-      "away_score": 0,
+      "away_score": 1,
       "status": "In_Play",
-      "minute": 62,
+      "minute": 68,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 0
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -4422,7 +4422,16 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 62,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "England",
+          "scorer": "Jude Bellingham",
+          "assist": "Bukayo Saka"
+        }
+      ]
     },
     {
       "id": "537414",
@@ -4435,7 +4444,7 @@
       "home_score": 1,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 61,
+      "minute": 65,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4949,9 +4958,9 @@
     },
     "Bukayo Saka (England)": {
       "goals": 0,
-      "assists": 1,
+      "assists": 2,
       "group_goals": 0,
-      "group_assists": 1
+      "group_assists": 2
     },
     "Desire Doue (France)": {
       "goals": 1,
@@ -5070,8 +5079,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782598897,
-  "last_score_refresh_attempt_at": 1782598895,
+  "last_score_refresh_at": 1782599197,
+  "last_score_refresh_attempt_at": 1782599195,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
