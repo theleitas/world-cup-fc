@@ -2364,14 +2364,17 @@ def render_payment_panel(state, payment_key="payments", title="Time to Pay Up", 
 
 def render_payments_section(state):
     with st.expander("Payments", expanded=False):
-        render_payment_panel(
-            state,
-            payment_key="goalie_payments",
-            title="Goalie Challenge",
-            amount="$25",
-            note="Please send your $25 Goalie Challenge side bet to Jayme.",
-        )
         render_payment_panel(state)
+
+
+def render_goalie_payment_panel(state):
+    render_payment_panel(
+        state,
+        payment_key="goalie_payments",
+        title="Goalie Challenge",
+        amount="$25",
+        note="Please send your $25 Goalie Challenge side bet to Jayme.",
+    )
 
 
 def render_payout_descriptions():
@@ -5112,6 +5115,7 @@ if FOOTBALL_DATA_TOKEN and (not draft_in_progress) and int(time.time()) - int(st
 scores = calculate_scores(state)
 
 render_header(state)
+render_goalie_payment_panel(state)
 draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
