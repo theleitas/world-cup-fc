@@ -119,6 +119,19 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .side-bet-pill { border:1px solid rgba(255,255,255,.14); border-radius:6px; background:#050505; padding:5px 3px; min-width:0; text-align:center; box-shadow:inset 0 0 10px rgba(255,255,255,.035); }
 .side-bet-pill span { display:block; color:#b9c2c9; font-size:.82rem; font-weight:900; text-transform:uppercase; line-height:1.02; }
 .side-bet-pill b { display:block; color:#fff; font-size:1.02rem; line-height:1.04; overflow-wrap:anywhere; margin-top:2px; }
+.goalie-main-pill { border:1px solid color-mix(in srgb, var(--coach-color) 48%, rgba(255,255,255,.16)); border-radius:6px; background:color-mix(in srgb, var(--coach-color) 10%, #050505); padding:5px 7px; margin:4px 0 5px; text-align:center; box-shadow:inset 0 0 10px rgba(255,255,255,.035); }
+.goalie-main-pill span { color:#b9c2c9; font-size:.78rem; font-weight:1000; text-transform:uppercase; }
+.goalie-main-pill b { color:var(--coach-color); font-size:1.05rem; font-weight:1000; margin-left:6px; text-shadow:0 0 8px var(--coach-color); }
+.goalie-rules-note { border:1px solid rgba(255,213,74,.4); border-radius:8px; background:#070707; color:#fff7cf; font-size:.86rem; font-weight:850; line-height:1.35; padding:8px 10px; margin:8px 0 10px; }
+.goalie-card-grid { margin-bottom:8px; }
+.goalie-card .coach-head { margin-bottom:7px; }
+.goalie-slot-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:4px; }
+.goalie-slot { min-height:54px; border:1px solid color-mix(in srgb, var(--coach-color) 48%, rgba(255,255,255,.16)); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:4px 3px; text-align:center; box-shadow:inset 0 0 8px rgba(255,255,255,.035), 0 0 7px color-mix(in srgb, var(--coach-color) 20%, transparent); }
+.goalie-slot-empty { color:#6f777d; font-size:.68rem; font-weight:900; }
+.goalie-slot-flag { font-size:1.3rem; line-height:1; }
+.goalie-slot-flag .flag-icon { margin:0; width:1.05em; height:1.05em; vertical-align:0; }
+.goalie-slot-name { color:#fff; font-size:.72rem; line-height:.98; font-weight:850; overflow-wrap:anywhere; }
+.goalie-slot-ga { color:var(--coach-color); font-size:.7rem; line-height:1; font-weight:1000; text-shadow:0 0 7px var(--coach-color); }
 .coach-live-impact { border-top:1px solid rgba(185,194,201,.28); margin-top:6px; padding-top:6px; }
 .live-impact-title { display:flex; align-items:center; justify-content:center; gap:6px; color:#ffd54a; font-size:.78rem; font-weight:1000; text-transform:uppercase; }
 .live-dot { width:.55rem; height:.55rem; border-radius:50%; background:#ff1744; box-shadow:0 0 9px #ff1744; display:inline-block; }
@@ -142,6 +155,8 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .team-roster-cell .roster-flag { min-height:25px; font-size:1.82rem; margin-bottom:-1px; }
 .team-roster-cell .roster-flag .flag-icon { width:1.08em; height:1.08em; }
 .team-roster-cell .roster-name { line-height:.98; }
+.roster-cell-eliminated::before { content:""; position:absolute; inset:0; background:rgba(255,23,68,.32); z-index:3; pointer-events:none; }
+.roster-cell-eliminated::after { content:"×"; position:absolute; inset:0; z-index:4; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.88); font-size:3.1rem; font-weight:1000; text-shadow:0 0 12px #ff1744; pointer-events:none; }
 .player-roster-cell { min-height:64px; flex-direction:row; justify-content:flex-start; align-items:center; gap:8px; text-align:left; padding:6px 34px 6px 6px; }
 .player-thumb { width:48px; height:48px; border-radius:50%; object-fit:cover; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
 .player-thumb-placeholder { width:48px; height:48px; border-radius:50%; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.88rem; font-weight:900; box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
@@ -336,6 +351,7 @@ div[class*="st-key-btn-match-timeline"] div[data-testid="stButton"] > button:hov
     .payment-grid { grid-template-columns:1fr 1fr; gap:5px; }
     .payment-row { font-size:.78rem; padding:5px 6px; }
     .standings-grid { grid-template-columns:1fr; }
+    .goalie-slot-grid { grid-template-columns:repeat(2, minmax(0, 1fr)); }
     .coach-card { min-height:auto; }
     .coach-face, .coach-face-placeholder { width:60px; height:60px; }
     .score-badge { width:52px; height:52px; font-size:1.08rem; }
@@ -409,6 +425,12 @@ DRAFT_DEADLINE_TEXT = "Draft will end on Thursday, June 11 at 3pm"
 TEAM_ROUND_DIRECTIONS = ["forward", "reverse", "reverse", "forward", "reverse", "forward"]
 PLAYER_ROUND_DIRECTIONS = ["reverse", "forward"]
 DRAFT_BUTTON_COLUMNS = 2
+GOALIE_ROUND_ORDER = ["r32", "r16", "r8"]
+GOALIE_ROUNDS = {
+    "r32": {"label": "Round of 32", "stage": "Round of 32", "slots": 4, "previous": "Group Stage"},
+    "r16": {"label": "Round of 16", "stage": "Round of 16", "slots": 2, "previous": "Round of 32"},
+    "r8": {"label": "Round of 8", "stage": "Quarterfinals", "slots": 1, "previous": "Round of 16"},
+}
 
 TEAM_COLOR_OPTIONS = [
     ("Gold", "#FFD54A"),
@@ -896,11 +918,12 @@ def asset_score_badge_html(points):
     return f"<div class='asset-score-badge'>{int(points or 0)}</div>"
 
 
-def roster_grid_cell_html(flag_html="", label="", points=None):
+def roster_grid_cell_html(flag_html="", label="", points=None, eliminated=False):
     if not label:
         return "<div class='roster-cell roster-cell-empty'></div>"
+    extra_class = " roster-cell-eliminated" if eliminated else ""
     return f"""
-<div class='roster-cell team-roster-cell'>
+<div class='roster-cell team-roster-cell{extra_class}'>
   {asset_score_badge_html(points)}
   <div class='roster-flag'>{flag_html}</div>
   <div class='roster-name'>{html.escape(label)}</div>
@@ -925,14 +948,14 @@ def player_roster_grid_cell_html(player, country, points=None):
 """
 
 
-def standings_roster_grid_html(items, kind, points_by_item=None):
+def standings_roster_grid_html(items, kind, points_by_item=None, state=None):
     points_by_item = points_by_item or {}
     target_count = 6 if kind == "team" else 2
     cells = []
     for item in list(items or [])[:target_count]:
         if kind == "team":
             team = canonical_team_name(item)
-            cells.append(roster_grid_cell_html(team_flag_html(team), team, points_by_item.get(team, 0)))
+            cells.append(roster_grid_cell_html(team_flag_html(team), team, points_by_item.get(team, 0), eliminated=team_is_eliminated(state, team)))
         else:
             country = player_country(item)
             cells.append(player_roster_grid_cell_html(item, country, points_by_item.get(item, 0)))
@@ -1212,6 +1235,20 @@ def empty_official_rosters():
     }
 
 
+def empty_goalie_challenge():
+    return {
+        "rounds": {
+            round_key: {
+                "active": False,
+                "order": [],
+                "picks": [],
+                "current_pick_started_at": int(time.time()),
+            }
+            for round_key in GOALIE_ROUND_ORDER
+        }
+    }
+
+
 def seed_matches():
     return [
         {
@@ -1236,6 +1273,7 @@ def default_state():
         "draft_active": True,
         "teams": default_coaches(),
         "official_rosters": empty_official_rosters(),
+        "goalie_challenge": empty_goalie_challenge(),
         "payments": {coach: False for coach in COACHES},
         "team_picks": [],
         "player_picks": [],
@@ -1262,6 +1300,7 @@ def normalize_state(state):
     state.setdefault("app_title", base["app_title"])
     state.setdefault("draft_enabled", base["draft_enabled"])
     state.setdefault("draft_active", True)
+    state.setdefault("goalie_challenge", {})
     state.setdefault("payments", {})
     has_official_rosters = isinstance(state.get("official_rosters"), dict)
     state.setdefault("team_picks", [])
@@ -1336,7 +1375,81 @@ def normalize_state(state):
 
     state["matches"] = [normalize_match(match, index) for index, match in enumerate(state.get("matches") or [])]
     state["player_stats"] = normalize_player_stats(state.get("player_stats"), state["players"])
+    state["goalie_challenge"] = normalize_goalie_challenge(state.get("goalie_challenge"))
     return state
+
+
+def build_goalie_sequence(order, slots):
+    clean_order = [coach for coach in order if coach in COACHES]
+    for coach in COACHES:
+        if coach not in clean_order:
+            clean_order.append(coach)
+    sequence = []
+    pick_number = 1
+    for round_index in range(1, int(slots) + 1):
+        coaches = clean_order if round_index % 2 == 1 else list(reversed(clean_order))
+        for slot_index, coach in enumerate(coaches, start=1):
+            sequence.append(
+                {
+                    "pick": pick_number,
+                    "round": round_index,
+                    "slot": slot_index,
+                    "coach": coach,
+                    "direction": "forward" if round_index % 2 == 1 else "reverse",
+                }
+            )
+            pick_number += 1
+    return sequence
+
+
+def normalize_goalie_picks(raw_picks, sequence):
+    picks = []
+    seen_pick_numbers = set()
+    seen_teams = set()
+    sequence_by_pick = {item["pick"]: item for item in sequence}
+    for raw in raw_picks or []:
+        if not isinstance(raw, dict):
+            continue
+        try:
+            pick_number = int(raw.get("pick"))
+        except (TypeError, ValueError):
+            continue
+        if pick_number not in sequence_by_pick or pick_number in seen_pick_numbers:
+            continue
+        team = canonical_team_name(raw.get("team"))
+        if not team or team in seen_teams:
+            continue
+        expected = sequence_by_pick[pick_number]
+        picks.append(
+            {
+                "pick": pick_number,
+                "round": expected["round"],
+                "coach": expected["coach"],
+                "team": team,
+                "picked_at": str(raw.get("picked_at") or ""),
+            }
+        )
+        seen_pick_numbers.add(pick_number)
+        seen_teams.add(team)
+    return sorted(picks, key=lambda item: item["pick"])
+
+
+def normalize_goalie_challenge(raw):
+    raw = raw if isinstance(raw, dict) else {}
+    raw_rounds = raw.get("rounds") if isinstance(raw.get("rounds"), dict) else {}
+    normalized = empty_goalie_challenge()
+    for round_key in GOALIE_ROUND_ORDER:
+        round_info = GOALIE_ROUNDS[round_key]
+        prior = raw_rounds.get(round_key) if isinstance(raw_rounds.get(round_key), dict) else {}
+        order = [coach for coach in prior.get("order", []) if coach in COACHES]
+        sequence = build_goalie_sequence(order or COACHES, round_info["slots"])
+        normalized["rounds"][round_key] = {
+            "active": bool(prior.get("active", False)),
+            "order": order,
+            "picks": normalize_goalie_picks(prior.get("picks", []), sequence),
+            "current_pick_started_at": none_or_int(prior.get("current_pick_started_at")) or int(time.time()),
+        }
+    return normalized
 
 
 def normalize_pick_list(raw_picks, sequence, field):
@@ -1748,8 +1861,103 @@ def score_match_for_team(match, team_name):
     return result_points + goals_for + clean_sheet
 
 
+def match_has_goalie_score_context(match):
+    if match.get("home_score") is None or match.get("away_score") is None:
+        return False
+    status = str(match.get("status", "")).lower()
+    return status not in ["scheduled", "timed", "postponed", "cancelled", "canceled", "suspended"]
+
+
+def goalie_round_matches(state, round_key):
+    target_stage = GOALIE_ROUNDS.get(round_key, {}).get("stage", "")
+    return [
+        match
+        for match in state.get("matches", [])
+        if stage_to_advancement(match.get("stage")) == target_stage
+        and "friendly" not in str(match.get("stage") or "").lower()
+    ]
+
+
+def goalie_goals_allowed_for_pick(state, round_key, team_name):
+    team_name = canonical_team_name(team_name)
+    goals_allowed = 0
+    counted_matches = 0
+    for match in goalie_round_matches(state, round_key):
+        if not match_has_goalie_score_context(match):
+            continue
+        home = canonical_team_name(match.get("home"))
+        away = canonical_team_name(match.get("away"))
+        if team_name not in [home, away]:
+            continue
+        home_score = int(match.get("home_score") or 0)
+        away_score = int(match.get("away_score") or 0)
+        goals_allowed += away_score if team_name == home else home_score
+        counted_matches += 1
+    return goals_allowed, counted_matches
+
+
+def goalie_challenge_scores(state):
+    scores = {coach: {"points": 0, "counted_matches": 0, "slots": []} for coach in COACHES}
+    challenge = state.get("goalie_challenge", {})
+    rounds = challenge.get("rounds", {}) if isinstance(challenge, dict) else {}
+    for round_key in GOALIE_ROUND_ORDER:
+        round_state = rounds.get(round_key, {})
+        round_label = GOALIE_ROUNDS[round_key]["label"]
+        for pick in round_state.get("picks", []):
+            coach = pick.get("coach")
+            if coach not in scores:
+                continue
+            team = canonical_team_name(pick.get("team"))
+            goals_allowed, counted = goalie_goals_allowed_for_pick(state, round_key, team)
+            scores[coach]["points"] += goals_allowed
+            scores[coach]["counted_matches"] += counted
+            scores[coach]["slots"].append(
+                {
+                    "round_key": round_key,
+                    "round_label": round_label,
+                    "pick": int(pick.get("pick") or 0),
+                    "team": team,
+                    "goals_allowed": goals_allowed,
+                    "counted": counted,
+                }
+            )
+    return scores
+
+
 def stage_is_group(stage):
     return "group" in str(stage or "").lower()
+
+
+def team_is_eliminated(state, team_name):
+    if not state:
+        return False
+    team_name = canonical_team_name(team_name)
+    advancement = state.get("advancement", {}).get(team_name, "Group Stage")
+    if not team_name or advancement == "Champion":
+        return False
+    current_rank = advancement_rank(advancement)
+    populated_stage_ranks = [
+        advancement_rank(stage_to_advancement(match.get("stage")))
+        for match in state.get("matches", [])
+        if stage_to_advancement(match.get("stage")) and "friendly" not in str(match.get("stage") or "").lower()
+    ]
+    if populated_stage_ranks and max(populated_stage_ranks) > current_rank:
+        return True
+    if current_rank <= advancement_rank("Group Stage"):
+        return False
+    for match in state.get("matches", []):
+        if "friendly" in str(match.get("stage") or "").lower():
+            continue
+        if advancement_rank(stage_to_advancement(match.get("stage"))) != current_rank:
+            continue
+        teams = {canonical_team_name(match.get("home")), canonical_team_name(match.get("away"))}
+        if team_name not in teams:
+            continue
+        if match_is_completed(match):
+            winner = match_winner_team(match)
+            if winner and winner != team_name:
+                return True
+    return False
 
 
 def team_goals_in_matches(matches, team_name):
@@ -1794,6 +2002,7 @@ def cinderella_team_rows(state):
 
 def calculate_scores(state):
     matches = state.get("matches", [])
+    goalie_scores = goalie_challenge_scores(state)
     scores = {}
     for coach, data in state["teams"].items():
         team_points = 0
@@ -1829,6 +2038,7 @@ def calculate_scores(state):
             player_breakdown.append((player, points))
 
         total_points = team_points + player_points
+        goalie_score = goalie_scores.get(coach, {"points": 0, "counted_matches": 0, "slots": []})
         scores[coach] = {
             "coach": coach,
             "color": data["color"],
@@ -1836,6 +2046,9 @@ def calculate_scores(state):
             "team_points": team_points,
             "player_points": player_points,
             "total_points": total_points,
+            "goalie_challenge_points": int(goalie_score.get("points", 0)),
+            "goalie_challenge_counted": int(goalie_score.get("counted_matches", 0)),
+            "goalie_challenge_slots": goalie_score.get("slots", []),
             "group_stage_points": group_stage_points + player_group_points,
             "empire_count": empire_count,
             "empire_goals": empire_goals,
@@ -1861,6 +2074,11 @@ def award_leaders(scores):
         leaders["Group Stage Winner"] = max(values, key=lambda item: item["group_stage_points"])
     if max(item.get("empire_count", 0) for item in values) > 0:
         leaders["Empire Builder"] = max(values, key=lambda item: (item["empire_count"], item["empire_goals"], item["total_points"]))
+    if any(item.get("goalie_challenge_counted", 0) > 0 for item in values):
+        leaders["Goalie Challenge Winner"] = min(
+            values,
+            key=lambda item: (item.get("goalie_challenge_points", 0), -item.get("total_points", 0)),
+        )
     cinderella_candidates = []
     for item in values:
         for team, team_points, baseline, cinderella in item.get("team_breakdown", []):
@@ -2157,8 +2375,14 @@ def render_payout_descriptions():
 <div class='payout-desc'><b>How Points Are Scored</b><br>
 National teams earn +3 for a win, +1 for a draw, +1 for each goal scored, and +1 for a clean sheet. Star players earn +4 for each goal and +3 for each assist. Advancement bonuses are added automatically as teams move deeper in the tournament. During live matches, points are shown based on the current state of the match. For example, a team leading 2-0 live would currently show +3 for the win, +2 for goals, and +1 for the clean sheet.</div>
 
+<div class='payout-desc'><b>Goalie Challenge - $25 Side Bet</b><br>
+Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The draft order for each goalie round is reverse overall standings before that round starts and snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($150), second lowest wins Silver ($75), and third lowest wins Bronze ($25). Draft sections open when official fixtures for that round are populated and close at the first kickoff of that round.</div>
+
 <div class='payout-desc'><b>Standings Card Abbreviations</b><br>
-"Group" means Group Stage Winner points only. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
+"Group" means Group Stage Winner points only. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. "Goalie Challenge Points" means goals allowed in the separate goalie side bet; lower is better and those points do not affect the main total. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
+
+<div class='payout-desc'><b>Goalie Challenge Draft Timing</b><br>
+The Round of 32 goalie draft begins once the full Round of 32 field and fixtures are official and ends before the first Round of 32 kickoff. The Round of 16 goalie draft begins once the Round of 32 is complete and official Round of 16 fixtures are populated, then ends before the first Round of 16 kickoff. The Round of 8 goalie draft begins once the Round of 16 is complete and quarterfinal fixtures are populated, then ends before the first quarterfinal kickoff.</div>
 
 <div class='payout-desc'><b>Gold - $300</b><br>
 Awarded to the coach who finishes first overall in total fantasy points. Total fantasy points are the sum of every drafted national team's match points, advancement bonuses, and drafted star-player points.</div>
@@ -2205,8 +2429,8 @@ def render_standings(state, scores, show_title=True):
         coach_state = state["teams"][coach]
         team_points_by_item = {team: points for team, points, _baseline, _cinderella in item.get("team_breakdown", [])}
         player_points_by_item = {player: points for player, points in item.get("player_breakdown", [])}
-        teams = standings_roster_grid_html(coach_state.get("national_teams", []), "team", team_points_by_item)
-        players = standings_roster_grid_html(coach_state.get("star_players", []), "player", player_points_by_item)
+        teams = standings_roster_grid_html(coach_state.get("national_teams", []), "team", team_points_by_item, state=state)
+        players = standings_roster_grid_html(coach_state.get("star_players", []), "player", player_points_by_item, state=state)
         power_rating = format_power_rating(state, coach)
         cinderella_text = "None"
         if item["cinderella_team"]:
@@ -2240,6 +2464,7 @@ def render_standings(state, scores, show_title=True):
     <div class='side-bet-pill'><span>Empire</span><b>{int(item["empire_count"])} teams<br>{int(item["empire_goals"])} goals</b></div>
     <div class='side-bet-pill'><span>Cinderella</span><b>{html.escape(cinderella_text)}</b></div>
   </div>
+  <div class='goalie-main-pill'><span>Goalie Challenge Points</span><b>{int(item.get("goalie_challenge_points", 0))}</b></div>
   {teams}
   {players}
   {live_html}
@@ -2418,6 +2643,304 @@ def render_standings_section(state, scores):
         render_standings(state, scores, show_title=False)
 
 
+def goalie_order_from_scores(scores):
+    return [
+        item["coach"]
+        for item in sorted(
+            scores.values(),
+            key=lambda item: (int(item.get("total_points", 0)), COACHES.index(item["coach"]) if item["coach"] in COACHES else 999),
+        )
+    ]
+
+
+def goalie_round_state(state, round_key):
+    return state.get("goalie_challenge", {}).get("rounds", {}).get(round_key, {})
+
+
+def goalie_round_order(state, round_key, scores):
+    stored_order = [coach for coach in goalie_round_state(state, round_key).get("order", []) if coach in COACHES]
+    return stored_order or goalie_order_from_scores(scores)
+
+
+def goalie_round_sequence(state, round_key, scores):
+    return build_goalie_sequence(goalie_round_order(state, round_key, scores), GOALIE_ROUNDS[round_key]["slots"])
+
+
+def goalie_round_available_teams(state, round_key):
+    teams = []
+    seen = set()
+    for match in sorted(goalie_round_matches(state, round_key), key=lambda item: match_datetime(item.get("date")) or datetime.max.replace(tzinfo=ZoneInfo("UTC"))):
+        for team_name in [match.get("home"), match.get("away")]:
+            team_name = canonical_team_name(team_name)
+            if team_name and team_name not in seen:
+                teams.append(team_name)
+                seen.add(team_name)
+    return teams
+
+
+def goalie_round_required_team_count(round_key):
+    return int(GOALIE_ROUNDS[round_key]["slots"]) * len(COACHES)
+
+
+def goalie_round_first_kickoff(state, round_key):
+    dates = [match_datetime(match.get("date")) for match in goalie_round_matches(state, round_key) if match_datetime(match.get("date"))]
+    return min(dates) if dates else None
+
+
+def goalie_round_is_populated(state, round_key):
+    return len(goalie_round_available_teams(state, round_key)) >= goalie_round_required_team_count(round_key)
+
+
+def goalie_round_is_closed(state, round_key):
+    kickoff = goalie_round_first_kickoff(state, round_key)
+    return bool(kickoff and datetime.now(ZoneInfo("UTC")) >= kickoff)
+
+
+def goalie_round_window_text(state, round_key):
+    info = GOALIE_ROUNDS[round_key]
+    available = goalie_round_available_teams(state, round_key)
+    kickoff = goalie_round_first_kickoff(state, round_key)
+    open_text = f"Opens when official {info['stage']} fixtures are populated"
+    if len(available) >= goalie_round_required_team_count(round_key):
+        open_text = f"Open after {info['previous']} is finalized"
+    close_text = "Closes at the first kickoff for this round"
+    if kickoff:
+        close_text = f"Closes {kickoff.astimezone(ZoneInfo('America/New_York')).strftime('%b %d, %I:%M %p ET')}"
+    return f"{open_text}. {close_text}."
+
+
+def goalie_round_drafted_teams(state, round_key):
+    return {canonical_team_name(pick.get("team")) for pick in goalie_round_state(state, round_key).get("picks", [])}
+
+
+def set_goalie_round_active(round_key, active):
+    def mutator(state):
+        state = normalize_state(state)
+        if round_key not in GOALIE_ROUNDS:
+            return False
+        round_state = state["goalie_challenge"]["rounds"][round_key]
+        if active and not goalie_round_is_populated(state, round_key):
+            return False
+        if active and not round_state.get("order"):
+            round_state["order"] = goalie_order_from_scores(calculate_scores(state))
+        round_state["active"] = bool(active)
+        round_state["current_pick_started_at"] = int(time.time())
+        return True
+    return mutate_shared_state(mutator, f"Update {GOALIE_ROUNDS.get(round_key, {}).get('label', 'Goalie')} draft")
+
+
+def make_goalie_pick(round_key, team_name):
+    def mutator(state):
+        state = normalize_state(state)
+        if round_key not in GOALIE_ROUNDS:
+            return False
+        if goalie_round_is_closed(state, round_key) or not goalie_round_is_populated(state, round_key):
+            return False
+        round_state = state["goalie_challenge"]["rounds"][round_key]
+        if not round_state.get("active"):
+            return False
+        if not round_state.get("order"):
+            round_state["order"] = goalie_order_from_scores(calculate_scores(state))
+        sequence = build_goalie_sequence(round_state["order"], GOALIE_ROUNDS[round_key]["slots"])
+        pick = current_pick(sequence, round_state.get("picks", []))
+        team = canonical_team_name(team_name)
+        if not pick or team not in goalie_round_available_teams(state, round_key) or team in goalie_round_drafted_teams(state, round_key):
+            return False
+        round_state["picks"].append(
+            {
+                "pick": pick["pick"],
+                "round": pick["round"],
+                "coach": pick["coach"],
+                "team": team,
+                "picked_at": datetime.now(ZoneInfo("America/New_York")).isoformat(),
+            }
+        )
+        round_state["current_pick_started_at"] = int(time.time())
+        return True
+    return mutate_shared_state(mutator, f"Draft {team_name} for Goalie Challenge")
+
+
+def undo_goalie_pick(round_key):
+    def mutator(state):
+        state = normalize_state(state)
+        if round_key not in GOALIE_ROUNDS:
+            return False
+        picks = state["goalie_challenge"]["rounds"][round_key].get("picks", [])
+        if not picks:
+            return False
+        picks.pop()
+        state["goalie_challenge"]["rounds"][round_key]["current_pick_started_at"] = int(time.time())
+        return True
+    return mutate_shared_state(mutator, f"Undo {GOALIE_ROUNDS.get(round_key, {}).get('label', 'Goalie')} goalie pick")
+
+
+def render_goalie_round_status(state, round_key, sequence, picks):
+    active_pick = current_pick(sequence, picks)
+    round_state = goalie_round_state(state, round_key)
+    status = "Live" if round_state.get("active") else "Paused"
+    if goalie_round_is_closed(state, round_key):
+        status = "Closed"
+    elif not goalie_round_is_populated(state, round_key):
+        status = "Waiting for official teams"
+    st.caption(f"{goalie_round_window_text(state, round_key)} Status: {status}.")
+    if active_pick and round_state.get("active") and not goalie_round_is_closed(state, round_key):
+        color = state["teams"][active_pick["coach"]]["color"]
+        total = len(sequence)
+        st.markdown(
+            f"<div class='draft-pick-prompt' style='--coach-color:{html.escape(color)}'>{coach_mini_html(active_pick['coach'], color)}<span>{html.escape(active_pick['coach'])}, make goalie pick {active_pick['pick']} of {total} below.</span></div>",
+            unsafe_allow_html=True,
+        )
+
+
+def render_goalie_available_teams(state, round_key):
+    available = [team for team in goalie_round_available_teams(state, round_key) if team not in goalie_round_drafted_teams(state, round_key)]
+    if not available:
+        st.caption("No teams available for this goalie draft yet.")
+        return
+    round_state = goalie_round_state(state, round_key)
+    current = current_pick(build_goalie_sequence(round_state.get("order", COACHES), GOALIE_ROUNDS[round_key]["slots"]), round_state.get("picks", []))
+    coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
+    button_text_color = button_text_color_for_background(coach_color)
+    base_color = f"color-mix(in srgb, {coach_color} 34%, #101010)"
+    hover_color = f"color-mix(in srgb, {coach_color} 48%, #101010)"
+    st.markdown(
+        f"""
+<style>
+.st-key-goalie-pick-buttons-{round_key} {{
+    --draft-button-bg:{base_color};
+    --draft-button-border:{coach_color};
+    --draft-button-hover:{hover_color};
+    --draft-button-fg:{button_text_color};
+}}
+.st-key-goalie-pick-buttons-{round_key} div[data-testid="stButton"] > button {{
+    background:var(--draft-button-bg)!important;
+    border-color:var(--draft-button-border)!important;
+    color:var(--draft-button-fg)!important;
+    box-shadow:0 0 12px color-mix(in srgb, var(--draft-button-border) 35%, transparent)!important;
+}}
+.st-key-goalie-pick-buttons-{round_key} div[data-testid="stButton"] > button:hover {{
+    background:var(--draft-button-hover)!important;
+    border-color:var(--draft-button-border)!important;
+    color:var(--draft-button-fg)!important;
+}}
+</style>
+""",
+        unsafe_allow_html=True,
+    )
+    saving_key = f"goalie_saving_{round_key}"
+    saving = st.session_state.get(saving_key, False)
+    with st.container(key=f"goalie-pick-buttons-{round_key}"):
+        for row_start in range(0, len(available), DRAFT_BUTTON_COLUMNS):
+            cols = st.columns(DRAFT_BUTTON_COLUMNS, gap="small")
+            for col, team in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
+                with col:
+                    label = display_team(team)
+                    pressed = st.button(label, key=f"goalie-draft-{round_key}-{team}", width="stretch", disabled=(not round_state.get("active") or goalie_round_is_closed(state, round_key) or saving))
+                    if pressed:
+                        st.session_state[saving_key] = True
+                        st.toast("Saving goalie pick...")
+                        ok, _ = make_goalie_pick(round_key, team)
+                        st.session_state[saving_key] = False
+                        if ok:
+                            st.rerun()
+                        st.warning(f"Could not save {label}. It may already be drafted, paused, or closed.")
+
+
+def render_goalie_draft_round(state, scores, round_key):
+    info = GOALIE_ROUNDS[round_key]
+    with st.expander(info["label"], expanded=False):
+        round_state = goalie_round_state(state, round_key)
+        sequence = goalie_round_sequence(state, round_key, scores)
+        picks = round_state.get("picks", [])
+        render_goalie_round_status(state, round_key, sequence, picks)
+        c1, c2, c3 = st.columns(3, gap="small")
+        can_start = goalie_round_is_populated(state, round_key) and not goalie_round_is_closed(state, round_key)
+        with c1:
+            if st.button("Start Draft", key=f"goalie-start-{round_key}", disabled=(round_state.get("active") or not can_start), width="stretch"):
+                ok, _ = set_goalie_round_active(round_key, True)
+                if ok:
+                    st.rerun()
+        with c2:
+            if st.button("Stop Draft", key=f"goalie-stop-{round_key}", disabled=not round_state.get("active"), width="stretch"):
+                ok, _ = set_goalie_round_active(round_key, False)
+                if ok:
+                    st.rerun()
+        with c3:
+            if st.button("Undo Last Pick", key=f"goalie-undo-{round_key}", disabled=not bool(picks), width="stretch"):
+                ok, _ = undo_goalie_pick(round_key)
+                if ok:
+                    st.rerun()
+        render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state)
+        if current_pick(sequence, picks):
+            render_goalie_available_teams(state, round_key)
+
+
+def goalie_slot_cells_html(slots):
+    cells = []
+    ordered_slots = []
+    for round_key in GOALIE_ROUND_ORDER:
+        round_slots = sorted([slot for slot in slots if slot.get("round_key") == round_key], key=lambda item: item.get("pick", 0))
+        ordered_slots.extend(round_slots)
+        while len([slot for slot in ordered_slots if slot.get("round_key") == round_key]) < GOALIE_ROUNDS[round_key]["slots"]:
+            ordered_slots.append({"round_key": round_key, "team": "", "goals_allowed": 0})
+    for slot in ordered_slots[:7]:
+        team = canonical_team_name(slot.get("team"))
+        if not team:
+            label = GOALIE_ROUNDS.get(slot.get("round_key"), {}).get("label", "Open")
+            cells.append(f"<div class='goalie-slot goalie-slot-empty'><span>{html.escape(label)}</span></div>")
+            continue
+        cells.append(
+            f"""
+<div class='goalie-slot'>
+  <div class='goalie-slot-flag'>{team_flag_html(team)}</div>
+  <div class='goalie-slot-name'>{html.escape(team)}</div>
+  <div class='goalie-slot-ga'>GA {int(slot.get("goals_allowed", 0))}</div>
+</div>
+"""
+        )
+    return "".join(cells)
+
+
+def render_goalie_challenge_standings(state, scores):
+    ranked = sorted(scores.values(), key=lambda item: (int(item.get("goalie_challenge_points", 0)), -int(item.get("goalie_challenge_counted", 0)), -int(item.get("total_points", 0))))
+    rank_by_coach = {item["coach"]: index + 1 for index, item in enumerate(ranked)}
+    cards = ["<div class='standings-grid goalie-card-grid'>"]
+    for item in ranked:
+        coach = item["coach"]
+        color = item["color"]
+        place_label, place_color, place_text_color = placement_strip(rank_by_coach[coach])
+        cards.append(
+            f"""
+<div class='coach-card goalie-card' style='--coach-color:{html.escape(color)}'>
+  <div class='place-strip' style='--place-color:{html.escape(place_color)}; --place-text:{html.escape(place_text_color)}'>{html.escape(place_label)}</div>
+  <div class='coach-head'>
+    {coach_image_html(coach, color)}
+    <div>
+      <div class='coach-name'>{html.escape(item["display_name"])}</div>
+      <div class='award-lines'><div class='award-line'>Goalie Challenge</div></div>
+    </div>
+    <div class='score-badge'>{int(item.get("goalie_challenge_points", 0))}</div>
+  </div>
+  <div class='goalie-slot-grid'>{goalie_slot_cells_html(item.get("goalie_challenge_slots", []))}</div>
+</div>
+"""
+        )
+    cards.append("</div>")
+    st.markdown("".join(cards), unsafe_allow_html=True)
+
+
+def render_goalie_challenge(state, scores):
+    with st.expander("Goalie Challenge", expanded=False):
+        st.markdown("<div class='section-title'>Standings</div>", unsafe_allow_html=True)
+        render_goalie_challenge_standings(state, scores)
+        st.markdown(
+            "<div class='goalie-rules-note'>Lowest total goals allowed wins this $25 side bet. These goals allowed do not change the main World Cup FC standings.</div>",
+            unsafe_allow_html=True,
+        )
+        for round_key in GOALIE_ROUND_ORDER:
+            render_goalie_draft_round(state, scores, round_key)
+
+
 def group_tracker_match_counts(match):
     if not stage_is_group(match.get("stage")):
         return False
@@ -2559,6 +3082,7 @@ def render_group_tracker(state):
 def render_post_standings_sections(state, scores, show_detail_tables=False):
     with st.container(key="post-standings-section-stack"):
         render_standings_section(state, scores)
+        render_goalie_challenge(state, scores)
         render_group_tracker(state)
         render_live_matches(state)
         render_points_tracker(state, scores)
@@ -4158,6 +4682,88 @@ def render_official_roster_editor(state):
     st.markdown("</div>", unsafe_allow_html=True)
 
 
+def goalie_challenge_admin_rows(state):
+    rows = []
+    for round_key in GOALIE_ROUND_ORDER:
+        label = GOALIE_ROUNDS[round_key]["label"]
+        for pick in goalie_round_state(state, round_key).get("picks", []):
+            rows.append(
+                {
+                    "Round": label,
+                    "Pick": int(pick.get("pick") or 0),
+                    "Coach": pick.get("coach") or "",
+                    "Team": canonical_team_name(pick.get("team")),
+                }
+            )
+    return rows
+
+
+def render_goalie_challenge_admin_editor(state):
+    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+    st.subheader("Goalie Challenge Editor")
+    st.caption("This table only edits the separate Goalie Challenge side bet. It does not change original team/player rosters or main scoring.")
+    rows = goalie_challenge_admin_rows(state)
+    if rows:
+        edited = st.data_editor(
+            pd.DataFrame(rows, columns=["Round", "Pick", "Coach", "Team"]),
+            hide_index=True,
+            width="stretch",
+            num_rows="fixed",
+            disabled=["Round", "Pick", "Coach"],
+            column_config={"Team": st.column_config.SelectboxColumn(options=[team["name"] for team in WORLD_CUP_TEAMS])},
+            key="goalie-challenge-editor",
+        )
+        if st.button("Save Goalie Challenge Table", key="save-goalie-challenge-table", width="stretch"):
+            def mutator(fresh):
+                fresh = normalize_state(fresh)
+                label_to_key = {info["label"]: key for key, info in GOALIE_ROUNDS.items()}
+                seen_by_round = {key: set() for key in GOALIE_ROUND_ORDER}
+                replacement = {key: [] for key in GOALIE_ROUND_ORDER}
+                for _, row in edited.iterrows():
+                    round_key = label_to_key.get(str(row.get("Round") or ""))
+                    if round_key not in GOALIE_ROUNDS:
+                        continue
+                    team = canonical_team_name(row.get("Team"))
+                    coach = str(row.get("Coach") or "").strip()
+                    if not team or coach not in COACHES or team in seen_by_round[round_key]:
+                        continue
+                    try:
+                        pick_number = int(row.get("Pick"))
+                    except (TypeError, ValueError):
+                        continue
+                    replacement[round_key].append(
+                        {
+                            "pick": pick_number,
+                            "round": ((pick_number - 1) // len(COACHES)) + 1,
+                            "coach": coach,
+                            "team": team,
+                            "picked_at": datetime.now(ZoneInfo("America/New_York")).isoformat(),
+                        }
+                    )
+                    seen_by_round[round_key].add(team)
+                for round_key in GOALIE_ROUND_ORDER:
+                    fresh["goalie_challenge"]["rounds"][round_key]["picks"] = sorted(replacement[round_key], key=lambda item: item["pick"])
+                return True
+            ok, _ = mutate_shared_state(mutator, "Update goalie challenge picks")
+            if ok:
+                st.rerun()
+    else:
+        st.caption("No Goalie Challenge picks have been made yet.")
+
+    st.markdown("**Protected Goalie Reset**")
+    reset_confirmed = st.checkbox("I understand this clears only Goalie Challenge picks and draft status.", key="reset-goalie-confirm-checkbox")
+    reset_text = st.text_input("Type RESET GOALIE to confirm goalie challenge reset", key="reset-goalie-confirm-text")
+    if st.button("Reset Goalie Challenge", key="admin-reset-goalie-challenge", disabled=not (reset_confirmed and reset_text.strip().upper() == "RESET GOALIE"), width="stretch"):
+        def mutator(fresh):
+            fresh = normalize_state(fresh)
+            fresh["goalie_challenge"] = empty_goalie_challenge()
+            return True
+        ok, _ = mutate_shared_state(mutator, "Reset goalie challenge")
+        if ok:
+            st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def render_completed_draft_table(state):
     if not full_draft_complete(state):
         return
@@ -4264,6 +4870,7 @@ def render_admin(state):
         st.markdown("</div>", unsafe_allow_html=True)
 
         render_official_roster_editor(state)
+        render_goalie_challenge_admin_editor(state)
 
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
         st.subheader("Coach Colors")
