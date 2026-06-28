@@ -5339,13 +5339,13 @@
     }
   },
   "goalie_payments": {
-    "Benji": false,
+    "Benji": true,
     "Jeff": false,
     "Peter": false,
     "Chad": false,
     "Lamp": false,
-    "Herb": false,
-    "Jayme": false,
-    "Spencer": false
+    "Herb": true,
+    "Jayme": true,
+    "Spencer": true
   }
 }
