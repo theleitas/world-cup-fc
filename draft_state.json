@@ -4603,7 +4603,7 @@
       "home_score": 1,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 56,
+      "minute": 60,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4656,16 +4656,16 @@
       "matchday": 3,
       "home": "Algeria",
       "away": "Austria",
-      "home_score": 1,
+      "home_score": 2,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 57,
+      "minute": 61,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "AWAY_TEAM",
+        "winner": "DRAW",
         "full_time": {
-          "home": 1,
+          "home": 2,
           "away": 2
         },
         "regular_time": {
@@ -4701,6 +4701,14 @@
           "team": "Austria",
           "scorer": "Marcel Sabitzer",
           "assist": "Konrad Laimer"
+        },
+        {
+          "minute": 60,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Algeria",
+          "scorer": "Riyad Mahrez",
+          "assist": ""
         }
       ]
     },
@@ -5217,8 +5225,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782616844,
-  "last_score_refresh_attempt_at": 1782616844,
+  "last_score_refresh_at": 1782616960,
+  "last_score_refresh_attempt_at": 1782616959,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
