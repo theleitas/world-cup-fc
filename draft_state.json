@@ -5643,9 +5643,16 @@
             "coach": "Jeff",
             "team": "Netherlands",
             "picked_at": "2026-06-28T12:01:40.702567-04:00"
+          },
+          {
+            "pick": 10,
+            "round": 2,
+            "coach": "Spencer",
+            "team": "Portugal",
+            "picked_at": "2026-06-28T13:11:55.263636-04:00"
           }
         ],
-        "current_pick_started_at": 1782662500
+        "current_pick_started_at": 1782666715
       },
       "r16": {
         "active": false,
