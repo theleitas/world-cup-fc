@@ -5615,9 +5615,16 @@
             "coach": "Herb",
             "team": "Mexico",
             "picked_at": "2026-06-28T11:03:05.867955-04:00"
+          },
+          {
+            "pick": 6,
+            "round": 1,
+            "coach": "Chad",
+            "team": "Canada",
+            "picked_at": "2026-06-28T11:07:27.686446-04:00"
           }
         ],
-        "current_pick_started_at": 1782658985
+        "current_pick_started_at": 1782659247
       },
       "r16": {
         "active": false,
