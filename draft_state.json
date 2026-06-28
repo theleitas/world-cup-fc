@@ -5580,8 +5580,16 @@
           "Spencer",
           "Jeff"
         ],
-        "picks": [],
-        "current_pick_started_at": 1782643996
+        "picks": [
+          {
+            "pick": 1,
+            "round": 1,
+            "coach": "Benji",
+            "team": "Argentina",
+            "picked_at": "2026-06-28T07:02:04.184565-04:00"
+          }
+        ],
+        "current_pick_started_at": 1782644524
       },
       "r16": {
         "active": false,
