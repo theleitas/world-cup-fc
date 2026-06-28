@@ -2049,6 +2049,8 @@ def calculate_scores(state):
             "goalie_challenge_counted": int(goalie_score.get("counted_matches", 0)),
             "goalie_challenge_slots": goalie_score.get("slots", []),
             "group_stage_points": group_stage_points + player_group_points,
+            "group_stage_team_points": group_stage_points,
+            "group_stage_player_points": player_group_points,
             "empire_count": empire_count,
             "empire_goals": empire_goals,
             "cinderella": best_cinderella["cinderella"] if best_cinderella else 0,
@@ -2070,7 +2072,10 @@ def award_leaders(scores):
         return {}
     leaders = {}
     if max(item.get("group_stage_points", 0) for item in values) > 0:
-        leaders["Group Stage Winner"] = max(values, key=lambda item: item["group_stage_points"])
+        leaders["Group Stage Winner"] = max(
+            values,
+            key=lambda item: (item.get("group_stage_points", 0), item.get("group_stage_team_points", 0)),
+        )
     if max(item.get("empire_count", 0) for item in values) > 0:
         leaders["Empire Builder"] = max(values, key=lambda item: (item["empire_count"], item["empire_goals"], item["total_points"]))
     if any(item.get("goalie_challenge_counted", 0) > 0 for item in values):
@@ -2388,7 +2393,7 @@ National teams earn +3 for a win, +1 for a draw, +1 for each goal scored, and +1
 Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The draft order for each goalie round is reverse overall score after the previous stage is final, not including any Goalie Challenge points, and snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($125), second lowest wins Silver ($50), and third lowest wins Bronze ($25). Draft sections unlock only after every game from the previous stage is complete and the full next round is officially populated, then close at the first kickoff of that round.</div>
 
 <div class='payout-desc'><b>Standings Card Abbreviations</b><br>
-"Group" means Group Stage Winner points only. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. "Goalie Challenge Points" means goals allowed in the separate goalie side bet; lower is better and those points do not affect the main total. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
+"Group" means Group Stage Winner points only: group-stage drafted team points plus group-stage drafted player points. It excludes advancement bonuses, knockout matches, Empire Builder, Cinderella, and Goalie Challenge. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. "Goalie Challenge Points" means goals allowed in the separate goalie side bet; lower is better and those points do not affect the main total. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
 
 <div class='payout-desc'><b>Goalie Challenge Draft Timing</b><br>
 The Round of 32 goalie draft begins only after every group-stage match is final and the full Round of 32 field and fixtures are official, then ends before the first Round of 32 kickoff. The Round of 16 goalie draft begins only after every Round of 32 match is final and official Round of 16 fixtures are populated, then ends before the first Round of 16 kickoff. The Round of 8 goalie draft begins only after every Round of 16 match is final and quarterfinal fixtures are populated, then ends before the first quarterfinal kickoff.</div>
@@ -2403,7 +2408,7 @@ Awarded to the coach who finishes second overall by total fantasy points, using 
 Awarded to the coach who finishes third overall by total fantasy points, using the same full-tournament scoring calculation as Gold and Silver.</div>
 
 <div class='payout-desc'><b>Group Stage Winner - $90</b><br>
-Awarded to the coach with the most fantasy points earned during group-stage matches only. This includes group-stage national-team match points plus group-stage star-player goals and assists. Knockout advancement bonuses and knockout player production do not count for this side bet.</div>
+Awarded to the coach with the most fantasy points earned during group-stage matches only. This includes group-stage national-team match points plus group-stage star-player goals and assists. Knockout advancement bonuses and knockout player production do not count for this side bet. If coaches tie on total group-stage points, the tiebreaker is group-stage national-team points only, excluding player points.</div>
 
 <div class='payout-desc'><b>Empire Builder - $80</b><br>
 Awarded to the coach with the most drafted national teams that reach the Round of 16 or later. The app counts each drafted team whose advancement status is Round of 16, Quarterfinals, Semifinals, Final, or Champion. If coaches are tied on teams advanced, the tiebreaker is total goals scored by those advanced teams.</div>
