@@ -5587,9 +5587,16 @@
             "coach": "Benji",
             "team": "Argentina",
             "picked_at": "2026-06-28T07:02:04.184565-04:00"
+          },
+          {
+            "pick": 2,
+            "round": 1,
+            "coach": "Peter",
+            "team": "Spain",
+            "picked_at": "2026-06-28T07:16:30.981560-04:00"
           }
         ],
-        "current_pick_started_at": 1782644524
+        "current_pick_started_at": 1782645390
       },
       "r16": {
         "active": false,
