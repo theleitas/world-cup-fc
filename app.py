@@ -2436,7 +2436,7 @@ def render_payout_descriptions():
 National teams earn +3 for a win, +1 for a draw, +1 for each goal scored, and +1 for a clean sheet. Star players earn +4 for each goal and +3 for each assist. Advancement bonuses are added automatically only after the prior stage is fully final and the next round is officially populated: Round of 32 +5, Round of 16 +8, Quarterfinals +12, Semifinals +15, Final +20, and Champion +25. These advancement bonuses are total bonuses for the team's deepest confirmed finish, not added together round by round. During live matches, points are shown based on the current state of the match. For example, a team leading 2-0 live would currently show +3 for the win, +2 for goals, and +1 for the clean sheet.</div>
 
 <div class='payout-desc'><b>Goalie Challenge - $25 Side Bet</b><br>
-Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The draft order for each goalie round is reverse overall score after the previous stage is final, not including any Goalie Challenge points, and snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($125), second lowest wins Silver ($50), and third lowest wins Bronze ($25). Draft sections unlock only after every game from the previous stage is complete and the full next round is officially populated, then close at the first kickoff of that round.</div>
+Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The Round of 32 draft order is reverse group-stage rank after the group stage is final. Later goalie draft orders are reverse main standings before that goalie round starts, not including any Goalie Challenge points. Each goalie draft snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($125), second lowest wins Silver ($50), and third lowest wins Bronze ($25). Draft sections unlock only after every game from the previous stage is complete and the full next round is officially populated, then close at the first kickoff of that round.</div>
 
 <div class='payout-desc'><b>Standings Card Abbreviations</b><br>
 "Group" means Group Stage Winner points only: group-stage drafted team points plus group-stage drafted player points. It excludes advancement bonuses, knockout matches, Empire Builder, Cinderella, and Goalie Challenge. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. "Goalie Challenge Points" means goals allowed in the separate goalie side bet; lower is better and those points do not affect the main total. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
@@ -2703,12 +2703,23 @@ def render_standings_section(state, scores):
         render_standings(state, scores, show_title=False)
 
 
-def goalie_order_from_scores(scores):
+def goalie_order_from_scores(scores, round_key=""):
+    if round_key == "r32":
+        order_key = lambda item: (
+            int(item.get("group_stage_points", 0)),
+            int(item.get("group_stage_team_points", 0)),
+            -COACHES.index(item["coach"]) if item["coach"] in COACHES else -999,
+        )
+    else:
+        order_key = lambda item: (
+            int(item.get("total_points", 0)),
+            -COACHES.index(item["coach"]) if item["coach"] in COACHES else -999,
+        )
     return [
         item["coach"]
         for item in sorted(
             scores.values(),
-            key=lambda item: (int(item.get("total_points", 0)), COACHES.index(item["coach"]) if item["coach"] in COACHES else 999),
+            key=order_key,
         )
     ]
 
@@ -2741,11 +2752,12 @@ def goalie_previous_stage_complete(state, round_key):
 
 
 def goalie_round_order(state, round_key, scores):
-    stored_order = [coach for coach in goalie_round_state(state, round_key).get("order", []) if coach in COACHES]
-    if stored_order:
+    round_state = goalie_round_state(state, round_key)
+    stored_order = [coach for coach in round_state.get("order", []) if coach in COACHES]
+    if stored_order and round_state.get("picks"):
         return stored_order
     if goalie_previous_stage_complete(state, round_key):
-        return goalie_order_from_scores(scores)
+        return goalie_order_from_scores(scores, round_key)
     return []
 
 
@@ -2812,6 +2824,17 @@ def goalie_round_drafted_teams(state, round_key):
     return {canonical_team_name(pick.get("team")) for pick in goalie_round_state(state, round_key).get("picks", [])}
 
 
+def goalie_round_complete(state, round_key):
+    return len(goalie_round_state(state, round_key).get("picks", [])) >= goalie_round_required_team_count(round_key)
+
+
+def goalie_next_pick_after_current(sequence, picks):
+    next_index = len(picks) + 1
+    if next_index >= len(sequence):
+        return None
+    return sequence[next_index]
+
+
 def set_goalie_round_active(round_key, active):
     def mutator(state):
         state = normalize_state(state)
@@ -2820,8 +2843,8 @@ def set_goalie_round_active(round_key, active):
         round_state = state["goalie_challenge"]["rounds"][round_key]
         if active and not goalie_round_can_start(state, round_key):
             return False
-        if active and not round_state.get("order"):
-            round_state["order"] = goalie_order_from_scores(calculate_scores(state))
+        if active and not round_state.get("picks"):
+            round_state["order"] = goalie_order_from_scores(calculate_scores(state), round_key)
         round_state["active"] = bool(active)
         round_state["current_pick_started_at"] = int(time.time())
         return True
@@ -2838,8 +2861,8 @@ def make_goalie_pick(round_key, team_name):
         round_state = state["goalie_challenge"]["rounds"][round_key]
         if not round_state.get("active"):
             return False
-        if not round_state.get("order"):
-            round_state["order"] = goalie_order_from_scores(calculate_scores(state))
+        if not round_state.get("order") or not round_state.get("picks"):
+            round_state["order"] = goalie_order_from_scores(calculate_scores(state), round_key)
         sequence = build_goalie_sequence(round_state["order"], GOALIE_ROUNDS[round_key]["slots"])
         pick = current_pick(sequence, round_state.get("picks", []))
         team = canonical_team_name(team_name)
@@ -2884,6 +2907,20 @@ def render_goalie_round_status(state, round_key, sequence, picks):
     elif not goalie_round_is_populated(state, round_key):
         status = "Waiting for official teams"
     st.caption(f"{goalie_round_window_text(state, round_key)} Status: {status}.")
+    if active_pick and goalie_round_can_start(state, round_key):
+        color = state["teams"][active_pick["coach"]]["color"]
+        try:
+            started_at = int(round_state.get("current_pick_started_at") or time.time())
+        except (TypeError, ValueError):
+            started_at = int(time.time())
+        render_pick_timer("Goalie", active_pick, color, started_at, total_override=len(sequence))
+        on_deck = goalie_next_pick_after_current(sequence, picks)
+        if on_deck:
+            on_deck_color = state["teams"][on_deck["coach"]]["color"]
+            st.markdown(
+                f"<div class='on-deck-line on-deck-tight' style='--coach-color:{html.escape(on_deck_color)}'>{coach_mini_html(on_deck['coach'], on_deck_color)}<span>{html.escape(on_deck['coach'])} is ON-DECK</span></div>",
+                unsafe_allow_html=True,
+            )
     if active_pick and round_state.get("active") and goalie_round_can_start(state, round_key):
         color = state["teams"][active_pick["coach"]]["color"]
         total = len(sequence)
@@ -2902,7 +2939,7 @@ def render_goalie_available_teams(state, round_key):
         st.caption("No teams available for this goalie draft yet.")
         return
     round_state = goalie_round_state(state, round_key)
-    current = current_pick(build_goalie_sequence(round_state.get("order") or goalie_order_from_scores(calculate_scores(state)), GOALIE_ROUNDS[round_key]["slots"]), round_state.get("picks", []))
+    current = current_pick(build_goalie_sequence(round_state.get("order") or goalie_order_from_scores(calculate_scores(state), round_key), GOALIE_ROUNDS[round_key]["slots"]), round_state.get("picks", []))
     coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
     button_text_color = button_text_color_for_background(coach_color)
     base_color = f"color-mix(in srgb, {coach_color} 34%, #101010)"
@@ -2950,36 +2987,65 @@ def render_goalie_available_teams(state, round_key):
                         st.warning(f"Could not save {label}. It may already be drafted, paused, or closed.")
 
 
-def render_goalie_draft_round(state, scores, round_key):
+def render_goalie_draft_round_body(state, scores, round_key):
     info = GOALIE_ROUNDS[round_key]
-    with st.expander(info["label"], expanded=False):
-        round_state = goalie_round_state(state, round_key)
-        sequence = goalie_round_sequence(state, round_key, scores)
-        picks = round_state.get("picks", [])
-        render_goalie_round_status(state, round_key, sequence, picks)
-        c1, c2, c3 = st.columns(3, gap="small")
-        can_start = goalie_round_can_start(state, round_key)
-        with c1:
-            if st.button("Start Draft", key=f"goalie-start-{round_key}", disabled=(round_state.get("active") or not can_start), width="stretch"):
-                ok, _ = set_goalie_round_active(round_key, True)
-                if ok:
-                    st.rerun()
-        with c2:
-            if st.button("Stop Draft", key=f"goalie-stop-{round_key}", disabled=not round_state.get("active"), width="stretch"):
-                ok, _ = set_goalie_round_active(round_key, False)
-                if ok:
-                    st.rerun()
-        with c3:
-            if st.button("Undo Last Pick", key=f"goalie-undo-{round_key}", disabled=not bool(picks), width="stretch"):
-                ok, _ = undo_goalie_pick(round_key)
-                if ok:
-                    st.rerun()
-        if sequence:
-            render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state)
-        else:
-            st.caption("Draft order will lock and display after every game from the previous stage is final.")
-        if sequence and current_pick(sequence, picks):
-            render_goalie_available_teams(state, round_key)
+    round_state = goalie_round_state(state, round_key)
+    sequence = goalie_round_sequence(state, round_key, scores)
+    picks = round_state.get("picks", [])
+    render_goalie_round_status(state, round_key, sequence, picks)
+    c1, c2, c3 = st.columns(3, gap="small")
+    can_start = goalie_round_can_start(state, round_key)
+    with c1:
+        if st.button("Start Draft", key=f"goalie-start-{round_key}", disabled=(round_state.get("active") or not can_start), width="stretch"):
+            ok, _ = set_goalie_round_active(round_key, True)
+            if ok:
+                st.rerun()
+    with c2:
+        if st.button("Stop Draft", key=f"goalie-stop-{round_key}", disabled=not round_state.get("active"), width="stretch"):
+            ok, _ = set_goalie_round_active(round_key, False)
+            if ok:
+                st.rerun()
+    with c3:
+        if st.button("Undo Last Pick", key=f"goalie-undo-{round_key}", disabled=not bool(picks), width="stretch"):
+            ok, _ = undo_goalie_pick(round_key)
+            if ok:
+                st.rerun()
+    if sequence:
+        render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state)
+    else:
+        st.caption("Draft order will lock and display after every game from the previous stage is final.")
+    if sequence and current_pick(sequence, picks):
+        render_goalie_available_teams(state, round_key)
+
+
+def render_goalie_draft_round(state, scores, round_key):
+    with st.expander(GOALIE_ROUNDS[round_key]["label"], expanded=False):
+        render_goalie_draft_round_body(state, scores, round_key)
+
+
+def current_goalie_round_key(state, scores):
+    for round_key in GOALIE_ROUND_ORDER:
+        if goalie_round_state(state, round_key).get("active") and not goalie_round_complete(state, round_key):
+            return round_key
+    for round_key in GOALIE_ROUND_ORDER:
+        if goalie_round_can_start(state, round_key) and not goalie_round_complete(state, round_key):
+            return round_key
+    for round_key in GOALIE_ROUND_ORDER:
+        if not goalie_round_complete(state, round_key):
+            return round_key
+    return ""
+
+
+def render_current_goalie_draft_room(state, scores):
+    round_key = current_goalie_round_key(state, scores)
+    if not round_key:
+        return
+    st.markdown("<div class='section-title'>Goalie Challenge Draft Room</div>", unsafe_allow_html=True)
+    order_note = "Order is the reverse of group-stage rank using total group-stage points, then group-stage team points as the tiebreaker."
+    if round_key != "r32":
+        order_note = "Order is the reverse of the main standings before this goalie round starts, excluding Goalie Challenge points."
+    st.markdown(f"<div class='goalie-rules-note'>{html.escape(GOALIE_ROUNDS[round_key]['label'])} draft. {html.escape(order_note)}</div>", unsafe_allow_html=True)
+    render_goalie_draft_round_body(state, scores, round_key)
 
 
 def goalie_slot_cells_html(slots):
@@ -3044,8 +3110,6 @@ def render_goalie_challenge(state, scores):
             "<div class='goalie-rules-note'>Lowest total goals allowed wins this $25 side bet. These goals allowed do not change the main World Cup FC standings.</div>",
             unsafe_allow_html=True,
         )
-        for round_key in GOALIE_ROUND_ORDER:
-            render_goalie_draft_round(state, scores, round_key)
 
 
 def group_tracker_match_counts(match):
@@ -3508,8 +3572,8 @@ def next_pick_after_current(stage_label, state):
     return sequence[next_index]
 
 
-def render_pick_timer(stage_label, current, color, started_at, compact=False):
-    total_picks = draft_total_for_stage(stage_label)
+def render_pick_timer(stage_label, current, color, started_at, compact=False, total_override=None):
+    total_picks = int(total_override) if total_override is not None else draft_total_for_stage(stage_label)
     image_data_uri = image_to_data_uri(coach_photo_filename(current["coach"]), max_width=44, max_height=44, quality=70)
     if image_data_uri:
         coach_icon = f"<img class='coach-timer-face' src='{html.escape(image_data_uri, quote=True)}' alt=''>"
@@ -5167,6 +5231,7 @@ scores = calculate_scores(state)
 
 render_header(state)
 render_goalie_payment_panel(state)
+render_current_goalie_draft_room(state, scores)
 draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
