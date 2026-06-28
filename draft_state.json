@@ -5664,9 +5664,16 @@
             "coach": "Herb",
             "team": "Colombia",
             "picked_at": "2026-06-28T13:20:16.607303-04:00"
+          },
+          {
+            "pick": 13,
+            "round": 2,
+            "coach": "Lamp",
+            "team": "Germany",
+            "picked_at": "2026-06-28T13:39:03.972562-04:00"
           }
         ],
-        "current_pick_started_at": 1782667216
+        "current_pick_started_at": 1782668343
       },
       "r16": {
         "active": false,
