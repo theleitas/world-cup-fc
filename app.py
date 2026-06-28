@@ -1971,11 +1971,57 @@ def team_goals_in_matches(matches, team_name):
     return goals
 
 
+def advancement_stage_matches(state, stage_level):
+    return [
+        match
+        for match in state.get("matches", [])
+        if stage_to_advancement(match.get("stage")) == stage_level
+        and "friendly" not in str(match.get("stage") or "").lower()
+    ]
+
+
+def advancement_stage_complete(state, stage_level, required_matches):
+    matches = advancement_stage_matches(state, stage_level)
+    return len(matches) >= required_matches and all(match_is_completed(match) for match in matches)
+
+
+def advancement_stage_populated(state, stage_level, required_teams):
+    teams = set()
+    for match in advancement_stage_matches(state, stage_level):
+        for team_name in [match.get("home"), match.get("away")]:
+            team_name = canonical_team_name(team_name)
+            if team_name:
+                teams.add(team_name)
+    return len(teams) >= required_teams
+
+
+def advancement_bonus_for_team(state, team_name):
+    team_name = canonical_team_name(team_name)
+    advancement = state.get("advancement", {}).get(team_name, "Group Stage")
+    bonus_round_key = {
+        "Round of 32": "r32",
+        "Round of 16": "r16",
+        "Quarterfinals": "r8",
+    }.get(advancement)
+    if bonus_round_key and not (goalie_previous_stage_complete(state, bonus_round_key) and goalie_round_is_populated(state, bonus_round_key)):
+        return 0
+    if advancement == "Semifinals" and not (
+        advancement_stage_complete(state, "Quarterfinals", 4)
+        and advancement_stage_populated(state, "Semifinals", 4)
+    ):
+        return 0
+    if advancement == "Final" and not (
+        advancement_stage_complete(state, "Semifinals", 2)
+        and advancement_stage_populated(state, "Final", 2)
+    ):
+        return 0
+    return int(ADVANCEMENT_BONUSES.get(advancement, 0))
+
+
 def team_fantasy_points(state, team_name):
     team_name = canonical_team_name(team_name)
     match_points = sum(score_match_for_team(match, team_name) for match in state.get("matches", []))
-    advancement = state["advancement"].get(team_name, "Group Stage")
-    return match_points + ADVANCEMENT_BONUSES.get(advancement, 0)
+    return match_points + advancement_bonus_for_team(state, team_name)
 
 
 def cinderella_team_rows(state):
@@ -2387,7 +2433,7 @@ def render_payout_descriptions():
         st.markdown(
             f"""
 <div class='payout-desc'><b>How Points Are Scored</b><br>
-National teams earn +3 for a win, +1 for a draw, +1 for each goal scored, and +1 for a clean sheet. Star players earn +4 for each goal and +3 for each assist. Advancement bonuses are added automatically as teams move deeper in the tournament. During live matches, points are shown based on the current state of the match. For example, a team leading 2-0 live would currently show +3 for the win, +2 for goals, and +1 for the clean sheet.</div>
+National teams earn +3 for a win, +1 for a draw, +1 for each goal scored, and +1 for a clean sheet. Star players earn +4 for each goal and +3 for each assist. Advancement bonuses are added automatically only after the prior stage is fully final and the next round is officially populated. During live matches, points are shown based on the current state of the match. For example, a team leading 2-0 live would currently show +3 for the win, +2 for goals, and +1 for the clean sheet.</div>
 
 <div class='payout-desc'><b>Goalie Challenge - $25 Side Bet</b><br>
 Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The draft order for each goalie round is reverse overall score after the previous stage is final, not including any Goalie Challenge points, and snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($125), second lowest wins Silver ($50), and third lowest wins Bronze ($25). Draft sections unlock only after every game from the previous stage is complete and the full next round is officially populated, then close at the first kickoff of that round.</div>
@@ -4187,7 +4233,7 @@ def build_points_journal_text(state, scores, coach):
 
     for team_name in owned_teams:
         advancement = state.get("advancement", {}).get(team_name, "Group Stage")
-        bonus = int(ADVANCEMENT_BONUSES.get(advancement, 0))
+        bonus = advancement_bonus_for_team(state, team_name)
         if bonus <= 0:
             continue
         title = f"{team_name} Advancement"
