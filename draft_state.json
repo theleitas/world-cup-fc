@@ -4508,7 +4508,7 @@
       "home_score": 0,
       "away_score": 0,
       "status": "In_Play",
-      "minute": 62,
+      "minute": 72,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -4536,16 +4536,16 @@
       "matchday": 3,
       "home": "Congo DR",
       "away": "Uzbekistan",
-      "home_score": 0,
+      "home_score": 1,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 60,
+      "minute": 70,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "AWAY_TEAM",
+        "winner": "DRAW",
         "full_time": {
-          "home": 0,
+          "home": 1,
           "away": 1
         },
         "regular_time": {
@@ -4565,6 +4565,14 @@
           "team": "Uzbekistan",
           "scorer": "Eldor Shomurodov",
           "assist": "Akmal Mozgovoy"
+        },
+        {
+          "minute": 68,
+          "injury_time": null,
+          "type": "PENALTY",
+          "team": "Congo DR",
+          "scorer": "Yoane Wissa",
+          "assist": ""
         }
       ]
     },
@@ -5143,8 +5151,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782608054,
-  "last_score_refresh_attempt_at": 1782608052,
+  "last_score_refresh_at": 1782608653,
+  "last_score_refresh_attempt_at": 1782608652,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
