@@ -219,6 +219,15 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button { background:#ffff00!important; border-color:#ffff99!important; color:#000000!important; }
 .st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button *,
 .st-key-admin-undo-last-pick-top div[data-testid="stButton"] > button:disabled * { color:#000000!important; }
+.st-key-goalie-undo-r32 div[data-testid="stButton"] > button,
+.st-key-goalie-undo-r16 div[data-testid="stButton"] > button,
+.st-key-goalie-undo-r8 div[data-testid="stButton"] > button { background:#ffff00!important; border-color:#ffff99!important; color:#000000!important; }
+.st-key-goalie-undo-r32 div[data-testid="stButton"] > button *,
+.st-key-goalie-undo-r32 div[data-testid="stButton"] > button:disabled *,
+.st-key-goalie-undo-r16 div[data-testid="stButton"] > button *,
+.st-key-goalie-undo-r16 div[data-testid="stButton"] > button:disabled *,
+.st-key-goalie-undo-r8 div[data-testid="stButton"] > button *,
+.st-key-goalie-undo-r8 div[data-testid="stButton"] > button:disabled * { color:#000000!important; }
 .st-key-team-pick-buttons div[data-testid="stButton"] > button,
 .st-key-player-pick-buttons div[data-testid="stButton"] > button {
     background:var(--draft-button-bg, #121212)!important;
@@ -2859,10 +2868,9 @@ def make_goalie_pick(round_key, team_name):
         if not goalie_round_can_start(state, round_key):
             return False
         round_state = state["goalie_challenge"]["rounds"][round_key]
-        if not round_state.get("active"):
-            return False
         if not round_state.get("order") or not round_state.get("picks"):
             round_state["order"] = goalie_order_from_scores(calculate_scores(state), round_key)
+        round_state["active"] = True
         sequence = build_goalie_sequence(round_state["order"], GOALIE_ROUNDS[round_key]["slots"])
         pick = current_pick(sequence, round_state.get("picks", []))
         team = canonical_team_name(team_name)
@@ -2899,13 +2907,16 @@ def undo_goalie_pick(round_key):
 def render_goalie_round_status(state, round_key, sequence, picks):
     active_pick = current_pick(sequence, picks)
     round_state = goalie_round_state(state, round_key)
-    status = "Live" if round_state.get("active") else "Paused"
-    if goalie_round_is_closed(state, round_key):
+    if goalie_round_complete(state, round_key):
+        status = "Complete"
+    elif goalie_round_is_closed(state, round_key):
         status = "Closed"
     elif not goalie_previous_stage_complete(state, round_key):
         status = f"Waiting for {GOALIE_ROUNDS[round_key]['previous']} to finish"
     elif not goalie_round_is_populated(state, round_key):
         status = "Waiting for official teams"
+    else:
+        status = "Open"
     st.caption(f"{goalie_round_window_text(state, round_key)} Status: {status}.")
     if active_pick and goalie_round_can_start(state, round_key):
         color = state["teams"][active_pick["coach"]]["color"]
@@ -2921,7 +2932,7 @@ def render_goalie_round_status(state, round_key, sequence, picks):
                 f"<div class='on-deck-line on-deck-tight' style='--coach-color:{html.escape(on_deck_color)}'>{coach_mini_html(on_deck['coach'], on_deck_color)}<span>{html.escape(on_deck['coach'])} is ON-DECK</span></div>",
                 unsafe_allow_html=True,
             )
-    if active_pick and round_state.get("active") and goalie_round_can_start(state, round_key):
+    if active_pick and goalie_round_can_start(state, round_key):
         color = state["teams"][active_pick["coach"]]["color"]
         total = len(sequence)
         st.markdown(
@@ -2976,7 +2987,7 @@ def render_goalie_available_teams(state, round_key):
             for col, team in zip(cols, available[row_start:row_start + DRAFT_BUTTON_COLUMNS]):
                 with col:
                     label = display_team(team)
-                    pressed = st.button(label, key=f"goalie-draft-{round_key}-{team}", width="stretch", disabled=(not round_state.get("active") or goalie_round_is_closed(state, round_key) or saving))
+                    pressed = st.button(label, key=f"goalie-draft-{round_key}-{team}", width="stretch", disabled=(goalie_round_is_closed(state, round_key) or saving))
                     if pressed:
                         st.session_state[saving_key] = True
                         st.toast("Saving goalie pick...")
@@ -2993,23 +3004,10 @@ def render_goalie_draft_round_body(state, scores, round_key):
     sequence = goalie_round_sequence(state, round_key, scores)
     picks = round_state.get("picks", [])
     render_goalie_round_status(state, round_key, sequence, picks)
-    c1, c2, c3 = st.columns(3, gap="small")
-    can_start = goalie_round_can_start(state, round_key)
-    with c1:
-        if st.button("Start Draft", key=f"goalie-start-{round_key}", disabled=(round_state.get("active") or not can_start), width="stretch"):
-            ok, _ = set_goalie_round_active(round_key, True)
-            if ok:
-                st.rerun()
-    with c2:
-        if st.button("Stop Draft", key=f"goalie-stop-{round_key}", disabled=not round_state.get("active"), width="stretch"):
-            ok, _ = set_goalie_round_active(round_key, False)
-            if ok:
-                st.rerun()
-    with c3:
-        if st.button("Undo Last Pick", key=f"goalie-undo-{round_key}", disabled=not bool(picks), width="stretch"):
-            ok, _ = undo_goalie_pick(round_key)
-            if ok:
-                st.rerun()
+    if st.button("Undo Last Pick", key=f"goalie-undo-{round_key}", disabled=not bool(picks), width="stretch"):
+        ok, _ = undo_goalie_pick(round_key)
+        if ok:
+            st.rerun()
     if sequence:
         first_round_order = [item["coach"] for item in sorted([item for item in sequence if item["round"] == 1], key=lambda item: item["pick"])]
         render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state, coach_order=first_round_order)
