@@ -5062,10 +5062,9 @@ def render_admin(state):
         st.caption(f"Status: {status_label}")
         st.caption(status_text)
         st.caption("Draft order is fixed and intentionally not editable.")
-        draft_live = bool(state.get("draft_active"))
         draft_complete = full_draft_complete(state)
         has_any_picks = bool(state.get("team_picks") or state.get("player_picks")) and not draft_complete
-        c1, c2, c3, c4 = st.columns(4, gap="small")
+        c1, c2 = st.columns(2, gap="small")
         with c1:
             if st.button("Enable Draft", key="admin-enable-draft"):
                 ok, _ = set_draft_enabled(True)
@@ -5074,16 +5073,6 @@ def render_admin(state):
         with c2:
             if st.button("Disable Draft", key="admin-disable-draft"):
                 ok, _ = set_draft_enabled(False)
-                if ok:
-                    st.rerun()
-        with c3:
-            if st.button("Start Draft", key="admin-start-draft", disabled=draft_live):
-                ok, _ = set_draft_active(True)
-                if ok:
-                    st.rerun()
-        with c4:
-            if st.button("Stop Draft", key="admin-stop-draft", disabled=not draft_live):
-                ok, _ = set_draft_active(False)
                 if ok:
                     st.rerun()
         if st.button("Undo Last Pick", key="admin-undo-last-pick-top", width="stretch", disabled=not has_any_picks):
