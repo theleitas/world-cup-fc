@@ -5636,9 +5636,16 @@
             "coach": "Jeff",
             "team": "Belgium",
             "picked_at": "2026-06-28T12:01:27.565608-04:00"
+          },
+          {
+            "pick": 9,
+            "round": 2,
+            "coach": "Jeff",
+            "team": "Netherlands",
+            "picked_at": "2026-06-28T12:01:40.702567-04:00"
           }
         ],
-        "current_pick_started_at": 1782662487
+        "current_pick_started_at": 1782662500
       },
       "r16": {
         "active": false,
