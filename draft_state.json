@@ -5629,9 +5629,16 @@
             "coach": "Spencer",
             "team": "France",
             "picked_at": "2026-06-28T11:45:33.246529-04:00"
+          },
+          {
+            "pick": 8,
+            "round": 1,
+            "coach": "Jeff",
+            "team": "Belgium",
+            "picked_at": "2026-06-28T12:01:27.565608-04:00"
           }
         ],
-        "current_pick_started_at": 1782661533
+        "current_pick_started_at": 1782662487
       },
       "r16": {
         "active": false,
