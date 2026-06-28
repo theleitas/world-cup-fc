@@ -5569,10 +5569,19 @@
   "goalie_challenge": {
     "rounds": {
       "r32": {
-        "active": false,
-        "order": [],
+        "active": true,
+        "order": [
+          "Benji",
+          "Peter",
+          "Jayme",
+          "Lamp",
+          "Herb",
+          "Chad",
+          "Spencer",
+          "Jeff"
+        ],
         "picks": [],
-        "current_pick_started_at": 1782613138
+        "current_pick_started_at": 1782643996
       },
       "r16": {
         "active": false,
