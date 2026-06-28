@@ -133,6 +133,9 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .goalie-slot-flag .flag-icon { margin:0; width:1.05em; height:1.05em; vertical-align:0; }
 .goalie-slot-name { color:#fff; font-size:.72rem; line-height:.98; font-weight:850; overflow-wrap:anywhere; }
 .goalie-slot-ga { color:var(--coach-color); font-size:.7rem; line-height:1; font-weight:1000; text-shadow:0 0 7px var(--coach-color); }
+.goalie-slot-tb { color:#b9c2c9; font-size:.62rem; line-height:1; font-weight:900; }
+.goalie-tb-pill { border:1px solid rgba(185,194,201,.24); border-radius:6px; background:rgba(255,255,255,.045); color:#b9c2c9; font-size:.72rem; font-weight:950; line-height:1.15; text-align:center; padding:4px 6px; margin:0 0 7px; }
+.goalie-tb-pill b { color:var(--coach-color); margin-left:4px; text-shadow:0 0 7px var(--coach-color); }
 .coach-live-impact { border-top:1px solid rgba(185,194,201,.28); margin-top:6px; padding-top:6px; }
 .live-impact-title { display:flex; align-items:center; justify-content:center; gap:6px; color:#ffd54a; font-size:.78rem; font-weight:1000; text-transform:uppercase; }
 .live-dot { width:.55rem; height:.55rem; border-radius:50%; background:#ff1744; box-shadow:0 0 9px #ff1744; display:inline-block; }
@@ -1909,8 +1912,28 @@ def goalie_goals_allowed_for_pick(state, round_key, team_name):
     return goals_allowed, counted_matches
 
 
+def goalie_shootout_goals_allowed_for_pick(state, round_key, team_name):
+    team_name = canonical_team_name(team_name)
+    shootout_goals_allowed = 0
+    for match in goalie_round_matches(state, round_key):
+        if not match_has_goalie_score_context(match):
+            continue
+        home = canonical_team_name(match.get("home"))
+        away = canonical_team_name(match.get("away"))
+        if team_name not in [home, away]:
+            continue
+        score_node = match.get("score_node") if isinstance(match.get("score_node"), dict) else {}
+        penalties = score_node.get("penalties") if isinstance(score_node.get("penalties"), dict) else {}
+        home_penalties = none_or_int(penalties.get("home"))
+        away_penalties = none_or_int(penalties.get("away"))
+        if home_penalties is None or away_penalties is None:
+            continue
+        shootout_goals_allowed += away_penalties if team_name == home else home_penalties
+    return shootout_goals_allowed
+
+
 def goalie_challenge_scores(state):
-    scores = {coach: {"points": 0, "counted_matches": 0, "slots": []} for coach in COACHES}
+    scores = {coach: {"points": 0, "shootout_ga": 0, "counted_matches": 0, "slots": []} for coach in COACHES}
     challenge = state.get("goalie_challenge", {})
     rounds = challenge.get("rounds", {}) if isinstance(challenge, dict) else {}
     for round_key in GOALIE_ROUND_ORDER:
@@ -1922,7 +1945,9 @@ def goalie_challenge_scores(state):
                 continue
             team = canonical_team_name(pick.get("team"))
             goals_allowed, counted = goalie_goals_allowed_for_pick(state, round_key, team)
+            shootout_ga = goalie_shootout_goals_allowed_for_pick(state, round_key, team)
             scores[coach]["points"] += goals_allowed
+            scores[coach]["shootout_ga"] += shootout_ga
             scores[coach]["counted_matches"] += counted
             scores[coach]["slots"].append(
                 {
@@ -1931,6 +1956,7 @@ def goalie_challenge_scores(state):
                     "pick": int(pick.get("pick") or 0),
                     "team": team,
                     "goals_allowed": goals_allowed,
+                    "shootout_ga": shootout_ga,
                     "counted": counted,
                 }
             )
@@ -2092,7 +2118,7 @@ def calculate_scores(state):
             player_breakdown.append((player, points))
 
         total_points = team_points + player_points
-        goalie_score = goalie_scores.get(coach, {"points": 0, "counted_matches": 0, "slots": []})
+        goalie_score = goalie_scores.get(coach, {"points": 0, "shootout_ga": 0, "counted_matches": 0, "slots": []})
         scores[coach] = {
             "coach": coach,
             "color": data["color"],
@@ -2101,6 +2127,7 @@ def calculate_scores(state):
             "player_points": player_points,
             "total_points": total_points,
             "goalie_challenge_points": int(goalie_score.get("points", 0)),
+            "goalie_challenge_shootout_ga": int(goalie_score.get("shootout_ga", 0)),
             "goalie_challenge_counted": int(goalie_score.get("counted_matches", 0)),
             "goalie_challenge_slots": goalie_score.get("slots", []),
             "group_stage_points": group_stage_points + player_group_points,
@@ -2136,7 +2163,11 @@ def award_leaders(scores):
     if any(item.get("goalie_challenge_counted", 0) > 0 for item in values):
         leaders["Goalie Challenge Winner"] = min(
             values,
-            key=lambda item: (item.get("goalie_challenge_points", 0), -item.get("total_points", 0)),
+            key=lambda item: (
+                item.get("goalie_challenge_points", 0),
+                item.get("goalie_challenge_shootout_ga", 0),
+                -item.get("total_points", 0),
+            ),
         )
     cinderella_candidates = []
     for item in values:
@@ -2445,10 +2476,10 @@ def render_payout_descriptions():
 National teams earn +3 for a win, +1 for a draw, +1 for each goal scored, and +1 for a clean sheet. Star players earn +4 for each goal and +3 for each assist. Advancement bonuses are added automatically only after the prior stage is fully final and the next round is officially populated: Round of 32 +5, Round of 16 +8, Quarterfinals +12, Semifinals +15, Final +20, and Champion +25. These advancement bonuses are total bonuses for the team's deepest confirmed finish, not added together round by round. During live matches, points are shown based on the current state of the match. For example, a team leading 2-0 live would currently show +3 for the win, +2 for goals, and +1 for the clean sheet.</div>
 
 <div class='payout-desc'><b>Goalie Challenge - $25 Side Bet</b><br>
-Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The Round of 32 draft order is reverse group-stage rank after the group stage is final. Later goalie draft orders are reverse main standings before that goalie round starts, not including any Goalie Challenge points. Each goalie draft snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($125), second lowest wins Silver ($50), and third lowest wins Bronze ($25). Draft sections unlock only after every game from the previous stage is complete and the full next round is officially populated, then close at the first kickoff of that round.</div>
+Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The Round of 32 draft order is reverse group-stage rank after the group stage is final. Later goalie draft orders are reverse main standings before that goalie round starts, not including any Goalie Challenge points. Each goalie draft snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Penalty kicks scored during regular time or extra time count as normal goals against. Penalty shootout goals do not add to the Goalie Challenge score; they are tracked separately as Shootout GA and used only as the first tiebreaker if coaches are tied in normal goals allowed. Lowest total goals allowed wins Goalie Challenge Gold ($125), second lowest wins Silver ($50), and third lowest wins Bronze ($25). Draft sections unlock only after every game from the previous stage is complete and the full next round is officially populated, then close at the first kickoff of that round.</div>
 
 <div class='payout-desc'><b>Standings Card Abbreviations</b><br>
-"Group" means Group Stage Winner points only: group-stage drafted team points plus group-stage drafted player points. It excludes advancement bonuses, knockout matches, Empire Builder, Cinderella, and Goalie Challenge. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. "Goalie Challenge Points" means goals allowed in the separate goalie side bet; lower is better and those points do not affect the main total. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
+"Group" means Group Stage Winner points only: group-stage drafted team points plus group-stage drafted player points. It excludes advancement bonuses, knockout matches, Empire Builder, Cinderella, and Goalie Challenge. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. "Goalie Challenge Points" means normal goals allowed in the separate goalie side bet; lower is better and those points do not affect the main total. "Shootout GA" or "SO TB" means penalty shootout goals allowed and is only a Goalie Challenge tiebreaker, not added score. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
 
 <div class='payout-desc'><b>Goalie Challenge Draft Timing</b><br>
 The Round of 32 goalie draft begins only after every group-stage match is final and the full Round of 32 field and fixtures are official, then ends before the first Round of 32 kickoff. The Round of 16 goalie draft begins only after every Round of 32 match is final and official Round of 16 fixtures are populated, then ends before the first Round of 16 kickoff. The Round of 8 goalie draft begins only after every Round of 16 match is final and quarterfinal fixtures are populated, then ends before the first quarterfinal kickoff.</div>
@@ -3067,6 +3098,7 @@ def goalie_slot_cells_html(slots):
   <div class='goalie-slot-flag'>{team_flag_html(team)}</div>
   <div class='goalie-slot-name'>{html.escape(team)}</div>
   <div class='goalie-slot-ga'>GA {int(slot.get("goals_allowed", 0))}</div>
+  <div class='goalie-slot-tb'>SO TB {int(slot.get("shootout_ga", 0))}</div>
 </div>
 """
         )
@@ -3074,7 +3106,15 @@ def goalie_slot_cells_html(slots):
 
 
 def render_goalie_challenge_standings(state, scores):
-    ranked = sorted(scores.values(), key=lambda item: (int(item.get("goalie_challenge_points", 0)), -int(item.get("goalie_challenge_counted", 0)), -int(item.get("total_points", 0))))
+    ranked = sorted(
+        scores.values(),
+        key=lambda item: (
+            int(item.get("goalie_challenge_points", 0)),
+            int(item.get("goalie_challenge_shootout_ga", 0)),
+            -int(item.get("goalie_challenge_counted", 0)),
+            -int(item.get("total_points", 0)),
+        ),
+    )
     rank_by_coach = {item["coach"]: index + 1 for index, item in enumerate(ranked)}
     cards = ["<div class='standings-grid goalie-card-grid'>"]
     for item in ranked:
@@ -3093,6 +3133,7 @@ def render_goalie_challenge_standings(state, scores):
     </div>
     <div class='score-badge'>{int(item.get("goalie_challenge_points", 0))}</div>
   </div>
+  <div class='goalie-tb-pill'>Shootout GA tiebreaker only:<b>{int(item.get("goalie_challenge_shootout_ga", 0))}</b></div>
   <div class='goalie-slot-grid'>{goalie_slot_cells_html(item.get("goalie_challenge_slots", []))}</div>
 </div>
 """
@@ -3106,7 +3147,7 @@ def render_goalie_challenge(state, scores):
         st.markdown("<div class='section-title'>Standings</div>", unsafe_allow_html=True)
         render_goalie_challenge_standings(state, scores)
         st.markdown(
-            "<div class='goalie-rules-note'>Lowest total goals allowed wins this $25 side bet. These goals allowed do not change the main World Cup FC standings.</div>",
+            "<div class='goalie-rules-note'>Lowest total goals allowed wins this $25 side bet. Shootout goals allowed are tracked only as the first tiebreaker and do not add to the main Goalie Challenge score.</div>",
             unsafe_allow_html=True,
         )
 
