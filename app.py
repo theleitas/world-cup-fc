@@ -123,7 +123,8 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .goalie-main-pill span { color:#b9c2c9; font-size:.78rem; font-weight:1000; text-transform:uppercase; }
 .goalie-main-pill b { color:var(--coach-color); font-size:1.05rem; font-weight:1000; margin-left:6px; text-shadow:0 0 8px var(--coach-color); }
 .goalie-rules-note { border:1px solid rgba(255,213,74,.4); border-radius:8px; background:#070707; color:#fff7cf; font-size:.86rem; font-weight:850; line-height:1.35; padding:8px 10px; margin:8px 0 10px; }
-.goalie-card-grid { margin-bottom:8px; }
+.payment-panel + .payment-panel { margin-top:10px; }
+.goalie-card-grid { margin-top:8px; margin-bottom:8px; }
 .goalie-card .coach-head { margin-bottom:7px; }
 .goalie-slot-grid { display:grid; grid-template-columns:repeat(4, minmax(0, 1fr)); gap:4px; }
 .goalie-slot { min-height:54px; border:1px solid color-mix(in srgb, var(--coach-color) 48%, rgba(255,255,255,.16)); border-radius:5px; background:rgba(255,255,255,.045); display:flex; flex-direction:column; align-items:center; justify-content:center; gap:1px; padding:4px 3px; text-align:center; box-shadow:inset 0 0 8px rgba(255,255,255,.035), 0 0 7px color-mix(in srgb, var(--coach-color) 20%, transparent); }
@@ -156,7 +157,6 @@ div[class*="st-key-points-journal-text"] textarea:disabled {
 .team-roster-cell .roster-flag .flag-icon { width:1.08em; height:1.08em; }
 .team-roster-cell .roster-name { line-height:.98; }
 .roster-cell-eliminated::before { content:""; position:absolute; inset:0; background:rgba(255,23,68,.32); z-index:3; pointer-events:none; }
-.roster-cell-eliminated::after { content:"×"; position:absolute; inset:0; z-index:4; display:flex; align-items:center; justify-content:center; color:rgba(255,255,255,.88); font-size:3.1rem; font-weight:1000; text-shadow:0 0 12px #ff1744; pointer-events:none; }
 .player-roster-cell { min-height:64px; flex-direction:row; justify-content:flex-start; align-items:center; gap:8px; text-align:left; padding:6px 34px 6px 6px; }
 .player-thumb { width:48px; height:48px; border-radius:50%; object-fit:cover; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
 .player-thumb-placeholder { width:48px; height:48px; border-radius:50%; border:1px solid color-mix(in srgb, var(--coach-color) 58%, rgba(255,255,255,.28)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:.88rem; font-weight:900; box-shadow:0 0 8px color-mix(in srgb, var(--coach-color) 38%, transparent); flex:0 0 48px; background:#111; }
@@ -427,9 +427,9 @@ PLAYER_ROUND_DIRECTIONS = ["reverse", "forward"]
 DRAFT_BUTTON_COLUMNS = 2
 GOALIE_ROUND_ORDER = ["r32", "r16", "r8"]
 GOALIE_ROUNDS = {
-    "r32": {"label": "Round of 32", "stage": "Round of 32", "slots": 4, "previous": "Group Stage"},
-    "r16": {"label": "Round of 16", "stage": "Round of 16", "slots": 2, "previous": "Round of 32"},
-    "r8": {"label": "Round of 8", "stage": "Quarterfinals", "slots": 1, "previous": "Round of 16"},
+    "r32": {"label": "Round of 32", "stage": "Round of 32", "slots": 4, "previous": "Group Stage", "previous_stage": "Group Stage", "previous_required_matches": 72},
+    "r16": {"label": "Round of 16", "stage": "Round of 16", "slots": 2, "previous": "Round of 32", "previous_stage": "Round of 32", "previous_required_matches": 16},
+    "r8": {"label": "Round of 8", "stage": "Quarterfinals", "slots": 1, "previous": "Round of 16", "previous_stage": "Round of 16", "previous_required_matches": 8},
 }
 
 TEAM_COLOR_OPTIONS = [
@@ -1275,6 +1275,7 @@ def default_state():
         "official_rosters": empty_official_rosters(),
         "goalie_challenge": empty_goalie_challenge(),
         "payments": {coach: False for coach in COACHES},
+        "goalie_payments": {coach: False for coach in COACHES},
         "team_picks": [],
         "player_picks": [],
         "players": list(DEFAULT_PLAYERS),
@@ -1302,6 +1303,7 @@ def normalize_state(state):
     state.setdefault("draft_active", True)
     state.setdefault("goalie_challenge", {})
     state.setdefault("payments", {})
+    state.setdefault("goalie_payments", {})
     has_official_rosters = isinstance(state.get("official_rosters"), dict)
     state.setdefault("team_picks", [])
     state.setdefault("player_picks", [])
@@ -1364,6 +1366,8 @@ def normalize_state(state):
     state["teams"] = normalized_coaches
     prior_payments = state.get("payments") if isinstance(state.get("payments"), dict) else {}
     state["payments"] = {coach: bool(prior_payments.get(coach, False)) for coach in COACHES}
+    prior_goalie_payments = state.get("goalie_payments") if isinstance(state.get("goalie_payments"), dict) else {}
+    state["goalie_payments"] = {coach: bool(prior_goalie_payments.get(coach, False)) for coach in COACHES}
 
     state["team_picks"] = normalize_pick_list(state.get("team_picks"), TEAM_DRAFT_SEQUENCE, "team")
     state["player_picks"] = normalize_pick_list(state.get("player_picks"), PLAYER_DRAFT_SEQUENCE, "player")
@@ -1936,14 +1940,9 @@ def team_is_eliminated(state, team_name):
     if not team_name or advancement == "Champion":
         return False
     current_rank = advancement_rank(advancement)
-    populated_stage_ranks = [
-        advancement_rank(stage_to_advancement(match.get("stage")))
-        for match in state.get("matches", [])
-        if stage_to_advancement(match.get("stage")) and "friendly" not in str(match.get("stage") or "").lower()
-    ]
-    if populated_stage_ranks and max(populated_stage_ranks) > current_rank:
-        return True
     if current_rank <= advancement_rank("Group Stage"):
+        if goalie_previous_stage_complete(state, "r32") and goalie_round_is_populated(state, "r32"):
+            return team_name not in goalie_round_available_teams(state, "r32")
         return False
     for match in state.get("matches", []):
         if "friendly" in str(match.get("stage") or "").lower():
@@ -2333,9 +2332,9 @@ def render_header(state):
                 st.rerun()
 
 
-def render_payment_panel(state):
+def render_payment_panel(state, payment_key="payments", title="Time to Pay Up", amount="$100", note="Please send your $100 World Cup FC ante to Jayme."):
     rows = []
-    payments = state.get("payments", {})
+    payments = state.get(payment_key, {})
     for coach in COACHES:
         color = state["teams"].get(coach, {}).get("color") or "#FFD54A"
         paid = bool(payments.get(coach, False))
@@ -2352,10 +2351,10 @@ def render_payment_panel(state):
         f"""
 <div class='payment-panel'>
   <div class='payment-head'>
-    <div class='payment-title'>Time to Pay Up</div>
-    <a class='payment-link' href='https://www.venmo.com/u/Jayme-Leita' target='_blank' rel='noopener'>Pay $100 on Venmo</a>
+    <div class='payment-title'>{html.escape(title)}</div>
+    <a class='payment-link' href='https://www.venmo.com/u/Jayme-Leita' target='_blank' rel='noopener'>Pay {html.escape(amount)} on Venmo</a>
   </div>
-  <div class='payment-note'>Please send your $100 World Cup FC ante to Jayme.</div>
+  <div class='payment-note'>{html.escape(note)}</div>
   <div class='payment-grid'>{''.join(rows)}</div>
 </div>
 """,
@@ -2365,6 +2364,13 @@ def render_payment_panel(state):
 
 def render_payments_section(state):
     with st.expander("Payments", expanded=False):
+        render_payment_panel(
+            state,
+            payment_key="goalie_payments",
+            title="Goalie Challenge",
+            amount="$25",
+            note="Please send your $25 Goalie Challenge side bet to Jayme.",
+        )
         render_payment_panel(state)
 
 
@@ -2376,13 +2382,13 @@ def render_payout_descriptions():
 National teams earn +3 for a win, +1 for a draw, +1 for each goal scored, and +1 for a clean sheet. Star players earn +4 for each goal and +3 for each assist. Advancement bonuses are added automatically as teams move deeper in the tournament. During live matches, points are shown based on the current state of the match. For example, a team leading 2-0 live would currently show +3 for the win, +2 for goals, and +1 for the clean sheet.</div>
 
 <div class='payout-desc'><b>Goalie Challenge - $25 Side Bet</b><br>
-Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The draft order for each goalie round is reverse overall standings before that round starts and snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($150), second lowest wins Silver ($75), and third lowest wins Bronze ($25). Draft sections open when official fixtures for that round are populated and close at the first kickoff of that round.</div>
+Goalie Challenge is completely separate from the main World Cup FC standings and never changes the overall Gold, Silver, or Bronze totals. Coaches draft teams, not individual goalkeepers, before the Round of 32, Round of 16, and Round of 8. Each coach drafts 4 teams for the Round of 32, 2 teams for the Round of 16, and 1 team for the Round of 8. The draft order for each goalie round is reverse overall score after the previous stage is final, not including any Goalie Challenge points, and snakes each round. The score is total goals allowed by those drafted teams in that specific round only. Lowest total goals allowed wins Goalie Challenge Gold ($150), second lowest wins Silver ($75), and third lowest wins Bronze ($25). Draft sections unlock only after every game from the previous stage is complete and the full next round is officially populated, then close at the first kickoff of that round.</div>
 
 <div class='payout-desc'><b>Standings Card Abbreviations</b><br>
 "Group" means Group Stage Winner points only. "Empire" means Empire Builder, shown as teams advanced to the Round of 16 or later and then goals scored by those advanced teams for the tiebreaker. "Cinderella" means the coach's best single-team overperformance against the locked FIFA ranking baseline. "Goalie Challenge Points" means goals allowed in the separate goalie side bet; lower is better and those points do not affect the main total. Live Matches appears only for matches currently live and shows the active match score plus live team and player points from that match. Power Rating is the preseason roster strength estimate shown at the bottom of each card.</div>
 
 <div class='payout-desc'><b>Goalie Challenge Draft Timing</b><br>
-The Round of 32 goalie draft begins once the full Round of 32 field and fixtures are official and ends before the first Round of 32 kickoff. The Round of 16 goalie draft begins once the Round of 32 is complete and official Round of 16 fixtures are populated, then ends before the first Round of 16 kickoff. The Round of 8 goalie draft begins once the Round of 16 is complete and quarterfinal fixtures are populated, then ends before the first quarterfinal kickoff.</div>
+The Round of 32 goalie draft begins only after every group-stage match is final and the full Round of 32 field and fixtures are official, then ends before the first Round of 32 kickoff. The Round of 16 goalie draft begins only after every Round of 32 match is final and official Round of 16 fixtures are populated, then ends before the first Round of 16 kickoff. The Round of 8 goalie draft begins only after every Round of 16 match is final and quarterfinal fixtures are populated, then ends before the first quarterfinal kickoff.</div>
 
 <div class='payout-desc'><b>Gold - $300</b><br>
 Awarded to the coach who finishes first overall in total fantasy points. Total fantasy points are the sum of every drafted national team's match points, advancement bonuses, and drafted star-player points.</div>
@@ -2657,13 +2663,41 @@ def goalie_round_state(state, round_key):
     return state.get("goalie_challenge", {}).get("rounds", {}).get(round_key, {})
 
 
+def goalie_previous_stage_matches(state, round_key):
+    info = GOALIE_ROUNDS.get(round_key, {})
+    previous_stage = info.get("previous_stage")
+    matches = []
+    for match in state.get("matches", []):
+        if "friendly" in str(match.get("stage") or "").lower():
+            continue
+        if previous_stage == "Group Stage" and stage_is_group(match.get("stage")):
+            matches.append(match)
+        elif previous_stage and stage_to_advancement(match.get("stage")) == previous_stage:
+            matches.append(match)
+    return matches
+
+
+def goalie_previous_stage_complete(state, round_key):
+    info = GOALIE_ROUNDS.get(round_key, {})
+    matches = goalie_previous_stage_matches(state, round_key)
+    required_matches = int(info.get("previous_required_matches") or 0)
+    if required_matches and len(matches) < required_matches:
+        return False
+    return bool(matches) and all(match_is_completed(match) for match in matches)
+
+
 def goalie_round_order(state, round_key, scores):
     stored_order = [coach for coach in goalie_round_state(state, round_key).get("order", []) if coach in COACHES]
-    return stored_order or goalie_order_from_scores(scores)
+    if stored_order:
+        return stored_order
+    if goalie_previous_stage_complete(state, round_key):
+        return goalie_order_from_scores(scores)
+    return []
 
 
 def goalie_round_sequence(state, round_key, scores):
-    return build_goalie_sequence(goalie_round_order(state, round_key, scores), GOALIE_ROUNDS[round_key]["slots"])
+    order = goalie_round_order(state, round_key, scores)
+    return build_goalie_sequence(order, GOALIE_ROUNDS[round_key]["slots"]) if order else []
 
 
 def goalie_round_available_teams(state, round_key):
@@ -2696,12 +2730,23 @@ def goalie_round_is_closed(state, round_key):
     return bool(kickoff and datetime.now(ZoneInfo("UTC")) >= kickoff)
 
 
+def goalie_round_can_start(state, round_key):
+    return goalie_previous_stage_complete(state, round_key) and goalie_round_is_populated(state, round_key) and not goalie_round_is_closed(state, round_key)
+
+
 def goalie_round_window_text(state, round_key):
     info = GOALIE_ROUNDS[round_key]
     available = goalie_round_available_teams(state, round_key)
     kickoff = goalie_round_first_kickoff(state, round_key)
-    open_text = f"Opens when official {info['stage']} fixtures are populated"
-    if len(available) >= goalie_round_required_team_count(round_key):
+    previous_matches = goalie_previous_stage_matches(state, round_key)
+    completed_previous = sum(1 for match in previous_matches if match_is_completed(match))
+    required_previous = int(info.get("previous_required_matches") or len(previous_matches) or 0)
+    open_text = f"Opens after all {info['previous']} matches are final"
+    if required_previous:
+        open_text += f" ({completed_previous}/{required_previous})"
+    if goalie_previous_stage_complete(state, round_key):
+        open_text = f"{info['previous']} is final; waiting for official {info['stage']} fixtures"
+    if goalie_previous_stage_complete(state, round_key) and len(available) >= goalie_round_required_team_count(round_key):
         open_text = f"Open after {info['previous']} is finalized"
     close_text = "Closes at the first kickoff for this round"
     if kickoff:
@@ -2719,7 +2764,7 @@ def set_goalie_round_active(round_key, active):
         if round_key not in GOALIE_ROUNDS:
             return False
         round_state = state["goalie_challenge"]["rounds"][round_key]
-        if active and not goalie_round_is_populated(state, round_key):
+        if active and not goalie_round_can_start(state, round_key):
             return False
         if active and not round_state.get("order"):
             round_state["order"] = goalie_order_from_scores(calculate_scores(state))
@@ -2734,7 +2779,7 @@ def make_goalie_pick(round_key, team_name):
         state = normalize_state(state)
         if round_key not in GOALIE_ROUNDS:
             return False
-        if goalie_round_is_closed(state, round_key) or not goalie_round_is_populated(state, round_key):
+        if not goalie_round_can_start(state, round_key):
             return False
         round_state = state["goalie_challenge"]["rounds"][round_key]
         if not round_state.get("active"):
@@ -2780,10 +2825,12 @@ def render_goalie_round_status(state, round_key, sequence, picks):
     status = "Live" if round_state.get("active") else "Paused"
     if goalie_round_is_closed(state, round_key):
         status = "Closed"
+    elif not goalie_previous_stage_complete(state, round_key):
+        status = f"Waiting for {GOALIE_ROUNDS[round_key]['previous']} to finish"
     elif not goalie_round_is_populated(state, round_key):
         status = "Waiting for official teams"
     st.caption(f"{goalie_round_window_text(state, round_key)} Status: {status}.")
-    if active_pick and round_state.get("active") and not goalie_round_is_closed(state, round_key):
+    if active_pick and round_state.get("active") and goalie_round_can_start(state, round_key):
         color = state["teams"][active_pick["coach"]]["color"]
         total = len(sequence)
         st.markdown(
@@ -2793,12 +2840,15 @@ def render_goalie_round_status(state, round_key, sequence, picks):
 
 
 def render_goalie_available_teams(state, round_key):
+    if not goalie_round_can_start(state, round_key):
+        st.caption("This goalie draft will unlock after the prior stage is fully final and the next round is fully populated.")
+        return
     available = [team for team in goalie_round_available_teams(state, round_key) if team not in goalie_round_drafted_teams(state, round_key)]
     if not available:
         st.caption("No teams available for this goalie draft yet.")
         return
     round_state = goalie_round_state(state, round_key)
-    current = current_pick(build_goalie_sequence(round_state.get("order", COACHES), GOALIE_ROUNDS[round_key]["slots"]), round_state.get("picks", []))
+    current = current_pick(build_goalie_sequence(round_state.get("order") or goalie_order_from_scores(calculate_scores(state)), GOALIE_ROUNDS[round_key]["slots"]), round_state.get("picks", []))
     coach_color = state["teams"][current["coach"]]["color"] if current else "#FFD54A"
     button_text_color = button_text_color_for_background(coach_color)
     base_color = f"color-mix(in srgb, {coach_color} 34%, #101010)"
@@ -2854,7 +2904,7 @@ def render_goalie_draft_round(state, scores, round_key):
         picks = round_state.get("picks", [])
         render_goalie_round_status(state, round_key, sequence, picks)
         c1, c2, c3 = st.columns(3, gap="small")
-        can_start = goalie_round_is_populated(state, round_key) and not goalie_round_is_closed(state, round_key)
+        can_start = goalie_round_can_start(state, round_key)
         with c1:
             if st.button("Start Draft", key=f"goalie-start-{round_key}", disabled=(round_state.get("active") or not can_start), width="stretch"):
                 ok, _ = set_goalie_round_active(round_key, True)
@@ -2870,8 +2920,11 @@ def render_goalie_draft_round(state, scores, round_key):
                 ok, _ = undo_goalie_pick(round_key)
                 if ok:
                     st.rerun()
-        render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state)
-        if current_pick(sequence, picks):
+        if sequence:
+            render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state)
+        else:
+            st.caption("Draft order will lock and display after every game from the previous stage is final.")
+        if sequence and current_pick(sequence, picks):
             render_goalie_available_teams(state, round_key)
 
 
@@ -4773,6 +4826,31 @@ def render_completed_draft_table(state):
         render_draft_board("Player Draft", PLAYER_DRAFT_SEQUENCE, state["player_picks"], "player", state, power_rosters=draft_rosters)
 
 
+def render_admin_payment_editor(state, payment_key, title, checkbox_prefix, save_key, message):
+    st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
+    st.subheader(title)
+    payment_updates = {}
+    payments = state.get(payment_key, {})
+    for row_start in range(0, len(COACHES), 4):
+        cols = st.columns(4, gap="small")
+        for col, coach in zip(cols, COACHES[row_start:row_start + 4]):
+            with col:
+                payment_updates[coach] = st.checkbox(
+                    f"{coach} paid",
+                    value=bool(payments.get(coach, False)),
+                    key=f"{checkbox_prefix}-{coach}",
+                )
+    if st.button(f"Save {title}", key=save_key, width="stretch"):
+        def mutator(fresh):
+            fresh = normalize_state(fresh)
+            fresh[payment_key] = {coach: bool(payment_updates.get(coach, False)) for coach in COACHES}
+            return True
+        ok, _ = mutate_shared_state(mutator, message)
+        if ok:
+            st.rerun()
+    st.markdown("</div>", unsafe_allow_html=True)
+
+
 def render_admin(state):
     st.markdown("<div class='section-title admin-title'>Admin Only</div>", unsafe_allow_html=True)
     if st.session_state.pop("clear_admin_password", False):
@@ -4799,28 +4877,22 @@ def render_admin(state):
             st.rerun()
         st.caption("Admin controls are open for this private league app.")
 
-        st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
-        st.subheader("Payment Status")
-        payment_updates = {}
-        payments = state.get("payments", {})
-        for row_start in range(0, len(COACHES), 4):
-            cols = st.columns(4, gap="small")
-            for col, coach in zip(cols, COACHES[row_start:row_start + 4]):
-                with col:
-                    payment_updates[coach] = st.checkbox(
-                        f"{coach} paid",
-                        value=bool(payments.get(coach, False)),
-                        key=f"admin-payment-{coach}",
-                    )
-        if st.button("Save Payment Status", key="admin-save-payment-status", width="stretch"):
-            def mutator(fresh):
-                fresh = normalize_state(fresh)
-                fresh["payments"] = {coach: bool(payment_updates.get(coach, False)) for coach in COACHES}
-                return True
-            ok, _ = mutate_shared_state(mutator, "Update payment status")
-            if ok:
-                st.rerun()
-        st.markdown("</div>", unsafe_allow_html=True)
+        render_admin_payment_editor(
+            state,
+            "goalie_payments",
+            "Goalie Challenge Payment Status",
+            "admin-goalie-payment",
+            "admin-save-goalie-payment-status",
+            "Update goalie challenge payment status",
+        )
+        render_admin_payment_editor(
+            state,
+            "payments",
+            "Payment Status",
+            "admin-payment",
+            "admin-save-payment-status",
+            "Update payment status",
+        )
 
         status_label, status_text = draft_status_summary(state)
         st.markdown("<div class='admin-box'>", unsafe_allow_html=True)
