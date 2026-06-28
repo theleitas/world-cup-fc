@@ -4601,16 +4601,16 @@
       "home": "Jordan",
       "away": "Argentina",
       "home_score": 0,
-      "away_score": 1,
+      "away_score": 2,
       "status": "In_Play",
-      "minute": 30,
+      "minute": 38,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
           "home": 0,
-          "away": 1
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -4629,6 +4629,14 @@
           "team": "Argentina",
           "scorer": "Giovani Lo Celso",
           "assist": ""
+        },
+        {
+          "minute": 31,
+          "injury_time": null,
+          "type": "PENALTY",
+          "team": "Argentina",
+          "scorer": "Lautaro Martínez",
+          "assist": ""
         }
       ]
     },
@@ -4643,7 +4651,7 @@
       "home_score": 0,
       "away_score": 1,
       "status": "In_Play",
-      "minute": 30,
+      "minute": 38,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -5057,9 +5065,9 @@
       "group_assists": 0
     },
     "Lautaro Martinez (Argentina)": {
-      "goals": 0,
+      "goals": 1,
       "assists": 0,
-      "group_goals": 0,
+      "group_goals": 1,
       "group_assists": 0
     },
     "Bukayo Saka (England)": {
@@ -5185,8 +5193,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782614060,
-  "last_score_refresh_attempt_at": 1782614060,
+  "last_score_refresh_at": 1782614373,
+  "last_score_refresh_attempt_at": 1782614371,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
