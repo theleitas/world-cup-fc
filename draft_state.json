@@ -4954,6 +4954,68 @@
       "goals": []
     },
     {
+      "id": "537426",
+      "date": "2026-07-01T16:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "England",
+      "away": "Congo DR",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537422",
+      "date": "2026-07-01T20:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Belgium",
+      "away": "Senegal",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
       "id": "537421",
       "date": "2026-07-02T00:00:00Z",
       "stage": "Last 32",
@@ -4961,6 +5023,99 @@
       "matchday": null,
       "home": "USA",
       "away": "Bosnia and Herzegovina",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537420",
+      "date": "2026-07-02T19:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Spain",
+      "away": "Austria",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537419",
+      "date": "2026-07-02T23:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Portugal",
+      "away": "Croatia",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537429",
+      "date": "2026-07-03T03:00:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Switzerland",
+      "away": "Algeria",
       "home_score": null,
       "away_score": null,
       "status": "Timed",
@@ -5023,6 +5178,37 @@
       "matchday": null,
       "home": "Argentina",
       "away": "Cabo Verde",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
+    },
+    {
+      "id": "537430",
+      "date": "2026-07-04T01:30:00Z",
+      "stage": "Last 32",
+      "group": null,
+      "matchday": null,
+      "home": "Colombia",
+      "away": "Ghana",
       "home_score": null,
       "away_score": null,
       "status": "Timed",
@@ -5212,14 +5398,14 @@
     "Qatar": "Group Stage",
     "Saudi Arabia": "Group Stage",
     "Uzbekistan": "Group Stage",
-    "Algeria": "Group Stage",
+    "Algeria": "Round of 32",
     "Cabo Verde": "Round of 32",
-    "Congo DR": "Group Stage",
+    "Congo DR": "Round of 32",
     "Côte d'Ivoire": "Round of 32",
     "Egypt": "Round of 32",
-    "Ghana": "Group Stage",
+    "Ghana": "Round of 32",
     "Morocco": "Round of 32",
-    "Senegal": "Group Stage",
+    "Senegal": "Round of 32",
     "South Africa": "Round of 32",
     "Tunisia": "Group Stage",
     "Curaçao": "Group Stage",
@@ -5227,30 +5413,30 @@
     "Panama": "Group Stage",
     "Argentina": "Round of 32",
     "Brazil": "Round of 32",
-    "Colombia": "Group Stage",
+    "Colombia": "Round of 32",
     "Ecuador": "Round of 32",
     "Paraguay": "Round of 32",
     "Uruguay": "Group Stage",
     "New Zealand": "Group Stage",
-    "Austria": "Group Stage",
-    "Belgium": "Group Stage",
+    "Austria": "Round of 32",
+    "Belgium": "Round of 32",
     "Bosnia and Herzegovina": "Round of 32",
-    "Croatia": "Group Stage",
+    "Croatia": "Round of 32",
     "Czechia": "Group Stage",
-    "England": "Group Stage",
+    "England": "Round of 32",
     "France": "Round of 32",
     "Germany": "Round of 32",
     "Netherlands": "Round of 32",
     "Norway": "Round of 32",
-    "Portugal": "Group Stage",
+    "Portugal": "Round of 32",
     "Scotland": "Group Stage",
-    "Spain": "Group Stage",
+    "Spain": "Round of 32",
     "Sweden": "Round of 32",
-    "Switzerland": "Group Stage",
+    "Switzerland": "Round of 32",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782619344,
-  "last_score_refresh_attempt_at": 1782619343,
+  "last_score_refresh_at": 1782620028,
+  "last_score_refresh_attempt_at": 1782620026,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
