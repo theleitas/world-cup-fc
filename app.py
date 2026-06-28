@@ -3011,7 +3011,8 @@ def render_goalie_draft_round_body(state, scores, round_key):
             if ok:
                 st.rerun()
     if sequence:
-        render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state)
+        first_round_order = [item["coach"] for item in sorted([item for item in sequence if item["round"] == 1], key=lambda item: item["pick"])]
+        render_draft_board(f"{info['label']} Goalie Draft", sequence, picks, "team", state, coach_order=first_round_order)
     else:
         st.caption("Draft order will lock and display after every game from the previous stage is final.")
     if sequence and current_pick(sequence, picks):
@@ -3816,8 +3817,12 @@ def render_make_pick_prompt(stage_label, current, state):
     )
 
 
-def render_draft_board(title, sequence, picks, field, state, power_rosters=None):
+def render_draft_board(title, sequence, picks, field, state, power_rosters=None, coach_order=None):
     st.markdown(f"<div class='section-title'>{html.escape(title)}</div>", unsafe_allow_html=True)
+    coach_order = [coach for coach in (coach_order or COACHES) if coach in COACHES]
+    for coach in COACHES:
+        if coach not in coach_order:
+            coach_order.append(coach)
     pick_map = pick_by_number(picks)
     active_pick = current_pick(sequence, picks)
     active_pick_number = active_pick["pick"] if active_pick else None
@@ -3825,7 +3830,7 @@ def render_draft_board(title, sequence, picks, field, state, power_rosters=None)
     rows = []
     rows.append("<div class='draft-board'><table><thead><tr>")
     rows.append("<th class='round-head'>Round</th>")
-    for coach in COACHES:
+    for coach in coach_order:
         color = state["teams"][coach]["color"]
         power_rating = format_power_rating(state, coach, rosters=power_rosters)
         rows.append(
@@ -3835,7 +3840,7 @@ def render_draft_board(title, sequence, picks, field, state, power_rosters=None)
     for round_number in range(1, rounds + 1):
         rows.append("<tr>")
         rows.append(f"<th class='round-head'>{round_number}</th>")
-        for coach in COACHES:
+        for coach in coach_order:
             item = next(seq for seq in sequence if seq["round"] == round_number and seq["coach"] == coach)
             pick = pick_map.get(item["pick"])
             cell_color = state["teams"][item["coach"]]["color"]
@@ -5230,8 +5235,8 @@ if FOOTBALL_DATA_TOKEN and (not draft_in_progress) and int(time.time()) - int(st
 scores = calculate_scores(state)
 
 render_header(state)
-render_goalie_payment_panel(state)
 render_current_goalie_draft_room(state, scores)
+render_goalie_payment_panel(state)
 draft_visible = state.get("draft_enabled") and not full_draft_complete(state)
 if draft_visible:
     render_drafts(state)
