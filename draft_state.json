@@ -4507,7 +4507,7 @@
       "away": "Portugal",
       "home_score": 0,
       "away_score": 0,
-      "status": "In_Play",
+      "status": "Finished",
       "minute": 90,
       "elapsed": null,
       "clock": "",
@@ -4536,7 +4536,7 @@
       "matchday": 3,
       "home": "Congo DR",
       "away": "Uzbekistan",
-      "home_score": 2,
+      "home_score": 3,
       "away_score": 1,
       "status": "In_Play",
       "minute": 90,
@@ -4545,7 +4545,7 @@
       "score_node": {
         "winner": "HOME_TEAM",
         "full_time": {
-          "home": 2,
+          "home": 3,
           "away": 1
         },
         "regular_time": {
@@ -4581,6 +4581,14 @@
           "team": "Congo DR",
           "scorer": "Fiston Mayele",
           "assist": ""
+        },
+        {
+          "minute": 90,
+          "injury_time": 1,
+          "type": "REGULAR",
+          "team": "Congo DR",
+          "scorer": "Yoane Wissa",
+          "assist": "Meschack Elia"
         }
       ]
     },
@@ -5159,8 +5167,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782609869,
-  "last_score_refresh_attempt_at": 1782609868,
+  "last_score_refresh_at": 1782610211,
+  "last_score_refresh_attempt_at": 1782610207,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
