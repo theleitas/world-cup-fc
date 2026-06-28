@@ -5650,9 +5650,16 @@
             "coach": "Spencer",
             "team": "Portugal",
             "picked_at": "2026-06-28T13:11:55.263636-04:00"
+          },
+          {
+            "pick": 11,
+            "round": 2,
+            "coach": "Chad",
+            "team": "USA",
+            "picked_at": "2026-06-28T13:16:50.552827-04:00"
           }
         ],
-        "current_pick_started_at": 1782666715
+        "current_pick_started_at": 1782667010
       },
       "r16": {
         "active": false,
