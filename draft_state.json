@@ -5657,9 +5657,16 @@
             "coach": "Chad",
             "team": "USA",
             "picked_at": "2026-06-28T13:16:50.552827-04:00"
+          },
+          {
+            "pick": 12,
+            "round": 2,
+            "coach": "Herb",
+            "team": "Colombia",
+            "picked_at": "2026-06-28T13:20:16.607303-04:00"
           }
         ],
-        "current_pick_started_at": 1782667010
+        "current_pick_started_at": 1782667216
       },
       "r16": {
         "active": false,
