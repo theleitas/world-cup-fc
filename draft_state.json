@@ -5608,9 +5608,16 @@
             "coach": "Lamp",
             "team": "Brazil",
             "picked_at": "2026-06-28T08:05:35.796003-04:00"
+          },
+          {
+            "pick": 5,
+            "round": 1,
+            "coach": "Herb",
+            "team": "Mexico",
+            "picked_at": "2026-06-28T11:03:05.867955-04:00"
           }
         ],
-        "current_pick_started_at": 1782648335
+        "current_pick_started_at": 1782658985
       },
       "r16": {
         "active": false,
