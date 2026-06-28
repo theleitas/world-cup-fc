@@ -5594,9 +5594,16 @@
             "coach": "Peter",
             "team": "Spain",
             "picked_at": "2026-06-28T07:16:30.981560-04:00"
+          },
+          {
+            "pick": 3,
+            "round": 1,
+            "coach": "Jayme",
+            "team": "England",
+            "picked_at": "2026-06-28T07:30:27.472827-04:00"
           }
         ],
-        "current_pick_started_at": 1782645390
+        "current_pick_started_at": 1782646227
       },
       "r16": {
         "active": false,
