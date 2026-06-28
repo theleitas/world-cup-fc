@@ -4600,16 +4600,16 @@
       "matchday": 3,
       "home": "Jordan",
       "away": "Argentina",
-      "home_score": 0,
+      "home_score": 1,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 50,
+      "minute": 56,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
-          "home": 0,
+          "home": 1,
           "away": 2
         },
         "regular_time": {
@@ -4637,6 +4637,14 @@
           "team": "Argentina",
           "scorer": "Lautaro Martínez",
           "assist": ""
+        },
+        {
+          "minute": 55,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Jordan",
+          "scorer": "Musa Al Taamari",
+          "assist": "Ehsan Haddad"
         }
       ]
     },
@@ -4649,16 +4657,16 @@
       "home": "Algeria",
       "away": "Austria",
       "home_score": 1,
-      "away_score": 1,
+      "away_score": 2,
       "status": "In_Play",
-      "minute": 51,
+      "minute": 57,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
           "home": 1,
-          "away": 1
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -4685,6 +4693,14 @@
           "team": "Algeria",
           "scorer": "Rafik Belghali",
           "assist": "Riyad Mahrez"
+        },
+        {
+          "minute": 55,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Austria",
+          "scorer": "Marcel Sabitzer",
+          "assist": "Konrad Laimer"
         }
       ]
     },
@@ -5201,8 +5217,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782616480,
-  "last_score_refresh_attempt_at": 1782616480,
+  "last_score_refresh_at": 1782616745,
+  "last_score_refresh_attempt_at": 1782616743,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
