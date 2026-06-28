@@ -4601,16 +4601,16 @@
       "home": "Jordan",
       "away": "Argentina",
       "home_score": 1,
-      "away_score": 2,
+      "away_score": 3,
       "status": "In_Play",
-      "minute": 80,
+      "minute": 85,
       "elapsed": null,
       "clock": "",
       "score_node": {
         "winner": "AWAY_TEAM",
         "full_time": {
           "home": 1,
-          "away": 2
+          "away": 3
         },
         "regular_time": {
           "home": null,
@@ -4645,6 +4645,14 @@
           "team": "Jordan",
           "scorer": "Musa Al Taamari",
           "assist": "Ehsan Haddad"
+        },
+        {
+          "minute": 80,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Argentina",
+          "scorer": "Lionel Messi",
+          "assist": ""
         }
       ]
     },
@@ -4659,7 +4667,7 @@
       "home_score": 2,
       "away_score": 2,
       "status": "In_Play",
-      "minute": 80,
+      "minute": 84,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -5079,9 +5087,9 @@
       "group_assists": 0
     },
     "Lionel Messi (Argentina)": {
-      "goals": 5,
+      "goals": 6,
       "assists": 0,
-      "group_goals": 5,
+      "group_goals": 6,
       "group_assists": 0
     },
     "Luis Diaz (Colombia)": {
@@ -5225,8 +5233,8 @@
     "Switzerland": "Group Stage",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782618285,
-  "last_score_refresh_attempt_at": 1782618285,
+  "last_score_refresh_at": 1782618384,
+  "last_score_refresh_attempt_at": 1782618383,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
