@@ -4784,17 +4784,17 @@
       "matchday": null,
       "home": "Brazil",
       "away": "Japan",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 2,
+      "away_score": 1,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "HOME_TEAM",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 2,
+          "away": 1
         },
         "regular_time": {
           "home": null,
@@ -4805,7 +4805,32 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 29,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Japan",
+          "scorer": "Kaishu Sano",
+          "assist": ""
+        },
+        {
+          "minute": 56,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Brazil",
+          "scorer": "Casemiro",
+          "assist": "Gabriel Magalhães"
+        },
+        {
+          "minute": 90,
+          "injury_time": 6,
+          "type": "REGULAR",
+          "team": "Brazil",
+          "scorer": "Martinelli",
+          "assist": "Bruno Guimarães"
+        }
+      ]
     },
     {
       "id": "537415",
@@ -4815,28 +4840,45 @@
       "matchday": null,
       "home": "Germany",
       "away": "Paraguay",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 1,
+      "away_score": 1,
+      "status": "In_Play",
+      "minute": 97,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "DRAW",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "regular_time": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "penalties": {
           "home": null,
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 42,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Paraguay",
+          "scorer": "Julio Enciso",
+          "assist": "Matías Galarza"
+        },
+        {
+          "minute": 54,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Germany",
+          "scorer": "Kai Havertz",
+          "assist": "Florian Wirtz"
+        }
+      ]
     },
     {
       "id": "537418",
@@ -5444,8 +5486,8 @@
     "Switzerland": "Round of 32",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782745087,
-  "last_score_refresh_attempt_at": 1782745085,
+  "last_score_refresh_at": 1782772833,
+  "last_score_refresh_attempt_at": 1782772831,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
