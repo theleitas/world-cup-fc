@@ -4842,8 +4842,8 @@
       "away": "Paraguay",
       "home_score": 1,
       "away_score": 1,
-      "status": "Paused",
-      "minute": 105,
+      "status": "In_Play",
+      "minute": 109,
       "elapsed": null,
       "clock": "",
       "score_node": {
@@ -5486,8 +5486,8 @@
     "Switzerland": "Round of 32",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782773737,
-  "last_score_refresh_attempt_at": 1782773736,
+  "last_score_refresh_at": 1782774046,
+  "last_score_refresh_attempt_at": 1782774044,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
