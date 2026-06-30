@@ -4888,28 +4888,45 @@
       "matchday": null,
       "home": "Netherlands",
       "away": "Morocco",
-      "home_score": 0,
-      "away_score": 0,
-      "status": "In_Play",
-      "minute": 58,
+      "home_score": 3,
+      "away_score": 4,
+      "status": "Finished",
+      "minute": 120,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": "DRAW",
+        "winner": "AWAY_TEAM",
         "full_time": {
-          "home": 0,
-          "away": 0
+          "home": 3,
+          "away": 4
         },
         "regular_time": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 1
         },
         "penalties": {
-          "home": null,
-          "away": null
+          "home": 2,
+          "away": 3
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 72,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Netherlands",
+          "scorer": "Cody Gakpo",
+          "assist": "Crysencio Summerville"
+        },
+        {
+          "minute": 90,
+          "injury_time": 1,
+          "type": "REGULAR",
+          "team": "Morocco",
+          "scorer": "Issa Diop",
+          "assist": "Chemsdine Talbi"
+        }
+      ]
     },
     {
       "id": "537424",
@@ -4919,17 +4936,17 @@
       "matchday": null,
       "home": "Côte d'Ivoire",
       "away": "Norway",
-      "home_score": null,
-      "away_score": null,
-      "status": "Timed",
-      "minute": null,
+      "home_score": 1,
+      "away_score": 2,
+      "status": "Finished",
+      "minute": 90,
       "elapsed": null,
       "clock": "",
       "score_node": {
-        "winner": null,
+        "winner": "AWAY_TEAM",
         "full_time": {
-          "home": null,
-          "away": null
+          "home": 1,
+          "away": 2
         },
         "regular_time": {
           "home": null,
@@ -4940,7 +4957,32 @@
           "away": null
         }
       },
-      "goals": []
+      "goals": [
+        {
+          "minute": 39,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Norway",
+          "scorer": "Antonio Nusa",
+          "assist": "Martin Ødegaard"
+        },
+        {
+          "minute": 74,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Côte d'Ivoire",
+          "scorer": "Amad Diallo",
+          "assist": "Nicolas Pépé"
+        },
+        {
+          "minute": 86,
+          "injury_time": null,
+          "type": "REGULAR",
+          "team": "Norway",
+          "scorer": "Erling Haaland",
+          "assist": "Patrick Berg"
+        }
+      ]
     },
     {
       "id": "537416",
@@ -5282,6 +5324,37 @@
         }
       },
       "goals": []
+    },
+    {
+      "id": "537376",
+      "date": "2026-07-04T17:00:00Z",
+      "stage": "Last 16",
+      "group": null,
+      "matchday": null,
+      "home": "Canada",
+      "away": "Morocco",
+      "home_score": null,
+      "away_score": null,
+      "status": "Timed",
+      "minute": null,
+      "elapsed": null,
+      "clock": "",
+      "score_node": {
+        "winner": null,
+        "full_time": {
+          "home": null,
+          "away": null
+        },
+        "regular_time": {
+          "home": null,
+          "away": null
+        },
+        "penalties": {
+          "home": null,
+          "away": null
+        }
+      },
+      "goals": []
     }
   ],
   "player_stats": {
@@ -5316,7 +5389,7 @@
       "group_assists": 3
     },
     "Erling Haaland (Norway)": {
-      "goals": 4,
+      "goals": 5,
       "assists": 0,
       "group_goals": 4,
       "group_assists": 0
@@ -5437,7 +5510,7 @@
     }
   },
   "advancement": {
-    "Canada": "Round of 32",
+    "Canada": "Round of 16",
     "Mexico": "Round of 32",
     "USA": "Round of 32",
     "Australia": "Round of 32",
@@ -5455,7 +5528,7 @@
     "Côte d'Ivoire": "Round of 32",
     "Egypt": "Round of 32",
     "Ghana": "Round of 32",
-    "Morocco": "Round of 32",
+    "Morocco": "Round of 16",
     "Senegal": "Round of 32",
     "South Africa": "Round of 32",
     "Tunisia": "Group Stage",
@@ -5486,8 +5559,8 @@
     "Switzerland": "Round of 32",
     "Türkiye": "Group Stage"
   },
-  "last_score_refresh_at": 1782786035,
-  "last_score_refresh_attempt_at": 1782786034,
+  "last_score_refresh_at": 1782846035,
+  "last_score_refresh_attempt_at": 1782846031,
   "last_api_error": "",
   "draft_enabled": true,
   "current_pick_started_at": 1781199192,
